@@ -1,5 +1,7 @@
-# Project C
+# ConceptMCQ
 
-Initial project repository setup.
-- Configured for: skalasifmahmudsohag@gmail.com
-- Author: Asif Mahmud
+ConceptMCQ - An interactive MCQ & learning concept platform.
+
+- **Author**: Asif Mahmud
+- **Email**: skalasifmahmudsohag@gmail.com
+- **Status**: Development & Setup
