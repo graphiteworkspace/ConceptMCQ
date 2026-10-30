@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ConceptMCQ - Master Concepts Through Practice</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+  <!-- Supabase JS CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+</head>
+<body>
+  <div id="app">
+    <!-- Header -->
+    <header class="header">
+      <div class="container header-container">
+        <div class="logo">
+          <span class="logo-badge">⚡</span>
+          <span class="logo-text">Concept<span class="accent">MCQ</span></span>
+        </div>
+        <div class="header-status">
+          <span id="db-status-badge" class="badge badge-waiting">Connecting...</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="container main-content">
+      <!-- Hero / Stats -->
+      <section class="hero-section">
+        <h1 class="hero-title">Practice High-Yield Concept MCQs</h1>
+        <p class="hero-subtitle">Sharpen your analytical skills with curated conceptual questions and instant rationales.</p>
+      </section>
+
+      <!-- Quiz Card Area -->
+      <section id="quiz-container" class="quiz-card">
+        <div class="quiz-header">
+          <div class="category-tag" id="question-category">Loading Category...</div>
+          <div class="question-tracker" id="question-counter">Question 1</div>
+        </div>
+
+        <h2 class="question-text" id="question-title">Loading question...</h2>
+
+        <div class="options-grid" id="options-container">
+          <!-- Dynamic Options rendered by JS -->
+        </div>
+
+        <div id="explanation-box" class="explanation-box hidden">
+          <h4>💡 Concept Explanation</h4>
+          <p id="explanation-text"></p>
+        </div>
+
+        <div class="quiz-footer">
+          <button id="next-btn" class="btn btn-primary" disabled>Next Question →</button>
+        </div>
+      </section>
+    </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="container">
+        <p>© 2026 ConceptMCQ • Created by Asif Mahmud • Built for Excellence</p>
+      </div>
+    </footer>
+  </div>
+
+  <script src="js/config.js"></script>
+  <script src="js/app.js"></script>
+</body>
+</html>
