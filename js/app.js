@@ -800,6 +800,11 @@ function renderTargetUI() {
     }
   }
 
+  // Update folder tabs in Main Card
+  document.querySelectorAll(".folder-tab").forEach(tab => {
+    tab.classList.toggle("active", tab.dataset.stream === currentStreamId);
+  });
+
   // Subject Cards (10MS Pastel Circular Icons)
   const subjects = target.subjects[currentStreamId] || target.subjects[target.streams[0]?.id] || [];
   subjectsGridContainer.innerHTML = subjects.map(sub => `
@@ -1953,7 +1958,8 @@ function initTelcoHomeScreen() {
       const streamId = tab.dataset.stream;
       if (streamId) {
         currentStreamId = streamId;
-        renderTargetDashboard();
+        localStorage.setItem("conceptmcq_stream", currentStreamId);
+        renderTargetUI();
       }
     });
   });

@@ -134,58 +134,64 @@
               </div>
 
               <div class="card-inner-body">
-                <!-- Top Row: Side-by-Side Streak & Coins Chips with small '+' -->
+                <!-- Row 1: Side-by-Side Streak & Coins Chips with small '+' -->
                 <div class="chips-row">
                   <div class="stat-chip streak-chip" id="chip-streak" title="ধারাবাহিক পড়ার স্ট্রিক">
-                    <span class="chip-icon">🔥</span>
-                    <span class="chip-label">স্ট্রিক: <strong id="card-streak-val">৫ দিন</strong></span>
+                    <div class="chip-content">
+                      <span class="chip-icon">🔥</span>
+                      <span class="chip-label">স্ট্রিক: <strong id="card-streak-val">৫ দিন</strong></span>
+                    </div>
                     <button class="chip-plus-btn" title="স্ট্রিক বিস্তারিত" id="btn-streak-plus">+</button>
                   </div>
                   <div class="stat-chip coin-chip" id="chip-coins" title="অর্জিত রিওয়ার্ড কয়েন">
-                    <span class="chip-icon">🪙</span>
-                    <span class="chip-label">কয়েন: <strong id="card-coins-val">১২৫০</strong></span>
+                    <div class="chip-content">
+                      <span class="chip-icon">🪙</span>
+                      <span class="chip-label">কয়েন: <strong id="card-coins-val">১২৫০</strong></span>
+                    </div>
                     <button class="chip-plus-btn" title="কয়েন রিডিম" id="btn-coins-plus">+</button>
                   </div>
                 </div>
 
-                <!-- Main Live Model Test Row -->
-                <div class="banner-content telco-exam-content">
-                  <div class="banner-info">
-                    <div class="exam-lead-row">
-                      <div class="score-stat-box" title="সাপ্তাহিক মডেল টেস্ট">
-                        <span class="score-large-num" id="exam-score-num">৮</span>
-                        <span class="score-small-label">মডেল টেস্ট</span>
-                      </div>
-                      <div class="exam-title-wrap">
-                        <div class="banner-badge">
-                          <span class="live-pulse"></span>
-                          <span>আজকের লাইভ মডেল টেস্ট</span>
-                        </div>
-                        <h1 class="banner-title" id="banner-title">এসএসসি স্পেশাল সাধারণ গণিত ও বিজ্ঞান কুইজ</h1>
-                      </div>
-                    </div>
-                    <p class="banner-desc">পরীক্ষার আসল প্রস্তুতি নিন KaTeX সমীকরণ, নেগেটিভ মার্কিং ও কনসেপ্ট ব্যাখ্যা সহ।</p>
-                    <div class="banner-meta">
-                      <span class="meta-item">
-                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                          <circle cx="12" cy="13" r="8"></circle>
-                          <path d="M12 9v4l2 2M10 2h4"></path>
-                        </svg>
-                        <span>১৫ মিনিট</span>
-                      </span>
-                      <span>•</span>
-                      <span>২০টি প্রশ্ন</span>
-                      <span>•</span>
-                      <span class="badge-negative">নেগেটিভ মার্কিং: -০.২৫</span>
-                      <span>•</span>
-                      <span>৪,৫২০+ পরীক্ষার্থী</span>
-                    </div>
+                <!-- Row 2: Badges (Weekly Model Test Count + Live Test Badge) -->
+                <div class="card-badges-row">
+                  <div class="score-stat-box" title="সাপ্তাহিক মডেল টেস্ট">
+                    <span class="score-large-num" id="exam-score-num">৮</span>
+                    <span class="score-small-label">মডেল টেস্ট</span>
                   </div>
-                  <div class="cta-action-wrap">
-                    <button class="btn btn-magenta-cta telco-cta-btn" id="start-live-exam-btn">
-                      ⚡ পরীক্ষা শুরু করুন
-                    </button>
+                  <div class="banner-badge">
+                    <span class="live-pulse"></span>
+                    <span>আজকের লাইভ মডেল টেস্ট</span>
                   </div>
+                </div>
+
+                <!-- Row 3: Title -->
+                <h1 class="banner-title" id="banner-title">এসএসসি স্পেশাল বিজ্ঞান বিভাগ মডেল টেস্ট</h1>
+
+                <!-- Row 4: Description -->
+                <p class="banner-desc">পরীক্ষার আসল প্রস্তুতি নিন KaTeX সমীকরণ, নেগেটিভ মার্কিং ও কনসেপ্ট ব্যাখ্যা সহ।</p>
+
+                <!-- Row 5: Meta Info -->
+                <div class="banner-meta">
+                  <span class="meta-item">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="13" r="8"></circle>
+                      <path d="M12 9v4l2 2M10 2h4"></path>
+                    </svg>
+                    <span>১৫ মিনিট</span>
+                  </span>
+                  <span>•</span>
+                  <span>২০টি প্রশ্ন</span>
+                  <span>•</span>
+                  <span class="badge-negative">নেগেটিভ মার্কিং: -০.২৫</span>
+                  <span>•</span>
+                  <span>৪,৫২০+ পরীক্ষার্থী</span>
+                </div>
+
+                <!-- Row 6: Full-Width Red CTA Button -->
+                <div class="cta-action-wrap">
+                  <button class="btn btn-magenta-cta telco-cta-btn w-full" id="start-live-exam-btn">
+                    ⚡ পরীক্ষা শুরু করুন
+                  </button>
                 </div>
               </div>
             </section>

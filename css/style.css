@@ -2791,32 +2791,19 @@ kbd {
 
 /* ==========================================================================
    TELCO-INSPIRED MODERN HOME SCREEN REDESIGN STYLES
-   Pink-Red Primary: #F43F5E | Mobile First (360-412px) | Touch Targets >= 48px
+   Exact Reference Matching: Pure White Top Bar + Top Pink Border + 33vh Slider
    ========================================================================== */
 
-/* 1. Header with Pink-Red Gradient & Education Watermark */
+/* 1. Header with Pure White Background & Pink Top Accent */
 .header.telco-header {
-  background: linear-gradient(135deg, #F43F5E 0%, #E11D48 100%);
-  border-bottom: none;
+  background: #FFFFFF !important;
+  border-bottom: 1px solid rgba(244, 63, 94, 0.1);
+  border-top: 4px solid #F43F5E;
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: 0 4px 20px rgba(244, 63, 94, 0.25);
-  border-bottom-left-radius: 16px;
-  border-bottom-right-radius: 16px;
-  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
   padding: 8px 0;
-}
-
-.header-watermark-overlay {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  opacity: 0.08;
-  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3Ccircle cx='35' cy='18' r='3'/%3E%3Ccircle cx='12' cy='48' r='3'/%3E%3C/g%3E%3C/svg%3E");
-  pointer-events: none;
 }
 
 .telco-header .header-container {
@@ -2830,7 +2817,7 @@ kbd {
   gap: 10px;
 }
 
-/* 4-Block Action Bar on Header */
+/* 4-Block Action Bar on Header (Clean White Telco Look) */
 .top-action-bar {
   display: flex;
   align-items: center;
@@ -2839,44 +2826,51 @@ kbd {
 }
 
 .top-bar-block {
-  height: 44px;
+  height: 42px;
   background: #FFFFFF;
-  border-radius: 12px;
+  border-radius: 50px;
   display: flex;
   align-items: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.6);
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+  border: 1px solid #E2E8F0;
   transition: all 0.2s ease;
 }
 
 /* Block 1: Profile Avatar */
 .avatar-block {
-  width: 44px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   justify-content: center;
   cursor: pointer;
+  border-radius: 12px !important;
+  border: 1px solid #FECDD3 !important;
+  background: #FFF1F3 !important;
+  box-shadow: none !important;
 }
 
 .avatar-square {
-  width: 32px;
-  height: 32px;
-  border-radius: 8px;
-  background: linear-gradient(135deg, #FFE4E6 0%, #FECDD3 100%);
+  width: 100%;
+  height: 100%;
+  border-radius: 10px;
+  background: transparent;
   color: #E11D48;
   font-weight: 800;
-  font-size: 15px;
+  font-size: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: 1px solid #FDA4AF;
 }
 
 /* Block 2: Search Bar */
 .search-block {
   flex: 1;
-  padding: 0 12px;
+  padding: 0 14px;
   gap: 8px;
   cursor: text;
+  background: #F8FAFC !important;
+  border: 1px solid #E2E8F0 !important;
+  border-radius: 50px !important;
 }
 
 .search-block .search-icon {
@@ -2901,12 +2895,16 @@ kbd {
 
 /* Block 3: Notification Bell with Badge */
 .icon-block.notif-btn {
-  width: 44px;
+  width: 40px;
+  height: 40px;
   flex-shrink: 0;
   justify-content: center;
   cursor: pointer;
   position: relative;
   padding: 0;
+  border-radius: 12px !important;
+  background: #FFFFFF !important;
+  border: 1px solid #E2E8F0 !important;
 }
 
 .notif-icon-rel {
@@ -2919,14 +2917,14 @@ kbd {
 
 .notif-badge-num {
   position: absolute;
-  top: -6px;
-  right: -8px;
+  top: -4px;
+  right: -4px;
   background: #F43F5E;
   color: #FFFFFF;
-  font-size: 10px;
+  font-size: 9px;
   font-weight: 800;
-  height: 16px;
-  min-width: 16px;
+  height: 14px;
+  min-width: 14px;
   border-radius: 10px;
   display: flex;
   align-items: center;
@@ -2942,21 +2940,22 @@ kbd {
   gap: 6px;
   cursor: pointer;
   color: #1E293B;
+  background: #FFF1F3 !important;
+  border: 1px solid #FECDD3 !important;
+  border-radius: 50px !important;
+  height: 40px;
 }
 
 .icon-block.target-switcher-btn .target-badge {
-  background: #FFE4E6;
+  background: transparent;
   color: #E11D48;
   font-weight: 800;
-  font-size: 11px;
-  padding: 3px 6px;
-  border-radius: 6px;
+  font-size: 12px;
+  padding: 0;
 }
 
 .icon-block.target-switcher-btn .target-label {
-  font-size: 12.5px;
-  font-weight: 700;
-  color: #1E293B;
+  display: none !important; /* Keep mobile bar clean and identical to screenshot */
 }
 
 .grid-menu-icon {
@@ -2974,15 +2973,18 @@ kbd {
   .top-action-bar {
     max-width: 600px;
   }
+  .icon-block.target-switcher-btn .target-label {
+    display: inline !important;
+  }
 }
 
 /* ==========================================================================
-   SECTION 4: MAIN CARD WITH FOLDER-STYLE TABS
+   SECTION 4: MAIN CARD WITH STREAM PILL TABS
    ========================================================================== */
 .telco-main-card {
-  border: 1.5px solid rgba(244, 63, 94, 0.25) !important;
-  border-radius: 20px !important;
-  box-shadow: 0 10px 25px rgba(244, 63, 94, 0.08), 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+  border: 1.5px solid rgba(244, 63, 94, 0.15) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 12px 32px rgba(244, 63, 94, 0.06), 0 2px 8px rgba(0, 0, 0, 0.03) !important;
   background: #FFFFFF !important;
   overflow: visible !important;
   padding: 0 !important;
@@ -2991,23 +2993,20 @@ kbd {
 /* Folder Tabs on Top of Card */
 .card-folder-tabs {
   display: flex;
-  background: #FFF1F5;
-  border-bottom: 1.5px solid rgba(244, 63, 94, 0.2);
-  border-top-left-radius: 18px;
-  border-top-right-radius: 18px;
-  padding: 4px 8px 0 8px;
-  gap: 4px;
+  align-items: center;
+  background: transparent;
+  padding: 12px 14px 4px 14px;
+  gap: 8px;
 }
 
 .folder-tab {
-  padding: 8px 14px;
-  font-size: 13px;
+  padding: 6px 14px;
+  font-size: 13.5px;
   font-weight: 600;
   color: #64748B;
   background: transparent;
-  border: none;
-  border-top-left-radius: 12px;
-  border-top-right-radius: 12px;
+  border: 1px solid transparent;
+  border-radius: 50px;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
@@ -3017,19 +3016,19 @@ kbd {
   background: #FFFFFF;
   color: #F43F5E;
   font-weight: 700;
-  box-shadow: 0 -2px 8px rgba(244, 63, 94, 0.08);
-  border-top: 2px solid #F43F5E;
+  border: 1.5px solid rgba(244, 63, 94, 0.3);
+  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.08);
 }
 
 .card-inner-body {
-  padding: 16px 18px 18px 18px;
+  padding: 14px 18px 20px 18px;
 }
 
 /* Side-by-side chips with white plus buttons */
 .chips-row {
   display: flex;
   gap: 10px;
-  margin-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .stat-chip {
@@ -3037,11 +3036,11 @@ kbd {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 6px 10px;
-  border-radius: 30px;
-  background: #FFF1F5;
-  border: 1px solid rgba(244, 63, 94, 0.2);
-  font-size: 12.5px;
+  padding: 8px 12px;
+  border-radius: 50px;
+  background: #FFF5F7;
+  border: 1px solid rgba(244, 63, 94, 0.16);
+  font-size: 13px;
   font-weight: 600;
   color: #1E293B;
 }
@@ -3052,13 +3051,13 @@ kbd {
 }
 
 .chip-plus-btn {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   border-radius: 50%;
   background: #FFFFFF;
   border: 1px solid rgba(244, 63, 94, 0.3);
   color: #F43F5E;
-  font-size: 14px;
+  font-size: 15px;
   font-weight: 800;
   display: flex;
   align-items: center;
@@ -3072,12 +3071,12 @@ kbd {
   transform: scale(0.9);
 }
 
-/* Exam Lead Row with Big Score Number */
-.exam-lead-row {
+/* Badges Row (Model Test Count + Live Pulse Badge) */
+.card-badges-row {
   display: flex;
   align-items: center;
-  gap: 14px;
-  margin-bottom: 8px;
+  gap: 12px;
+  margin-bottom: 12px;
 }
 
 .score-stat-box {
@@ -3085,16 +3084,16 @@ kbd {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  background: #FFF1F2;
-  border: 1.5px solid #FECDD3;
-  border-radius: 14px;
+  background: #FFF1F3;
+  border: 1px solid #FECDD3;
+  border-radius: 12px;
   padding: 6px 12px;
-  min-width: 58px;
+  min-width: 60px;
   text-align: center;
 }
 
 .score-large-num {
-  font-size: 26px;
+  font-size: 24px;
   font-weight: 800;
   color: #F43F5E;
   line-height: 1;
@@ -3109,35 +3108,75 @@ kbd {
   white-space: nowrap;
 }
 
-.exam-title-wrap {
-  flex: 1;
-}
-
-.exam-title-wrap .banner-badge {
-  margin-bottom: 4px;
-}
-
-.exam-title-wrap .banner-title {
+.telco-main-card .banner-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #FFF1F5;
+  color: #E11D48;
+  padding: 6px 14px;
+  border-radius: 50px;
+  font-size: 12.5px;
+  font-weight: 700;
+  border: 1px solid rgba(244, 63, 94, 0.2);
   margin-bottom: 0;
+}
+
+.telco-main-card .banner-title {
   font-size: 18px;
-  line-height: 1.35;
+  font-weight: 800;
+  color: #0F172A;
+  margin: 10px 0 6px 0;
+  line-height: 1.4;
+}
+
+.telco-main-card .banner-desc {
+  font-size: 13px;
+  color: #64748B;
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+.telco-main-card .banner-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 18px;
+  font-size: 12px;
+  color: #64748B;
+}
+
+.telco-main-card .badge-negative {
+  background: #FFF1F2;
+  color: #E11D48;
+  padding: 3px 8px;
+  border-radius: 8px;
+  font-weight: 700;
+  border: 1px solid #FECDD3;
 }
 
 .telco-cta-btn {
+  width: 100% !important;
   background: linear-gradient(135deg, #F43F5E 0%, #E11D48 100%) !important;
   color: #FFFFFF !important;
-  font-size: 14.5px !important;
+  font-size: 16px !important;
   font-weight: 700 !important;
-  padding: 12px 20px !important;
-  border-radius: 14px !important;
-  box-shadow: 0 6px 18px rgba(244, 63, 94, 0.3) !important;
+  padding: 14px 24px !important;
+  border-radius: 16px !important;
+  box-shadow: 0 8px 24px rgba(244, 63, 94, 0.35) !important;
   border: none !important;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 6px;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
   cursor: pointer;
-  min-height: 48px;
+  min-height: 52px;
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+
+.telco-cta-btn:active {
+  transform: scale(0.98);
 }
 
 /* ==========================================================================
