@@ -1,67 +1,680 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="bn">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ConceptMCQ - Master Concepts Through Practice</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <title>ConceptMCQ - কনসেপ্ট ক্লিয়ার, পরীক্ষা জয়</title>
+  
+  <!-- PWA & Mobile Web App Meta Tags -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="ConceptMCQ">
+  <meta name="theme-color" content="#EA1D5D">
+  <meta name="application-name" content="ConceptMCQ">
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Typography: Hind Siliguri (Bengali) + Plus Jakarta Sans (English & Metrics) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="css/style.css">
+  
+  <!-- KaTeX CSS & JS for Mathematical Equation Rendering -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css">
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.js"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/contrib/auto-render.min.js"></script>
+
   <!-- Supabase JS CDN -->
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
-<body>
+<body class="clean-ui">
   <div id="app">
-    <!-- Header -->
+    <!-- Top Navigation Header -->
     <header class="header">
       <div class="container header-container">
-        <div class="logo">
-          <span class="logo-badge">⚡</span>
-          <span class="logo-text">Concept<span class="accent">MCQ</span></span>
+        <!-- Brand Logo -->
+        <div class="logo" id="logo-btn" title="হোমপেজে যান">
+          <div class="logo-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+            </svg>
+          </div>
+          <div class="logo-text">Concept<span class="logo-accent">MCQ</span></div>
         </div>
-        <div class="header-status">
-          <span id="db-status-badge" class="badge badge-waiting">Connecting...</span>
+
+        <!-- Target Switcher Pill (10MS Style) -->
+        <button class="target-switcher-btn" id="target-switcher-btn" title="ক্লাস বা লক্ষ্য পরিবর্তন করুন">
+          <span class="target-badge" id="current-target-badge">SSC</span>
+          <span class="target-label" id="current-target-label">এসএসসি (৯-১০)</span>
+          <span class="dropdown-arrow">▾</span>
+        </button>
+
+        <!-- User Stats & Profile Controls (Pure Coolicons Vector Icons) -->
+        <div class="header-right">
+          <div class="stat-pill streak-pill" title="ধারাবাহিক পড়ার স্ট্রিক">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M12 2C9.5 5 7 7.5 7 11C7 14.5 9.5 17 12 21C14.5 17 17 14.5 17 11C17 7.5 14.5 5 12 2Z"></path>
+            </svg>
+            <span class="stat-val" id="user-streak">৫ দিন</span>
+          </div>
+          <div class="stat-pill coin-pill" title="অর্জিত পয়েন্ট">
+            <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="12" cy="12" r="10"></circle>
+              <circle cx="12" cy="12" r="6"></circle>
+            </svg>
+            <span class="stat-val" id="user-coins">১২৫০</span>
+          </div>
+          <button class="icon-btn notif-btn" id="notif-btn" title="নোটিফিকেশন">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M15 17V18C15 19.6569 13.6569 21 12 21C10.3431 21 9 19.6569 9 18V17M19 14L20 15V16C20 16.5523 19.5523 17 19 17H5C4.44772 17 4 16.5523 4 16V15L5 14V10C5 6.13401 8.134 3 12 3C15.866 3 19 6.13401 19 10V14Z"></path>
+            </svg>
+          </button>
+          <div class="avatar-pill" title="প্রোফাইল">
+            <div class="avatar-circle">আ</div>
+          </div>
         </div>
       </div>
     </header>
 
-    <!-- Main Content -->
+    <!-- Main Content Area -->
     <main class="container main-content">
-      <!-- Hero / Stats -->
-      <section class="hero-section">
-        <h1 class="hero-title">Practice High-Yield Concept MCQs</h1>
-        <p class="hero-subtitle">Sharpen your analytical skills with curated conceptual questions and instant rationales.</p>
-      </section>
+      
+      <!-- VIEW 1: DASHBOARD VIEW -->
+      <div id="dashboard-view">
+        <div class="dashboard-grid-layout">
+          
+          <!-- LEFT COLUMN: Primary Content Feed -->
+          <div class="dashboard-main-col">
+            <!-- Hero / Live Model Test Banner -->
+            <section class="live-banner-card">
+              <div class="banner-badge">
+                <span class="live-pulse"></span>
+                <span>আজকের লাইভ মডেল টেস্ট</span>
+              </div>
+              <div class="banner-content">
+                <div class="banner-info">
+                  <h1 class="banner-title" id="banner-title">এসএসসি স্পেশাল সাধারণ গণিত ও বিজ্ঞান কুইজ</h1>
+                  <p class="banner-desc">পরীক্ষার আসল প্রস্তুতি নিন KaTeX সমীকরণ, নেগেটিভ মার্কিং ও কনসেপ্ট ব্যাখ্যা সহ।</p>
+                  <div class="banner-meta">
+                    <span class="meta-item">
+                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="13" r="8"></circle>
+                        <path d="M12 9v4l2 2M10 2h4"></path>
+                      </svg>
+                      <span>১৫ মিনিট</span>
+                    </span>
+                    <span>•</span>
+                    <span>২০টি প্রশ্ন</span>
+                    <span>•</span>
+                    <span class="badge-negative">নেগেটিভ মার্কিং: -০.২৫</span>
+                    <span>•</span>
+                    <span>৪,৫২০+ পরীক্ষার্থী</span>
+                  </div>
+                </div>
+                <button class="btn btn-magenta-cta" id="start-live-exam-btn">
+                  পরীক্ষা শুরু করুন →
+                </button>
+              </div>
+            </section>
 
-      <!-- Quiz Card Area -->
-      <section id="quiz-container" class="quiz-card">
-        <div class="quiz-header">
-          <div class="category-tag" id="question-category">Loading Category...</div>
-          <div class="question-tracker" id="question-counter">Question 1</div>
+            <!-- Subjects Header (Clean 10MS Style, Stream selected from top) -->
+            <section class="subjects-header-section">
+              <div class="section-header">
+                <div>
+                  <div class="section-title-wrap">
+                    <h2 class="section-title">আমার বিষয়সমূহ</h2>
+                    <span class="active-stream-badge" id="active-stream-badge">বিজ্ঞান বিভাগ</span>
+                  </div>
+                  <span class="section-subtitle" id="stream-subtitle">সিলেবাস অনুযায়ী অধ্যায়ভিত্তিক প্রস্তুতি ও মডেল টেস্ট</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- Dynamic 10MS-Inspired Circular Subject Grid -->
+            <section class="subjects-grid" id="subjects-grid-container">
+              <!-- Dynamic Subject Cards injected by JS -->
+            </section>
+
+            <!-- Mobile Quick Access Feature Tiles (Visible on Mobile / App Mode) -->
+            <section class="feature-tiles-grid mobile-tiles-only">
+              <div class="feature-tile" id="tile-mistake-bank-m">
+                <div class="tile-icon-wrap bg-rose-light">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M4 12C4 7.58 7.58 4 12 4c3.5 0 6.5 2.2 7.5 5.5M20 4v6h-6M20 12c0 4.42-3.58 8-8 8-3.5 0-6.5-2.2-7.5-5.5M4 20v-6h6"></path>
+                  </svg>
+                </div>
+                <div class="tile-details">
+                  <h3>ভুল উত্তর ব্যাংক</h3>
+                  <p>৩-দিনের স্পেসড রিটেনশন রিভিশন</p>
+                </div>
+              </div>
+              <div class="feature-tile" id="tile-bookmarks-m">
+                <div class="tile-icon-wrap bg-amber-light">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                  </svg>
+                </div>
+                <div class="tile-details">
+                  <h3>বুকমার্ক প্রশ্ন</h3>
+                  <p>সংরক্ষিত গুরুত্বপূর্ণ কনসেপ্ট</p>
+                </div>
+              </div>
+              <div class="feature-tile" id="tile-rapid-quiz-m">
+                <div class="tile-icon-wrap bg-purple-light">
+                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                  </svg>
+                </div>
+                <div class="tile-details">
+                  <h3>র‍্যাপিড ফায়ার</h3>
+                  <p>৫ মিনিটে ৫টি স্পিড টেস্ট</p>
+                </div>
+              </div>
+            </section>
+          </div>
+
+          <!-- RIGHT COLUMN: Desktop Analytics & Quick Actions (Web View Only) -->
+          <aside class="dashboard-sidebar-col">
+            <!-- 7-Day Weekly Streak Tracker -->
+            <div class="sidebar-card">
+              <div class="sidebar-card-header">
+                <div class="sidebar-title-wrap">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2C9.5 5 7 7.5 7 11C7 14.5 9.5 17 12 21C14.5 17 17 14.5 17 11C17 7.5 14.5 5 12 2Z"></path>
+                  </svg>
+                  <h4>সাপ্তাহিক পড়ার স্ট্রিক</h4>
+                </div>
+                <span class="streak-count-badge">৫ দিন সক্রিয়</span>
+              </div>
+              <div class="streak-days-row">
+                <div class="streak-day done"><span>শনি</span><div class="day-dot">✓</div></div>
+                <div class="streak-day done"><span>রবি</span><div class="day-dot">✓</div></div>
+                <div class="streak-day done"><span>সোম</span><div class="day-dot">✓</div></div>
+                <div class="streak-day done"><span>মঙ্গল</span><div class="day-dot">✓</div></div>
+                <div class="streak-day done today"><span>বুধ</span><div class="day-dot">✓</div></div>
+                <div class="streak-day"><span>বৃহ</span><div class="day-dot">•</div></div>
+                <div class="streak-day"><span>শুক্র</span><div class="day-dot">•</div></div>
+              </div>
+              <p class="streak-tip">প্রতিদিন অন্তত ১টি মডেল টেস্ট দিয়ে স্ট্রিক ধরে রাখুন!</p>
+            </div>
+
+            <!-- Desktop Quick Actions Hub -->
+            <div class="sidebar-card">
+              <h4 class="sidebar-heading">কুইক লার্নিং হাব</h4>
+              <div class="desktop-hub-actions">
+                <button class="hub-action-btn" id="tile-mistake-bank-d">
+                  <div class="hub-btn-left">
+                    <div class="hub-icon bg-rose-light">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M4 12C4 7.58 7.58 4 12 4c3.5 0 6.5 2.2 7.5 5.5M20 4v6h-6M20 12c0 4.42-3.58 8-8 8-3.5 0-6.5-2.2-7.5-5.5M4 20v-6h6"></path>
+                      </svg>
+                    </div>
+                    <div class="hub-texts">
+                      <strong>ভুল উত্তর ব্যাংক</strong>
+                      <span>৩-দিনের রিভিশন ব্যাংক</span>
+                    </div>
+                  </div>
+                  <span class="hub-arrow">→</span>
+                </button>
+
+                <button class="hub-action-btn" id="tile-bookmarks-d">
+                  <div class="hub-btn-left">
+                    <div class="hub-icon bg-amber-light">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                      </svg>
+                    </div>
+                    <div class="hub-texts">
+                      <strong>বুকমার্ক প্রশ্ন</strong>
+                      <span>সংরক্ষিত কনসেপ্টসমূহ</span>
+                    </div>
+                  </div>
+                  <span class="hub-arrow">→</span>
+                </button>
+
+                <button class="hub-action-btn" id="tile-rapid-quiz-d">
+                  <div class="hub-btn-left">
+                    <div class="hub-icon bg-purple-light">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                      </svg>
+                    </div>
+                    <div class="hub-texts">
+                      <strong>র‍্যাপিড ফায়ার কুইজ</strong>
+                      <span>৫ মিনিটে ৫টি প্রশ্ন</span>
+                    </div>
+                  </div>
+                  <span class="hub-arrow">→</span>
+                </button>
+              </div>
+            </div>
+
+            <!-- Desktop Leaderboard Widget -->
+            <div class="sidebar-card">
+              <div class="sidebar-card-header">
+                <div class="sidebar-title-wrap">
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"></path>
+                  </svg>
+                  <h4>লাইভ লিডারবোর্ড</h4>
+                </div>
+                <span class="badge-accent">টপ ৫%</span>
+              </div>
+              <div class="leader-preview-list">
+                <div class="leader-item">
+                  <span class="rank-pos gold">১</span>
+                  <span class="rank-name">সাকিবুল হাসান</span>
+                  <span class="rank-score">১৯.৭৫</span>
+                </div>
+                <div class="leader-item">
+                  <span class="rank-pos silver">২</span>
+                  <span class="rank-name">নুসরাত জাহান</span>
+                  <span class="rank-score">১৯.৫০</span>
+                </div>
+                <div class="leader-item current-user">
+                  <span class="rank-pos">১৪</span>
+                  <span class="rank-name">আসিফ মাহমুদ (আপনি)</span>
+                  <span class="rank-score">১৭.৫০</span>
+                </div>
+              </div>
+            </div>
+
+          </aside>
+        </div>
+      </div>
+
+      <!-- VIEW 2: INTERACTIVE EXAM / ASSESSMENT VIEW -->
+      <div id="exam-view" class="hidden">
+        
+        <!-- Top Exam Controls Bar -->
+        <div class="exam-top-bar">
+          <button class="back-link-btn" id="exit-exam-btn">← ড্যাশবোর্ডে ফিরুন</button>
+          <div class="exam-title-wrap">
+            <span class="exam-category-tag" id="exam-category-badge">সাধারণ গণিত</span>
+            <span class="exam-pacing-pill" id="exam-timer-display">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <circle cx="12" cy="13" r="8"></circle>
+                <path d="M12 9v4l2 2M10 2h4"></path>
+              </svg>
+              <span id="timer-text">১৫:০০</span>
+            </span>
+          </div>
+          <div class="exam-tools-group">
+            <button class="tool-toggle-btn" id="toggle-blur-mode" title="অপশন আগে থেকে না দেখে নিজে মনে করার প্র্যাকটিস (শর্টকাট: R)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                <circle cx="12" cy="12" r="3"></circle>
+              </svg>
+              <span class="tool-label">Active Recall</span>
+            </button>
+            <button class="tool-toggle-btn" id="toggle-strikethrough-mode" title="ভুল অপশন কাটার টুল (শর্টকাট: S)">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <line x1="18" y1="6" x2="6" y2="18"></line>
+                <line x1="6" y1="6" x2="18" y2="18"></line>
+              </svg>
+              <span class="tool-label">Elimination</span>
+            </button>
+          </div>
         </div>
 
-        <h2 class="question-text" id="question-title">Loading question...</h2>
-
-        <div class="options-grid" id="options-container">
-          <!-- Dynamic Options rendered by JS -->
+        <!-- Progress Bar -->
+        <div class="progress-wrap">
+          <div class="progress-info">
+            <span id="question-progress-label">প্রশ্ন ১ / ৮</span>
+            <span class="pacing-badge" id="pacing-badge">আদর্শ পেস: ৪৫ সেকেন্ড</span>
+          </div>
+          <div class="progress-bar-bg">
+            <div class="progress-bar-fill" id="exam-progress-bar"></div>
+          </div>
         </div>
 
-        <div id="explanation-box" class="explanation-box hidden">
-          <h4>💡 Concept Explanation</h4>
-          <p id="explanation-text"></p>
-        </div>
+        <!-- 2-Column Exam Arena (Desktop Web + Fluid Mobile) -->
+        <div class="exam-grid-layout">
+          
+          <!-- LEFT: Active Question & Solution Engine -->
+          <div class="exam-main-col">
+            <div class="question-card" id="question-card">
+              <div class="question-header">
+                <span class="question-id-pill" id="question-number-pill">প্রশ্ন ১</span>
+                <span class="question-topic-pill" id="question-topic-pill">বীজগণিতীয় সূত্রাবলী</span>
+              </div>
 
-        <div class="quiz-footer">
-          <button id="next-btn" class="btn btn-primary" disabled>Next Question →</button>
+              <!-- Question Prompt with KaTeX Math Equation Support -->
+              <h2 class="question-prompt" id="question-prompt-text">
+                প্রশ্ন লোড হচ্ছে...
+              </h2>
+
+              <!-- Options Container -->
+              <div class="options-container" id="options-container">
+                <!-- Options (ক, খ, গ, ঘ) injected by JS -->
+              </div>
+
+              <!-- Confidence Tagging Meter (Enterprise Grade - No Emojis) -->
+              <div class="confidence-selector-box" id="confidence-box">
+                <span class="confidence-label">আত্মবিশ্বাস মিটার: উত্তর সম্পর্কে আপনি কতটা নিশ্চিত?</span>
+                <div class="confidence-buttons">
+                  <button class="btn-confidence" data-confidence="certain">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                      <polyline points="20 6 9 17 4 12"></polyline>
+                    </svg>
+                    <span>১০০% নিশ্চিত</span>
+                  </button>
+                  <button class="btn-confidence" data-confidence="guess">
+                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <circle cx="12" cy="12" r="10"></circle>
+                      <path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"></path>
+                      <line x1="12" y1="17" x2="12.01" y2="17"></line>
+                    </svg>
+                    <span>আন্দাজে / দ্বিধাদ্বন্দ্ব</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Detailed Concept Explanation Card with KaTeX Math -->
+              <div class="explanation-card hidden" id="explanation-card">
+                <div class="explanation-header">
+                  <div class="bulb-wrap">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M9 21h6M12 3a6 6 0 0 0-6 6c0 2.5 1.5 4.5 2.5 5.5.5 1 .5 2 .5 2.5h6c0-.5 0-1.5.5-2.5 1-1 2.5-3 2.5-5.5a6 6 0 0 0-6-6z"></path>
+                    </svg>
+                  </div>
+                  <h3>কনসেপ্ট ও বিস্তারিত গাণিতিক ব্যাখ্যা</h3>
+                </div>
+                <div class="explanation-body" id="explanation-body-text"></div>
+                
+                <!-- Twisted / Counter Variant Question Generator -->
+                <div class="twisted-variant-box">
+                  <button class="btn btn-outline-magenta" id="twisted-question-btn">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M4 12C4 7.58 7.58 4 12 4c3.5 0 6.5 2.2 7.5 5.5M20 4v6h-6M20 12c0 4.42-3.58 8-8 8-3.5 0-6.5-2.2-7.5-5.5M4 20v-6h6"></path>
+                    </svg>
+                    <span>এই প্রশ্নটি পরীক্ষায় ঘুরিয়ে আসলে কেমন হবে?</span>
+                  </button>
+                </div>
+              </div>
+
+              <!-- Bottom Action Buttons -->
+              <div class="question-footer">
+                <button class="btn btn-secondary" id="prev-btn" disabled>← পূর্ববর্তী</button>
+                <div class="footer-center-actions">
+                  <button class="btn btn-ghost" id="mark-review-btn">বুকমার্ক রাখুন</button>
+                </div>
+                <button class="btn btn-primary-magenta" id="next-btn">পরবর্তী প্রশ্ন →</button>
+                <button class="btn btn-submit-exam hidden" id="finish-exam-btn">পরীক্ষা জমা দিন ✓</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- RIGHT: Desktop Question Palette & Shortcuts (Web View Only) -->
+          <aside class="exam-sidebar-col">
+            <div class="sidebar-card">
+              <h4 class="sidebar-heading">প্রশ্ন প্যালেট (Question Palette)</h4>
+              <p class="sidebar-subtext">যেকোনো প্রশ্নে সরাসরি জাম্প করুন:</p>
+              <div class="question-palette-grid" id="question-palette-container">
+                <!-- Question Number Chips (1..20) injected by JS -->
+              </div>
+              <div class="palette-legend">
+                <div class="legend-item"><span class="legend-dot answered"></span><span>উত্তর দেওয়া</span></div>
+                <div class="legend-item"><span class="legend-dot current"></span><span>বর্তমান</span></div>
+                <div class="legend-item"><span class="legend-dot bookmarked"></span><span>বুকমার্কড</span></div>
+                <div class="legend-item"><span class="legend-dot unanswered"></span><span>বাকি আছে</span></div>
+              </div>
+            </div>
+
+            <!-- Keyboard Shortcuts Box -->
+            <div class="sidebar-card">
+              <h4 class="sidebar-heading">ডেস্কটপ কিবোর্ড শর্টকাট</h4>
+              <div class="shortcut-list">
+                <div class="shortcut-row"><kbd>1</kbd> - <kbd>4</kbd><span>অপশন ক, খ, গ, ঘ সিলেক্ট</span></div>
+                <div class="shortcut-row"><kbd>Enter</kbd><span>পরবর্তী প্রশ্ন</span></div>
+                <div class="shortcut-row"><kbd>B</kbd><span>বুকমার্ক টগল</span></div>
+                <div class="shortcut-row"><kbd>R</kbd><span>Active Recall ব্লার টগল</span></div>
+                <div class="shortcut-row"><kbd>S</kbd><span>Elimination স্ট্রাইক মোড</span></div>
+              </div>
+            </div>
+          </aside>
+
         </div>
-      </section>
+      </div>
+
+      <!-- VIEW 3: RESULT & DIAGNOSTIC VIEW -->
+      <div id="result-view" class="hidden">
+        <div class="result-card">
+          <div class="result-header">
+            <div class="result-trophy-badge">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M19 5H18V3H6V5H5C3.9 5 3 5.9 3 7V9C3 11.21 4.79 13 7 13H7.5C8.42 14.62 10.08 15.74 12 15.94V19H8V21H16V19H12V15.94C13.92 15.74 15.58 14.62 16.5 13H17C19.21 13 21 11.21 21 9V7C21 5.9 20.1 5 19 5Z"></path>
+              </svg>
+            </div>
+            <h2 class="result-title">পরীক্ষার মূল্যায়ন ও অ্যানালিটিক্স</h2>
+            <p class="result-subtitle" id="result-subject-title">এসএসসি সাধারণ গণিত স্পেশাল</p>
+          </div>
+
+          <div class="score-summary-grid">
+            <div class="summary-metric-card">
+              <span class="metric-label">মোট স্কোর</span>
+              <span class="metric-val text-magenta" id="res-score">১৮ / ২০</span>
+            </div>
+            <div class="summary-metric-card">
+              <span class="metric-label">সঠিক উত্তর</span>
+              <span class="metric-val text-green" id="res-correct">১৮টি</span>
+            </div>
+            <div class="summary-metric-card">
+              <span class="metric-label">ভুল উত্তর</span>
+              <span class="metric-val text-red" id="res-wrong">২টি</span>
+            </div>
+            <div class="summary-metric-card">
+              <span class="metric-label">নেট মার্কস</span>
+              <span class="metric-val text-indigo" id="res-net">১৭.৫০</span>
+            </div>
+          </div>
+
+          <!-- Confidence Diagnostic Report -->
+          <div class="diagnostic-box">
+            <h4>আত্মবিশ্বাস বনাম নেগেটিভ মার্কিং অ্যানালাইসিস</h4>
+            <p id="res-confidence-feedback">
+              আপনি নিশ্চিত ছিলেন এমন প্রশ্নে একিউরেসি ৯৫%। তবে আন্দাজে দাগানো প্রশ্নের কারণে -০.৫০ নম্বর কাটা গেছে। পরীক্ষার হলে দ্বিধাদ্বন্দ্ব থাকা প্রশ্ন স্কিপ করাই সর্বোত্তম কৌশল।
+            </p>
+          </div>
+
+          <!-- 3-Day Spaced Repetition Notification -->
+          <div class="spaced-repetition-alert">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 9.8V20M12 20L11.4 19.1C10.9 18.4 10.6 18 10.3 17.7 10 17.4 9.6 17.2 9.3 17.1 8.8 17 8.4 17 7.4 17H4.6C4 17 3.8 17 3.5 16.9 3.4 16.8 3.2 16.6 3.1 16.5 3 16.2 3 16 3 15.4V6.6C3 6 3 5.8 3.1 5.5 3.2 5.4 3.4 5.2 3.5 5.1 3.8 5 4 5 4.6 5H7.2C8.9 5 9.7 5 10.4 5.3 11 5.6 11.4 6.1 11.7 6.6 12 7.3 12 8.1 12 9.8 12 8.1 12 7.3 12.3 6.6 12.6 6.1 13.1 5.6 13.6 5.3 14.3 5 15.1 5 16.8 5H19.4C20 5 20.2 5 20.5 5.1 20.6 5.2 20.8 5.4 20.9 5.5 21 5.8 21 6 21 6.6V15.4C21 16 21 16.2 20.9 16.5 20.8 16.6 20.6 16.8 20.5 16.9 20.2 17 20 17 19.4 17H16.6C15.6 17 15.2 17 14.7 17.1 14.4 17.2 14 17.4 13.7 17.7 13.4 18 13.1 18.4 12.6 19.1L12 20Z"></path>
+            </svg>
+            <span>ভুল হওয়া প্রশ্নগুলো আপনার <strong>৩-দিনের রিভিশন ব্যাংকে</strong> সেভ করা হয়েছে। ৩ দিন পর আবার রিভিশন দেওয়ার সুযোগ পাবেন।</span>
+          </div>
+
+          <div class="result-actions">
+            <button class="btn btn-primary-magenta" id="retake-exam-btn">আবার পরীক্ষা দিন</button>
+            <button class="btn btn-secondary" id="back-home-btn">ড্যাশবোর্ডে ফিরুন</button>
+          </div>
+        </div>
+      </div>
+
     </main>
 
-    <!-- Footer -->
-    <footer class="footer">
-      <div class="container">
-        <p>© 2026 ConceptMCQ • Created by Asif Mahmud • Built for Excellence</p>
+    <!-- MOBILE APP BOTTOM NAVIGATION DOCK (Native App Feel on Mobile / WebViews) -->
+    <nav class="mobile-bottom-dock" id="mobile-dock">
+      <button class="dock-item active" id="dock-home-btn">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
+          <polyline points="9 22 9 12 15 12 15 22"></polyline>
+        </svg>
+        <span>হোম</span>
+      </button>
+
+      <button class="dock-item" id="dock-study-btn">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
+          <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
+        </svg>
+        <span>স্টাডি</span>
+      </button>
+
+      <button class="dock-item" id="dock-revision-btn">
+        <div class="dock-icon-rel">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path d="M4 12C4 7.58 7.58 4 12 4c3.5 0 6.5 2.2 7.5 5.5M20 4v6h-6M20 12c0 4.42-3.58 8-8 8-3.5 0-6.5-2.2-7.5-5.5M4 20v-6h6"></path>
+          </svg>
+        </div>
+        <span>রিভিশন</span>
+      </button>
+
+      <button class="dock-item" id="dock-profile-btn">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
+          <circle cx="12" cy="7" r="4"></circle>
+        </svg>
+        <span>প্রোফাইল</span>
+      </button>
+    </nav>
+
+    <!-- CUSTOM CONCEPT & CHAPTER QUIZ BUILDER MODAL -->
+    <div class="modal-backdrop hidden" id="custom-quiz-modal-backdrop">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title">অধ্যায় ও কনসেপ্ট নির্বাচন করুন</h3>
+            <p class="modal-subtitle">বিষয়, অধ্যায় ও কনসেপ্ট সিলেক্ট করে কাস্টম প্র্যাকটিস শুরু করুন</p>
+          </div>
+          <button class="modal-close-btn" id="close-custom-quiz-modal">✕</button>
+        </div>
+
+        <div class="custom-quiz-form">
+          <!-- 1. Subject Select -->
+          <div class="form-group-custom">
+            <label class="form-label-custom">১. বিষয় নির্বাচন করুন:</label>
+            <div class="custom-select-wrap">
+              <select class="custom-form-select" id="custom-subject-select">
+                <!-- Dynamically populated from target subjects -->
+              </select>
+            </div>
+          </div>
+
+          <!-- 2. Chapter Select -->
+          <div class="form-group-custom">
+            <label class="form-label-custom">২. অধ্যায় নির্বাচন করুন:</label>
+            <div class="custom-select-wrap">
+              <select class="custom-form-select" id="custom-chapter-select">
+                <!-- Dynamically populated based on chosen subject -->
+              </select>
+            </div>
+          </div>
+
+          <!-- 3. Concept / Topic Select -->
+          <div class="form-group-custom">
+            <label class="form-label-custom">৩. কনসেপ্ট বা টপিক নির্বাচন করুন:</label>
+            <div class="custom-select-wrap">
+              <select class="custom-form-select" id="custom-concept-select">
+                <!-- Dynamically populated based on chosen chapter -->
+              </select>
+            </div>
+          </div>
+
+          <!-- 4. Number of Questions & Duration -->
+          <div class="form-group-custom">
+            <label class="form-label-custom">৪. প্রশ্নের সংখ্যা ও সময়:</label>
+            <div class="quiz-length-options" id="quiz-length-options">
+              <button type="button" class="quiz-length-pill active" data-count="5" data-mins="5">
+                <strong>৫টি প্রশ্ন</strong>
+                <span>৫ মিনিট</span>
+              </button>
+              <button type="button" class="quiz-length-pill" data-count="10" data-mins="10">
+                <strong>১০টি প্রশ্ন</strong>
+                <span>১০ মিনিট</span>
+              </button>
+              <button type="button" class="quiz-length-pill" data-count="15" data-mins="15">
+                <strong>১৫টি প্রশ্ন</strong>
+                <span>১৫ মিনিট</span>
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="modal-footer modal-footer-split">
+          <button class="btn btn-secondary" id="random-rapid-btn">
+            র‍্যান্ডম কুইজ 🎲
+          </button>
+          <button class="btn btn-primary-magenta flex-1" id="start-custom-quiz-btn">
+            কুইজ শুরু করুন →
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ONBOARDING & TARGET SWITCHER MODAL (Zero Emojis) -->
+    <div class="modal-backdrop hidden" id="target-modal-backdrop">
+      <div class="modal-card">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title">আপনার শ্রেণি বা লক্ষ্য বেছে নিন</h3>
+            <p class="modal-subtitle">যেকোনো সময় এটি হেডারের সুইচ বাটন থেকে পরিবর্তন করতে পারবেন।</p>
+          </div>
+          <button class="modal-close-btn" id="close-target-modal">✕</button>
+        </div>
+
+        <div class="targets-list" id="targets-list">
+          <!-- Target Options -->
+          <div class="target-option-card active" data-target="ssc">
+            <div class="target-card-badge">SSC</div>
+            <div class="target-card-info">
+              <h4>ক্লাস ৯ - ১০ (এসএসসি প্রস্তুতি)</h4>
+              <p>বিজ্ঞান, মানবিক ও ব্যবসায় শিক্ষা সিলেবাস</p>
+            </div>
+            <span class="target-check">✓</span>
+          </div>
+
+          <div class="target-option-card" data-target="hsc">
+            <div class="target-card-badge">HSC</div>
+            <div class="target-card-info">
+              <h4>ক্লাস ১১ - ১২ (এইচএসসি প্রস্তুতি)</h4>
+              <p>একাদশ-দ্বাদশ ও বোর্ড পরীক্ষার বিষয়সমূহ</p>
+            </div>
+            <span class="target-check">✓</span>
+          </div>
+
+          <div class="target-option-card" data-target="admission">
+            <div class="target-card-badge">UNI</div>
+            <div class="target-card-info">
+              <h4>বিশ্ববিদ্যালয় ভর্তি (ক, খ, গ ইউনিট)</h4>
+              <p>ঢাকা বিশ্ববিদ্যালয়, গুচ্ছ (GST) ও বিশ্ববিদ্যালয় ভর্তি</p>
+            </div>
+            <span class="target-check">✓</span>
+          </div>
+
+          <div class="target-option-card" data-target="medical">
+            <div class="target-card-badge">MED</div>
+            <div class="target-card-info">
+              <h4>মেডিকেল ও ডেন্টাল ভর্তি</h4>
+              <p>জীববিজ্ঞান, রসায়ন, পদার্থ, ইংরেজি ও সাধারণ জ্ঞান</p>
+            </div>
+            <span class="target-check">✓</span>
+          </div>
+
+          <div class="target-option-card" data-target="bcs">
+            <div class="target-card-badge">BCS</div>
+            <div class="target-card-info">
+              <h4>বিসিএস ও সরকারি চাকরি</h4>
+              <p>বিসিএস প্রিলিমিনারি ও ব্যাংক জবস স্পেশাল</p>
+            </div>
+            <span class="target-check">✓</span>
+          </div>
+        </div>
+
+        <div class="modal-footer">
+          <button class="btn btn-primary-magenta w-full" id="confirm-target-btn">
+            লক্ষ্য নিশ্চিত করুন ✓
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Desktop Footer -->
+    <footer class="footer desktop-footer">
+      <div class="container footer-container">
+        <p>© 2026 ConceptMCQ • কনসেপ্ট ক্লিয়ার, পরীক্ষা জয় • Web & Mobile Hybrid Architecture</p>
       </div>
     </footer>
   </div>

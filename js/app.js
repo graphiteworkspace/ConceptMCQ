@@ -1,100 +1,1670 @@
-// ConceptMCQ Application Logic
-const fallbackQuestions = [
+// ==============================================================================
+// CONCEPTMCQ APPLICATION ENGINE
+// 10 Minute School Inspired Architecture • 100% Coolicons • KaTeX Math Support
+// ==============================================================================
+
+// Target Configurations (Class 9-10, HSC, Admission, Medical, BCS)
+const TARGET_CONFIGS = {
+  ssc: {
+    id: "ssc",
+    label: "এসএসসি (৯-১০)",
+    codeBadge: "SSC",
+    desc: "বিজ্ঞান, মানবিক ও ব্যবসায় শিক্ষা সিলেবাস",
+    bannerTitle: "এসএসসি স্পেশাল সাধারণ গণিত ও বিজ্ঞান মডেল টেস্ট",
+    streams: [
+      { id: "science", label: "বিজ্ঞান বিভাগ" },
+      { id: "commerce", label: "ব্যবসায় শিক্ষা" },
+      { id: "humanities", label: "মানবিক বিভাগ" },
+      { id: "common", label: "কমন বিষয়সমূহ" }
+    ],
+    subjects: {
+      science: [
+        { id: "general_math", name: "সাধারণ গণিত", symbol: "±×", pastel: "pastel-pink", questionsCount: "১,৪৫০+ প্রশ্ন", topic: "বীজগণিতীয় সূত্রাবলী" },
+        { id: "physics", name: "পদার্থবিজ্ঞান", symbol: "PHY", pastel: "pastel-violet", questionsCount: "১,১৫০+ প্রশ্ন", topic: "বল ও গতি" },
+        { id: "chemistry", name: "রসায়ন", symbol: "CHM", pastel: "pastel-blue", questionsCount: "১,০২০+ প্রশ্ন", topic: "পর্যায় সারণি ও মোলার দ্রবণ" },
+        { id: "higher_math", name: "উচ্চতর গণিত", symbol: "∫dx", pastel: "pastel-amber", questionsCount: "৯৮০+ প্রশ্ন", topic: "স্থানাঙ্ক জ্যামিতি ও ক্যালকুলাস" },
+        { id: "biology", name: "জীববিজ্ঞান", symbol: "BIO", pastel: "pastel-green", questionsCount: "১,১০০+ প্রশ্ন", topic: "কোষ বিভাজন ও টিস্যু" },
+        { id: "ict", name: "তথ্য ও যোগাযোগ প্রযুক্তি", symbol: "ICT", pastel: "pastel-peach", questionsCount: "৭৫০+ প্রশ্ন", topic: "সংখ্যা পদ্ধতি ও লজিক গেট" }
+      ],
+      commerce: [
+        { id: "accounting", name: "হিসাববিজ্ঞান", symbol: "ACC", pastel: "pastel-blue", questionsCount: "১,০৫০+ প্রশ্ন", topic: "জাবেদা ও খতিয়ান" },
+        { id: "business_org", name: "ব্যবসায় উদ্যোগ", symbol: "BUS", pastel: "pastel-amber", questionsCount: "৯২০+ প্রশ্ন", topic: "উদ্যোক্তা উন্নয়ন" },
+        { id: "finance", name: "ফিন্যান্স ও ব্যাংকিং", symbol: "FIN", pastel: "pastel-green", questionsCount: "৮৯০+ প্রশ্ন", topic: "অর্থের সময়মূল্য" },
+        { id: "general_math", name: "সাধারণ গণিত", symbol: "±×", pastel: "pastel-pink", questionsCount: "১,৪০০+ প্রশ্ন", topic: "সেট ও ফাংশন" }
+      ],
+      humanities: [
+        { id: "history", name: "ইতিহাস ও সভ্যতা", symbol: "HIS", pastel: "pastel-peach", questionsCount: "৯০০+ প্রশ্ন", topic: "প্রাচীন বাংলা" },
+        { id: "civics", name: "পৌরনীতি ও নাগরিকতা", symbol: "CIV", pastel: "pastel-violet", questionsCount: "৮৫০+ প্রশ্ন", topic: "রাষ্ট্র ও সরকার" },
+        { id: "geography", name: "ভূগোল ও পরিবেশ", symbol: "GEO", pastel: "pastel-green", questionsCount: "৮২০+ প্রশ্ন", topic: "সৌরজগৎ ও ভূমিরূপ" },
+        { id: "economics", name: "অর্থনীতি", symbol: "ECO", pastel: "pastel-blue", questionsCount: "৭৮০+ প্রশ্ন", topic: "উৎপাদন ও বাজার" }
+      ],
+      common: [
+        { id: "bangla_1", name: "বাংলা ১ম পত্র", symbol: "অ", pastel: "pastel-pink", questionsCount: "১,২৫০+ প্রশ্ন", topic: "গদ্য ও পদ্য" },
+        { id: "bangla_2", name: "বাংলা ২য় পত্র", symbol: "স্ব", pastel: "pastel-peach", questionsCount: "১,৩০০+ প্রশ্ন", topic: "ব্যাকরণ ও সমাস" },
+        { id: "english_1", name: "English 1st", symbol: "En", pastel: "pastel-blue", questionsCount: "১,২০০+ প্রশ্ন", topic: "Reading & Grammar" },
+        { id: "english_2", name: "English 2nd", symbol: "Aa", pastel: "pastel-violet", questionsCount: "১,১৫০+ প্রশ্ন", topic: "Right Form of Verbs" },
+        { id: "bd_world", name: "বাংলাদেশ ও বিশ্বপরিচয়", symbol: "BD", pastel: "pastel-green", questionsCount: "১,৩৫০+ প্রশ্ন", topic: "মুক্তিযুদ্ধ ও সংবিধান" }
+      ]
+    }
+  },
+  hsc: {
+    id: "hsc",
+    label: "এইচএসসি (১১-১২)",
+    codeBadge: "HSC",
+    desc: "একাদশ-দ্বাদশ ও বোর্ড পরীক্ষার বিষয়সমূহ",
+    bannerTitle: "এইচএসসি বোর্ড প্রস্তুতি ও স্পেশাল কনসেপ্ট টেস্ট",
+    streams: [
+      { id: "science", label: "বিজ্ঞান" },
+      { id: "commerce", label: "ব্যবসায় শিক্ষা" },
+      { id: "humanities", label: "মানবিক" }
+    ],
+    subjects: {
+      science: [
+        { id: "physics", name: "পদার্থবিজ্ঞান ১ম ও ২য়", symbol: "PHY", pastel: "pastel-pink", questionsCount: "১,৪০০+ প্রশ্ন", topic: "ভেক্টর ও গতিবিদ্যা" },
+        { id: "chemistry", name: "রসায়ন ১ম ও ২য়", symbol: "CHM", pastel: "pastel-violet", questionsCount: "১,৩৫০+ প্রশ্ন", topic: "মৌলের পর্যাবৃত্ত ধর্ম ও জৈব রসায়ন" },
+        { id: "higher_math", name: "উচ্চতর গণিত ১ম ও ২য়", symbol: "∫dx", pastel: "pastel-blue", questionsCount: "১,৩০০+ প্রশ্ন", topic: "ম্যাট্রিক্স ও ক্যালকুলাস" },
+        { id: "biology", name: "জীববিজ্ঞান ১ম ও ২য়", symbol: "BIO", pastel: "pastel-green", questionsCount: "১,৪৫০+ প্রশ্ন", topic: "কোষ বিভাজন ও শারীরতত্ত্ব" }
+      ],
+      commerce: [
+        { id: "accounting", name: "হিসাববিজ্ঞান ১ম ও ২য়", symbol: "ACC", pastel: "pastel-blue", questionsCount: "১,৩০০+ প্রশ্ন", topic: "আর্থিক বিবরণী ও ব্যাংক সমন্বয়" },
+        { id: "business_org", name: "ব্যবসায় সংগঠন ১ম ও ২য়", symbol: "BUS", pastel: "pastel-amber", questionsCount: "১,২০০+ প্রশ্ন", topic: "ব্যবসায় পরিকল্পনা ও সংগঠন" },
+        { id: "finance", name: "ফিন্যান্স ও ব্যাংকিং ১ম ও ২য়", symbol: "FIN", pastel: "pastel-green", questionsCount: "১,১৫০+ প্রশ্ন", topic: "মূলধনি ব্যয় ও ঝুঁকি" },
+        { id: "economics", name: "অর্থনীতি ১ম ও ২য়", symbol: "ECO", pastel: "pastel-pink", questionsCount: "১,১০০+ প্রশ্ন", topic: "বাজার ও জাতীয় আয়" }
+      ],
+      humanities: [
+        { id: "civics", name: "পৌরনীতি ও সুশাসন ১ম ও ২য়", symbol: "CIV", pastel: "pastel-violet", questionsCount: "১,২৫০+ প্রশ্ন", topic: "রাষ্ট্র ও রাজনৈতিক দল" },
+        { id: "history", name: "ইতিহাস ও সংস্কৃতি ১ম ও ২য়", symbol: "HIS", pastel: "pastel-peach", questionsCount: "১,২০০+ প্রশ্ন", topic: "স্বাধীন বাংলাদেশের অভ্যুদয়" },
+        { id: "economics", name: "অর্থনীতি ১ম ও ২য়", symbol: "ECO", pastel: "pastel-blue", questionsCount: "১,১৫০+ প্রশ্ন", topic: "ব্যাষ্টিক ও সামষ্টিক অর্থনীতি" },
+        { id: "geography", name: "ভূগোল ১ম ও ২য়", symbol: "GEO", pastel: "pastel-green", questionsCount: "১,০৫০+ প্রশ্ন", topic: "প্রাকৃতিক ও মানব ভূগোল" }
+      ]
+    }
+  },
+  admission: {
+    id: "admission",
+    label: "বিশ্ববিদ্যালয় ভর্তি",
+    codeBadge: "UNI",
+    desc: "ঢাকা বিশ্ববিদ্যালয়, গুচ্ছ (GST) ও বিশ্ববিদ্যালয় ভর্তি",
+    bannerTitle: "ঢাকা বিশ্ববিদ্যালয় ও গুচ্ছ (GST) স্পেশাল মডেল টেস্ট",
+    streams: [
+      { id: "a_unit", label: "ক-ইউনিট (বিজ্ঞান)" },
+      { id: "b_unit", label: "খ-ইউনিট (মানবিক)" },
+      { id: "c_unit", label: "গ-ইউনিট (বাণিজ্য)" }
+    ],
+    subjects: {
+      a_unit: [
+        { id: "physics", name: "পদার্থবিজ্ঞান", symbol: "PHY", pastel: "pastel-pink", questionsCount: "১,৮০০+ প্রশ্ন", topic: "নিউটনিয়ান বলবিদ্যা" },
+        { id: "chemistry", name: "রসায়ন", symbol: "CHM", pastel: "pastel-violet", questionsCount: "১,৭৫০+ প্রশ্ন", topic: "গুণগত ও জৈব রসায়ন" },
+        { id: "higher_math", name: "গণিত", symbol: "∫dx", pastel: "pastel-blue", questionsCount: "১,৬০০+ প্রশ্ন", topic: "ক্যালকুলাস ও ভেক্টর" },
+        { id: "biology", name: "জীববিজ্ঞান", symbol: "BIO", pastel: "pastel-green", questionsCount: "১,৮৫০+ প্রশ্ন", topic: "জিনতত্ত্ব ও শারীরতত্ত্ব" }
+      ],
+      b_unit: [
+        { id: "bangla_1", name: "বাংলা ভাষা ও সাহিত্য", symbol: "অ", pastel: "pastel-pink", questionsCount: "২,১০০+ প্রশ্ন", topic: "আধুনিক যুগ ও ব্যাকরণ" },
+        { id: "english_1", name: "English Language", symbol: "En", pastel: "pastel-blue", questionsCount: "২,৩০০+ প্রশ্ন", topic: "Vocabulary & Prepositions" },
+        { id: "bd_world", name: "বাংলাদেশ বিষয়াবলী", symbol: "BD", pastel: "pastel-green", questionsCount: "২,৫০০+ প্রশ্ন", topic: "সংবিধান ও ইতিহাস" }
+      ],
+      c_unit: [
+        { id: "accounting", name: "হিসাববিজ্ঞান", symbol: "ACC", pastel: "pastel-blue", questionsCount: "১,৪৫০+ প্রশ্ন", topic: "আর্থিক বিবরণী" },
+        { id: "business_org", name: "ব্যবসায় সংগঠন", symbol: "BUS", pastel: "pastel-amber", questionsCount: "১,৩০০+ প্রশ্ন", topic: "ব্যবস্থাপনার নীতি" },
+        { id: "english_2", name: "English for Business", symbol: "En", pastel: "pastel-violet", questionsCount: "১,৬০০+ প্রশ্ন", topic: "Commercial English" }
+      ]
+    }
+  },
+  medical: {
+    id: "medical",
+    label: "মেডিকেল ভর্তি",
+    codeBadge: "MED",
+    desc: "জীববিজ্ঞান, রসায়ন, পদার্থ, ইংরেজি ও সাধারণ জ্ঞান",
+    bannerTitle: "মেডিকেল ও ডেন্টাল অ্যাডমিশন ফুল সিলেবাস টেস্ট",
+    streams: [
+      { id: "med_core", label: "মেডিকেল মূল বিষয়সমূহ" }
+    ],
+    subjects: {
+      med_core: [
+        { id: "biology", name: "জীববিজ্ঞান (উদ্ভিদ ও প্রাণি)", symbol: "BIO", pastel: "pastel-green", questionsCount: "৩,৫০০+ প্রশ্ন", topic: "মানব শারীরতত্ত্ব ও কোষবিদ্যা" },
+        { id: "chemistry", name: "রসায়ন", symbol: "CHM", pastel: "pastel-violet", questionsCount: "১,৯০০+ প্রশ্ন", topic: "জৈব যৌগ ও পরিবেশ রসায়ন" },
+        { id: "physics", name: "পদার্থবিজ্ঞান", symbol: "PHY", pastel: "pastel-blue", questionsCount: "১,৫০০+ প্রশ্ন", topic: "আলো ও আধুনিক পদার্থবিজ্ঞান" },
+        { id: "english_1", name: "ইংরেজি ও সাধারণ জ্ঞান", symbol: "GK", pastel: "pastel-amber", questionsCount: "১,৬০০+ প্রশ্ন", topic: "মুক্তিযুদ্ধ ও সিনোনিম" }
+      ]
+    }
+  },
+  bcs: {
+    id: "bcs",
+    label: "বিসিএস ও সরকারি চাকরি",
+    codeBadge: "BCS",
+    desc: "বিসিএস প্রিলিমিনারি ও ব্যাংক জবস স্পেশাল",
+    bannerTitle: "৪৬তম বিসিএস প্রিলিমিনারি পূর্ণাঙ্গ ২০০ মার্কস মডেল টেস্ট",
+    streams: [
+      { id: "bcs_core", label: "প্রিলিমিনারি বিষয়সমূহ" }
+    ],
+    subjects: {
+      bcs_core: [
+        { id: "bangla_2", name: "বাংলা ভাষা ও সাহিত্য", symbol: "অ", pastel: "pastel-pink", questionsCount: "৩,৫০০+ প্রশ্ন", topic: "প্রাচীন ও মধ্যযুগ" },
+        { id: "english_2", name: "English Language", symbol: "En", pastel: "pastel-blue", questionsCount: "৩,২০০+ প্রশ্ন", topic: "Idioms & Clauses" },
+        { id: "bd_world", name: "বাংলাদেশ বিষয়াবলী", symbol: "BD", pastel: "pastel-green", questionsCount: "৪,০০০+ প্রশ্ন", topic: "জাতীয় অর্জন ও সংবিধান" },
+        { id: "general_math", name: "গাণিতিক যুক্তি ও মানসিক দক্ষতা", symbol: "±×", pastel: "pastel-violet", questionsCount: "২,৪০০+ প্রশ্ন", topic: "অনুপাত ও ধারা" }
+      ]
+    }
+  }
+};
+
+// ==============================================================================
+// SUBJECT, CHAPTER & CONCEPT HIERARCHY MAP
+// ==============================================================================
+const SUBJECT_CHAPTERS_MAP = {
+  general_math: {
+    name: "সাধারণ গণিত",
+    chapters: [
+      {
+        id: "math_ch1",
+        title: "বীজগণিতীয় সূত্রাবলী ও রাশি",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "formula_4ab", title: "4ab ও 2(a²+b²) এর অনুসিদ্ধান্ত" },
+          { id: "factorization", title: "উৎপাদকে বিশ্লেষণ ও দ্বিঘাত রাশি" }
+        ]
+      },
+      {
+        id: "math_ch2",
+        title: "সেট ও ফাংশন",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "set_operations", title: "সংযোগ ও ছেদ সেট (Union & Intersection)" },
+          { id: "domain_range", title: "ফাংশনের ডোমেন ও রেঞ্জ" }
+        ]
+      },
+      {
+        id: "math_ch3",
+        title: "ত্রিকোণমিতিক অনুপাত ও অভেদ",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "trig_identity", title: "ত্রিকোণমিতিক অভেদাবলী ও মান" }
+        ]
+      }
+    ]
+  },
+  physics: {
+    name: "পদার্থবিজ্ঞান",
+    chapters: [
+      {
+        id: "phys_ch1",
+        title: "বল ও গতি (Force & Motion)",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "newton_second_law", title: "নিউটনের দ্বিতীয় সূত্র ও ত্বরণ (F = ma)" },
+          { id: "momentum", title: "ভরবেগ সংরক্ষণ সূত্র" }
+        ]
+      },
+      {
+        id: "phys_ch2",
+        title: "কাজ, শক্তি ও ক্ষমতা",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "work_energy", title: "কাজ ও গতিশক্তি উপপাদ্য" },
+          { id: "efficiency", title: "কর্মদক্ষতা (Efficiency) ও ক্ষমতা" }
+        ]
+      },
+      {
+        id: "phys_ch3",
+        title: "আলোর প্রতিফলন ও প্রতিসরণ",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "refraction_index", title: "প্রতিসরাঙ্ক ও স্নেলের সূত্র" }
+        ]
+      }
+    ]
+  },
+  chemistry: {
+    name: "রসায়ন",
+    chapters: [
+      {
+        id: "chem_ch1",
+        title: "দ্রবণ ও মোলারিটি (Solutions)",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "molarity_formula", title: "মোলারিটির আদর্শ হিসাব (S = 1000w / MV)" },
+          { id: "ppm_concentration", title: "পিপিএম (ppm) ও শতাংশ ঘনমাত্রা" }
+        ]
+      },
+      {
+        id: "chem_ch2",
+        title: "পর্যায় সারণি ও মৌলের ধর্ম",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "ionization_energy", title: "আয়নীকরণ শক্তি ও ইলেকট্রন আসক্তি" }
+        ]
+      }
+    ]
+  },
+  higher_math: {
+    name: "উচ্চতর গণিত",
+    chapters: [
+      {
+        id: "hmath_ch1",
+        title: "ক্যালকুলাস ও যোগজীকরণ",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "indefinite_integral", title: "অনির্দিষ্ট যোগজ (Power Rule)" },
+          { id: "definite_integral", title: "নির্দিষ্ট যোগজ ও ক্ষেত্রফল" }
+        ]
+      },
+      {
+        id: "hmath_ch2",
+        title: "স্থানাঙ্ক জ্যামিতি ও সরলরেখা",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "slope_line", title: "ঢাল ও সরলরেখার সমীকরণ" }
+        ]
+      }
+    ]
+  },
+  biology: {
+    name: "জীববিজ্ঞান",
+    chapters: [
+      {
+        id: "bio_ch1",
+        title: "কোষ বিভাজন (Cell Division)",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "mitosis_anaphase", title: "মাইটোসিস গতিপর্যায় (অ্যানাফেজ)" },
+          { id: "meiosis_crossing", title: "মিয়োসিস ক্রসিং ওভার ও প্রকরণ" }
+        ]
+      },
+      {
+        id: "bio_ch2",
+        title: "জীবপ্রযুক্তি ও জিনতত্ত্ব",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "dna_replication", title: "ডিএনএ অনুলিপন ও জিনোটাইপ" }
+        ]
+      }
+    ]
+  },
+  ict: {
+    name: "তথ্য ও যোগাযোগ প্রযুক্তি",
+    chapters: [
+      {
+        id: "ict_ch1",
+        title: "সংখ্যা পদ্ধতি ও ডিজিটাল লজিক",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "binary_hex_conversion", title: "বাইনারি থেকে হেক্সাডেসিমেল রূপান্তর" },
+          { id: "logic_gates", title: "লজিক গেট ও বুলিয়ান সমীকরণ" }
+        ]
+      }
+    ]
+  },
+  accounting: {
+    name: "হিসাববিজ্ঞান",
+    chapters: [
+      {
+        id: "acc_ch1",
+        title: "আর্থিক বিবরণী ও সমন্বয়",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "acc_profit_loss", title: "আয়-ব্যয় ও নিট লাভ নির্ণয়" },
+          { id: "acc_balance_sheet", title: "সম্পদ ও দায়ের সমীকরণ" }
+        ]
+      }
+    ]
+  },
+  business_org: {
+    name: "ব্যবসায় সংগঠন",
+    chapters: [
+      {
+        id: "bus_ch1",
+        title: "ব্যবস্থাপনার মূলনীতি ও সংগঠন",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "bus_principles", title: "হেনরি ফেয়লের ১৪টি নীতিমালা" }
+        ]
+      }
+    ]
+  },
+  bangla_2: {
+    name: "বাংলা ২য় পত্র",
+    chapters: [
+      {
+        id: "ban_ch1",
+        title: "ব্যাকরণ ও সমাস",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "ban_samash", title: "প্রাদি ও তৎপুরুষ সমাস নির্ণয়" },
+          { id: "ban_sandhi", title: "সন্ধি বিচ্ছেদ ও প্রত্যয়" }
+        ]
+      }
+    ]
+  },
+  english_2: {
+    name: "English 2nd",
+    chapters: [
+      {
+        id: "eng_ch1",
+        title: "Grammar & Syntax",
+        concepts: [
+          { id: "all", title: "All Concepts" },
+          { id: "eng_subject_verb", title: "Subject-Verb Agreement" },
+          { id: "eng_preposition", title: "Appropriate Prepositions" }
+        ]
+      }
+    ]
+  },
+  bd_world: {
+    name: "বাংলাদেশ বিষয়াবলী",
+    chapters: [
+      {
+        id: "bd_ch1",
+        title: "মুক্তিযুদ্ধ ও সংবিধান",
+        concepts: [
+          { id: "all", title: "অধ্যায়ের সকল কনসেপ্ট" },
+          { id: "bd_constitution", title: "সংবিধানের মূলনীতি ও মৌলিক অধিকার" }
+        ]
+      }
+    ]
+  }
+};
+
+// Rich conceptual questions with KaTeX Math Equations & Twisted variants
+const ALL_SAMPLE_QUESTIONS = [
   {
-    category: "JavaScript Core",
-    question: "What is the output of `typeof NaN` in JavaScript?",
-    options: ["number", "NaN", "undefined", "object"],
+    id: "q_math_1",
+    subjectId: "general_math",
+    chapterId: "math_ch1",
+    conceptId: "formula_4ab",
+    category: "সাধারণ গণিত (বীজগণিতীয় সূত্রাবলী)",
+    question: "যদি \\(a + b = \\sqrt{7}\\) এবং \\(a - b = \\sqrt{3}\\) হয়, তবে \\(4ab\\) এর মান কত হবে?",
+    options: ["2", "4", "5", "7"],
+    correctIndex: 1, // '4'
+    explanation: `
+      <strong>মূল কনসেপ্ট:</strong> বীজগাণিতিক অনুসিদ্ধান্ত অনুসারে:<br>
+      \\[ 4ab = (a + b)^2 - (a - b)^2 \\]
+      মান বসিয়ে পাই:<br>
+      \\[ 4ab = (\\sqrt{7})^2 - (\\sqrt{3})^2 = 7 - 3 = 4 \\]<br>
+      <strong>কেন বাকি অপশনগুলো ভুল?</strong><br>
+      • <strong>২:</strong> এটি \\(2ab\\) এর মান (\\(\\frac{4}{2} = 2\\))।<br>
+      • <strong>৫:</strong> সূত্রের প্রয়োগ ভুল হলে এমন ভ্রান্তি হতে পারে।<br>
+      • <strong>৭:</strong> এটি শুধুমাত্র \\((a + b)^2\\) এর মান।
+    `,
+    twisted: {
+      question: "যদি \\(a + b = \\sqrt{7}\\) এবং \\(a - b = \\sqrt{3}\\) হয়, তবে \\(2(a^2 + b^2)\\) এর মান কত?",
+      options: ["4", "10", "12", "14"],
+      correctIndex: 1, // '10'
+      explanation: `
+        <strong>টুইস্টেড প্রশ্নের সমাধান:</strong><br>
+        অনুরূপ অনুসিদ্ধান্ত অনুসারে:<br>
+        \\[ 2(a^2 + b^2) = (a + b)^2 + (a - b)^2 = (\\sqrt{7})^2 + (\\sqrt{3})^2 = 7 + 3 = 10 \\]
+        মনে রাখবেন: মাইনাস হলে \\(4ab = 4\\), প্লাস হলে \\(2(a^2 + b^2) = 10\\)।
+      `
+    }
+  },
+  {
+    id: "q_phys_1",
+    subjectId: "physics",
+    chapterId: "phys_ch1",
+    conceptId: "newton_second_law",
+    category: "পদার্থবিজ্ঞান (বল ও গতি)",
+    question: "কোনো বস্তুর ওপর প্রযুক্ত মোট বল ধ্রুবক থাকলে এবং বস্তুর ভর দ্বিগুণ করা হলে, ত্বরণ \\(a\\) এর কী পরিবর্তন ঘটবে?",
+    options: ["ত্বরণ দ্বিগুণ হবে", "ত্বরণ অর্ধেক হবে", "ত্বরণ চারগুণ বৃদ্ধি পাবে", "ত্বরণ অপরিবর্তিত থাকবে"],
+    correctIndex: 1, // অর্ধেক
+    explanation: `
+      <strong>মূল কনসেপ্ট:</strong> নিউটনের গতির দ্বিতীয় সূত্রানুসারে:<br>
+      \\[ F = ma \\implies a = \\frac{F}{m} \\]<br>
+      যেহেতু প্রযুক্ত বল \\(F\\) অপরিবর্তিত, তাই ত্বরণ ভরের ব্যস্তানুপাতিক (\\(a \\propto \\frac{1}{m}\\))।<br>
+      অতএব, ভর দ্বিগুণ (\\(2m\\)) করা হলে ত্বরণ অর্ধেক (\\(\\frac{1}{2}\\)) হয়ে যাবে।<br><br>
+      <strong>কেন বাকি অপশনগুলো ভুল?</strong><br>
+      • <strong>ত্বরণ দ্বিগুণ:</strong> ভর অর্ধেক করলে ত্বরণ দ্বিগুণ হতো।<br>
+      • <strong>চারগুণ:</strong> বলের পরিবর্তন ছাড়াই চারগুণ হওয়া পদার্থবিজ্ঞানের নিয়মের পরিপন্থী।
+    `,
+    twisted: {
+      question: "যদি একটি চলমান বস্তুর ত্বরণ দ্বিগুণ করতে হয় কিন্তু ভর অপরিবর্তিত থাকে, তবে প্রযুক্ত বল কত করতে হবে?",
+      options: ["অর্ধেক", "দ্বিগুণ", "চারগুণ", "শূন্য"],
+      correctIndex: 1, // দ্বিগুণ
+      explanation: "\\[ F = ma \\] অনুসারে ভর অপরিবর্তিত থাকলে ত্বরণ দ্বিগুণ করতে প্রযুক্ত বল \\(F\\) দ্বিগুণ করতে হবে।"
+    }
+  },
+  {
+    id: "q_hmath_1",
+    subjectId: "higher_math",
+    chapterId: "hmath_ch1",
+    conceptId: "indefinite_integral",
+    category: "উচ্চতর গণিত (ক্যালকুলাস ও যোগজীকরণ)",
+    question: "যোগজ \\(\\int (3x^2 + 2x - 5) \\, dx\\) এর মান কোনটি?",
+    options: [
+      "\\(x^3 + x^2 - 5x + c\\)",
+      "\\(6x + 2 + c\\)",
+      "\\(3x^3 + 2x^2 - 5x + c\\)",
+      "\\(\\frac{x^3}{3} + \\frac{x^2}{2} - 5x + c\\)"
+    ],
     correctIndex: 0,
-    explanation: "Even though NaN stands for 'Not-a-Number', its type in JavaScript is still primitive numeric (`number`)."
+    explanation: `
+      <strong>মূল কনসেপ্ট:</strong> যোগজীকরণের ঘাতের নিয়ম অনুসারে:<br>
+      \\[ \\int x^n \\, dx = \\frac{x^{n+1}}{n+1} + c \\]<br>
+      প্রদত্ত সমীকরণে:<br>
+      \\[ \\int 3x^2 dx + \\int 2x dx - \\int 5 dx = 3\\left(\\frac{x^3}{3}\\right) + 2\\left(\\frac{x^2}{2}\\right) - 5x + c = x^3 + x^2 - 5x + c \\]<br>
+      <strong>ভুল অপশনের কারণ:</strong><br>
+      • <strong>\\(6x + 2\\):</strong> এটি যোগজীকরণ নয়, এটি হলো অন্তরীকরণ (Derivative)।
+    `,
+    twisted: {
+      question: "নির্দিষ্ট যোগজ \\(\\int_{0}^{2} 3x^2 \\, dx\\) এর মান কত?",
+      options: ["6", "8", "12", "24"],
+      correctIndex: 1, // 8
+      explanation: "\\[ \\int_{0}^{2} 3x^2 dx = [x^3]_{0}^{2} = 2^3 - 0 = 8 \\]"
+    }
   },
   {
-    category: "Web Architecture",
-    question: "What does the HTTP 403 status code specifically indicate?",
-    options: ["Resource Not Found", "Forbidden / Access Denied", "Internal Server Error", "Unauthorized / Unauthenticated"],
+    id: "q_chem_1",
+    subjectId: "chemistry",
+    chapterId: "chem_ch1",
+    conceptId: "molarity_formula",
+    category: "রসায়ন (দ্রবণ ও মোলারিটি)",
+    question: "\\(250 \\text{ mL}\\) দ্রবণে \\(10.6 \\text{ g } \\text{Na}_2\\text{CO}_3\\) দ্রবীভূত থাকলে দ্রবণের মোলারিটি \\(S\\) কত?",
+    options: ["\\(0.2 \\text{ M}\\)", "\\(0.4 \\text{ M}\\)", "\\(0.5 \\text{ M}\\)", "\\(1.0 \\text{ M}\\)"],
+    correctIndex: 1, // 0.4 M
+    explanation: `
+      <strong>মূল কনসেপ্ট:</strong> মোলারিটির আদর্শ সূত্র:<br>
+      \\[ S = \\frac{1000 \\times w}{M \\times V} \\]<br>
+      এখানে, ভর \\(w = 10.6 \\text{ g}\\), আয়তন \\(V = 250 \\text{ mL}\\), এবং \\(\\text{Na}_2\\text{CO}_3\\) এর আণবিক ভর \\(M = (23 \\times 2) + 12 + (16 \\times 3) = 106\\)।<br>
+      মান বসিয়ে পাই:<br>
+      \\[ S = \\frac{1000 \\times 10.6}{106 \\times 250} = \\frac{10600}{26500} = 0.4 \\text{ M} \\]
+    `,
+    twisted: {
+      question: "\\(1 \\text{ L}\\) ডেসিমোলার (\\(0.1 \\text{ M}\\)) \\(\\text{Na}_2\\text{CO}_3\\) দ্রবণ প্রস্তুত করতে কত গ্রাম দ্রবের প্রয়োজন?",
+      options: ["\\(5.3 \\text{ g}\\)", "\\(10.6 \\text{ g}\\)", "\\(21.2 \\text{ g}\\)", "\\(53.0 \\text{ g}\\)"],
+      correctIndex: 1, // 10.6 g
+      explanation: "\\[ w = \\frac{SMV}{1000} = \\frac{0.1 \\times 106 \\times 1000}{1000} = 10.6 \\text{ g} \\]"
+    }
+  },
+  {
+    id: "q_bio_1",
+    subjectId: "biology",
+    chapterId: "bio_ch1",
+    conceptId: "mitosis_anaphase",
+    category: "জীববিজ্ঞান (কোষ বিভাজন)",
+    question: "মাইটোসিস কোষ বিভাজনের কোন পর্যায়ে ক্রোমোজোমের সেন্ট্রোমিয়ার দুটি ভাগে বিভক্ত হয়ে অপত্য ক্রোমোজোম গঠিত হয়?",
+    options: ["প্রোফেজ", "মেটাফেজ", "অ্যানাফেজ", "টেলোফেজ"],
+    correctIndex: 2, // অ্যানাফেজ
+    explanation: `
+      <strong>মূল কনসেপ্ট:</strong> অ্যানাফেজ (গতিপর্যায়)-এর শুরুতে প্রতিটি সেন্ট্রোমিয়ার লম্বালম্বিভাবে বিভক্ত হয়। ফলে প্রতিটি ক্রোমাটিড একটি পূর্ণাঙ্গ অপত্য ক্রোমোজোমে পরিণত হয় এবং মেরু অঞ্চলের দিকে চলতে থাকে (V, L, J, I আকৃতি ধারণ করে)।<br><br>
+      <strong>কেন বাকি অপশনগুলো ভুল?</strong><br>
+      • <strong>মেটাফেজ:</strong> এই ধাপে ক্রোমোজোমগুলো বিষুবীয় অঞ্চলে বিন্যস্ত থাকে এবং সর্বাধিক খাটো ও মোটা হয়।<br>
+      • <strong>টেলোফেজ:</strong> এই ধাপে অপত্য ক্রোমোজোম মেরুতে পৌঁছে নিউক্লিয়ার মেমব্রেন পুনর্গঠিত হয়।
+    `,
+    twisted: {
+      question: "মাইটোসিসের মেটাফেজ ধাপে ক্রোমোজোমের সেন্ট্রোমিয়ারের সাথে স্পিন্ডল তন্তুর সংযোগস্থলকে কী বলে?",
+      options: ["ক্রোমোমিয়ার", "কাইনেটোকোর", "স্যাটেলাইট", "টেলোমিয়ার"],
+      correctIndex: 1, // কাইনেটোকোর
+      explanation: "সেন্ট্রোমিয়ারে অবস্থিত প্রোটিন নির্মিত চাকতি সদৃশ কাইনেটোকোরের সাথেই ক্রোমোজোমাল তন্তুগুলো যুক্ত থাকে।"
+    }
+  },
+  {
+    id: "q_bangla_1",
+    subjectId: "bangla_2",
+    chapterId: "ban_ch1",
+    conceptId: "ban_samash",
+    category: "বাংলা ২য় পত্র (ব্যাকরণ ও সমাস)",
+    question: "‘অনুতাপ’ কোন সমাসের যথার্থ উদাহরণ?",
+    options: ["প্রাদি সমাস", "উপপদ তৎপুরুষ", "নঞ তৎপুরুষ", "রূপক কর্মধারয়"],
+    correctIndex: 0, // প্রাদি সমাস
+    explanation: `
+      <strong>মূল কনসেপ্ট:</strong> প্র, পরা, অপ, অনু ইত্যাদি প্রাদি উপসর্গের সাথে কৃৎ-প্রত্যয়সাধিত পদের সমাস হলে তাকে <strong>প্রাদি সমাস</strong> বলে (যেমন: অনুতে যে তাপ = অনুতাপ; প্র যে বচন = প্রবচন)।<br><br>
+      <strong>কেন বাকি অপশনগুলো ভুল?</strong><br>
+      • <strong>উপপদ তৎপুরুষ:</strong> কৃদন্ত পদের পূর্বে উপপদ বসতে হয় (যেমন: পঙ্কে জন্মে যা = পঙ্কজ)।<br>
+      • <strong>নঞ তৎপুরুষ:</strong> না-বাচক উপসর্গ বা অব্যয় যুক্ত হয় (যেমন: নয় চেনা = অচেনা)।
+    `,
+    twisted: {
+      question: "‘প্রভাত’ (প্রকৃষ্টরূপে ভাত/আলোকিত) কোন সমাসের উদাহরণ?",
+      options: ["প্রাদি সমাস", "অব্যয়ীভাব", "কর্মধারয়", "দ্বিগু"],
+      correctIndex: 0,
+      explanation: "‘প্র’ উপসর্গযোগে গঠিত হওয়ায় এটিও প্রাদি সমাসের উদাহরণ।"
+    }
+  },
+  {
+    id: "q_eng_1",
+    subjectId: "english_2",
+    chapterId: "eng_ch1",
+    conceptId: "eng_subject_verb",
+    category: "English 2nd (Subject-Verb Agreement)",
+    question: "Choose the correct sentence following formal grammar rules:",
+    options: [
+      "Neither the principal nor the teachers was present in the meeting.",
+      "Neither the principal nor the teachers were present in the meeting.",
+      "Neither the principal or the teachers was present in the meeting.",
+      "Neither the principal nor the teachers has been present in the meeting."
+    ],
     correctIndex: 1,
-    explanation: "403 Forbidden means the server understands the request but refuses to authorize it, distinct from 401 Unauthorized."
+    explanation: `
+      <strong>Core Rule:</strong> When two subjects are connected by <em>neither... nor</em> or <em>either... or</em>, the verb agrees in number and person with the <strong>closer subject</strong> (the proximity rule).<br>
+      Here, 'teachers' is plural and closest to the verb, so the plural verb <strong>were</strong> must be used.<br><br>
+      <strong>Why others are wrong?</strong><br>
+      • Option 1 & 4 use singular verbs ('was', 'has been') which violate agreement with 'teachers'.<br>
+      • Option 3 pairs 'neither' with 'or', which is a correlative conjunction error.
+    `,
+    twisted: {
+      question: "Choose the correct form: 'Either the students or the headmaster _____ coming today.'",
+      options: ["is", "are", "were", "have"],
+      correctIndex: 0, // is
+      explanation: "The closest subject is 'the headmaster' (singular), so the verb must be singular 'is'."
+    }
   },
   {
-    category: "Database Concepts",
-    question: "In relational databases, what does the ACID property 'I' stand for?",
-    options: ["Integrity", "Iteration", "Isolation", "Indexing"],
-    correctIndex: 2,
-    explanation: "ACID stands for Atomicity, Consistency, Isolation, and Durability. Isolation ensures concurrent transactions do not interfere with each other."
+    id: "q_ict_1",
+    subjectId: "ict",
+    chapterId: "ict_ch1",
+    conceptId: "binary_hex_conversion",
+    category: "তথ্য ও যোগাযোগ প্রযুক্তি (সংখ্যা পদ্ধতি)",
+    question: "বাইনারি সংখ্যা \\((11011)_2\\) এর সমতুল্য হেক্সাডেসিমেল মান কোনটি?",
+    options: ["\\((1B)_{16}\\)", "\\((27)_{16}\\)", "\\((1D)_{16}\\)", "\\((33)_{16}\\)"],
+    correctIndex: 0, // 1B
+    explanation: `
+      <strong>মূল কনসেপ্ট:</strong> বাইনারি থেকে হেক্সাডেসিমেলে রূপান্তর করতে ডানদিক থেকে ৪-বিট করে গ্রুপ করতে হয়:<br>
+      \\(11011_2 \\implies 0001 \\quad 1011\\)<br>
+      • \\(0001_2 = 1_{10} = 1_{16}\\)<br>
+      • \\(1011_2 = 8 + 2 + 1 = 11_{10} = B_{16}\\)<br>
+      সুতরাং সমতুল্য হেক্সাডেসিমেল মান হলো \\((1B)_{16}\\)।
+    `,
+    twisted: {
+      question: "হেক্সাডেসিমেল সংখ্যা \\((A)_{16}\\) এর বাইনারি রূপ কোনটি?",
+      options: ["\\(1001_2\\)", "\\(1010_2\\)", "\\(1011_2\\)", "\\(1100_2\\)"],
+      correctIndex: 1, // 1010
+      explanation: "\\(A_{16} = 10_{10} = (1010)_2\\)।"
+    }
+  },
+  {
+    id: "q_acc_1",
+    subjectId: "accounting",
+    chapterId: "acc_ch1",
+    conceptId: "acc_profit_loss",
+    category: "হিসাববিজ্ঞান (আর্থিক বিবরণী)",
+    question: "মোট লাভ \\(৫০,০০০\\) টাকা, পরিচালন ব্যয় \\(১৫,০০০\\) টাকা এবং ব্যাংক সুদ আয় \\(২,০০০\\) টাকা হলে নিট পরিচালন মুনাফা কত?",
+    options: ["\\(৩৫,০০০\\) টাকা", "\\(৩৭,০০০\\) টাকা", "\\(৩২,০০০\\) টাকা", "\\(৬৫,০০০\\) টাকা"],
+    correctIndex: 0, // ৩৫,০০০ টাকা
+    explanation: `
+      <strong>মূল কনসেপ্ট:</strong><br>
+      \\[ \\text{নিট পরিচালন মুনাফা} = \\text{মোট লাভ} - \\text{পরিচালন ব্যয়} \\]<br>
+      এখানে, \\(৫০,০০০ - ১৫,০০০ = ৩৫,০০০\\) টাকা। মনে রাখবেন, ব্যাংক সুদ আয় হলো অপরিচালন আয়, তাই পরিচালন মুনাফা বের করতে এটি যুক্ত হবে না।
+    `,
+    twisted: {
+      question: "যদি নিট মুনাফা বের করতে বলা হয়, তবে পূর্বোক্ত অংকে নিট মুনাফা কত হবে?",
+      options: ["\\(৩৫,০০০\\) টাকা", "\\(৩৭,০০০\\) টাকা", "\\(৩২,০০০\\) টাকা", "\\(৫০,০০০\\) টাকা"],
+      correctIndex: 1, // ৩৭,০০০ টাকা
+      explanation: "নিট মুনাফা = পরিচালন মুনাফা (৩৫,০০০) + অপরিচালন আয় (২,০০০) = ৩৭,০০০ টাকা।"
+    }
+  },
+  {
+    id: "q_bd_1",
+    subjectId: "bd_world",
+    chapterId: "bd_ch1",
+    conceptId: "bd_constitution",
+    category: "বাংলাদেশ বিষয়াবলী (সংবিধান)",
+    question: "গণপ্রজাতন্ত্রী বাংলাদেশের সংবিধানের কোন অনুচ্ছেদে ‘আইনের দৃষ্টিতে সমতা’ ও সকল নাগরিকের সমঅধিকার নিশ্চিত করা হয়েছে?",
+    options: ["অনুচ্ছেদ ২৭", "অনুচ্ছেদ ২৮", "অনুচ্ছেদ ৩১", "অনুচ্ছেদ ৩২"],
+    correctIndex: 0, // ২৭
+    explanation: `
+      <strong>মূল কনসেপ্ট:</strong> সংবিধানের ৩য় ভাগের (মৌলিক অধিকার) <strong>অনুচ্ছেদ ২৭</strong> এ বলা হয়েছে: 'সকল নাগরিক আইনের দৃষ্টিতে সমান এবং আইনের সমান আশ্রয় লাভের অধিকারী'।<br><br>
+      • অনুচ্ছেদ ২৮: ধর্ম প্রভৃতি কারণে বৈষম্য বিলোপ।<br>
+      • অনুচ্ছেদ ৩১: আইনের আশ্রয় লাভের অধিকার।
+    `,
+    twisted: {
+      question: "সংবিধানের ২৮(২) অনুচ্ছেদ অনুযায়ী রাষ্ট্র ও গণজীবনের সর্বস্তরে কাদের সমান অধিকার নিশ্চিত করা হয়েছে?",
+      options: ["শ্রমিক ও মালিকের", "নারী ও পুরুষের", "কৃষক ও মেহনতি মানুষের", "সংখ্যালঘু সম্প্রদায়ের"],
+      correctIndex: 1, // নারী ও পুরুষের
+      explanation: "২৮(২) অনুচ্ছেদে স্পষ্টভাবে নারী ও পুরুষের সমঅধিকারের কথা বলা হয়েছে।"
+    }
   }
 ];
 
-let questions = [...fallbackQuestions];
-let currentQuestionIndex = 0;
-let hasAnswered = false;
+// App State
+let currentTargetId = localStorage.getItem("conceptmcq_target") || "ssc";
+let currentStreamId = localStorage.getItem("conceptmcq_stream") || (TARGET_CONFIGS[currentTargetId]?.streams[0]?.id || "science");
+let currentQuestions = [...ALL_SAMPLE_QUESTIONS];
+let currentQIndex = 0;
+let userAnswers = {};
+let isBlurModeActive = false;
+let isEliminationModeActive = false;
+let examTimer = null;
+let secondsRemaining = 15 * 60; // 15 mins
+let currentExamMode = "standard"; // standard | rapid | mistake_bank | bookmarks
 
-// DOM Elements
-const categoryEl = document.getElementById("question-category");
-const counterEl = document.getElementById("question-counter");
-const titleEl = document.getElementById("question-title");
+// Modal Selection Working State
+let modalSelectedTarget = currentTargetId;
+let modalSelectedStream = currentStreamId;
+
+// DOM References
+const currentTargetBadge = document.getElementById("current-target-badge");
+const currentTargetLabel = document.getElementById("current-target-label");
+const targetSwitcherBtn = document.getElementById("target-switcher-btn");
+const targetModal = document.getElementById("target-modal-backdrop");
+const closeTargetModal = document.getElementById("close-target-modal");
+const confirmTargetBtn = document.getElementById("confirm-target-btn");
+const targetsList = document.getElementById("targets-list");
+const activeStreamBadge = document.getElementById("active-stream-badge");
+const streamSubtitle = document.getElementById("stream-subtitle");
+const subjectsGridContainer = document.getElementById("subjects-grid-container");
+const bannerTitle = document.getElementById("banner-title");
+
+// Custom Quiz Builder Elements
+const customQuizModal = document.getElementById("custom-quiz-modal-backdrop");
+const closeCustomQuizModal = document.getElementById("close-custom-quiz-modal");
+const customSubjectSelect = document.getElementById("custom-subject-select");
+const customChapterSelect = document.getElementById("custom-chapter-select");
+const customConceptSelect = document.getElementById("custom-concept-select");
+const startCustomQuizBtn = document.getElementById("start-custom-quiz-btn");
+const randomRapidBtn = document.getElementById("random-rapid-btn");
+const quizLengthOptions = document.getElementById("quiz-length-options");
+let selectedQuizCount = 5;
+let selectedQuizDurationMins = 5;
+
+// Views
+const dashboardView = document.getElementById("dashboard-view");
+const examView = document.getElementById("exam-view");
+const resultView = document.getElementById("result-view");
+
+// Exam Elements
+const startLiveExamBtn = document.getElementById("start-live-exam-btn");
+const exitExamBtn = document.getElementById("exit-exam-btn");
+const questionPromptText = document.getElementById("question-prompt-text");
 const optionsContainer = document.getElementById("options-container");
-const explanationBox = document.getElementById("explanation-box");
-const explanationText = document.getElementById("explanation-text");
+const questionNumberPill = document.getElementById("question-number-pill");
+const questionTopicPill = document.getElementById("question-topic-pill");
+const examTimerDisplay = document.getElementById("exam-timer-display");
+const timerText = document.getElementById("timer-text");
+const examProgressBar = document.getElementById("exam-progress-bar");
+const questionProgressLabel = document.getElementById("question-progress-label");
+const explanationCard = document.getElementById("explanation-card");
+const explanationBodyText = document.getElementById("explanation-body-text");
+const twistedQuestionBtn = document.getElementById("twisted-question-btn");
+const toggleBlurBtn = document.getElementById("toggle-blur-mode");
+const toggleStrikeBtn = document.getElementById("toggle-strikethrough-mode");
 const nextBtn = document.getElementById("next-btn");
-const dbStatusBadge = document.getElementById("db-status-badge");
+const prevBtn = document.getElementById("prev-btn");
+const finishExamBtn = document.getElementById("finish-exam-btn");
+const markReviewBtn = document.getElementById("mark-review-btn");
+const retakeExamBtn = document.getElementById("retake-exam-btn");
+const backHomeBtn = document.getElementById("back-home-btn");
 
-// Initialize Supabase Client
-let supabaseClient = null;
-try {
-  if (window.supabase && SUPABASE_CONFIG.url && SUPABASE_CONFIG.anonKey) {
-    supabaseClient = window.supabase.createClient(SUPABASE_CONFIG.url, SUPABASE_CONFIG.anonKey);
-    dbStatusBadge.textContent = "Supabase Connected";
-    dbStatusBadge.className = "badge badge-online";
+// Feature Tiles
+const tileMistakeBank = document.getElementById("tile-mistake-bank");
+const tileBookmarks = document.getElementById("tile-bookmarks");
+const tileRapidQuiz = document.getElementById("tile-rapid-quiz");
+
+// Toast Notification Helper (Sleek Slim Bar / 10MS Standard)
+function showToast(message, type = "info") {
+  let container = document.getElementById("toast-container");
+  if (!container) {
+    container = document.createElement("div");
+    container.id = "toast-container";
+    container.className = "toast-container";
+    document.body.appendChild(container);
   }
-} catch (e) {
-  console.warn("Supabase initialization error:", e);
-  dbStatusBadge.textContent = "Offline Mode";
+
+  // Clear existing toasts to prevent stacking bloat
+  container.innerHTML = "";
+
+  const icons = {
+    info: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>`,
+    success: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>`,
+    warning: `<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" style="flex-shrink:0"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"></path><line x1="12" y1="9" x2="12" y2="13"></line><line x1="12" y1="17" x2="12.01" y2="17"></line></svg>`
+  };
+
+  const toast = document.createElement("div");
+  toast.className = `toast toast-${type}`;
+  toast.innerHTML = `${icons[type] || icons.info}<span>${message}</span>`;
+  container.appendChild(toast);
+
+  setTimeout(() => {
+    toast.style.animation = "toastOut 0.25s forwards";
+    setTimeout(() => toast.remove(), 250);
+  }, 3200);
+}
+
+// Trigger KaTeX Math Rendering
+function renderMath() {
+  if (window.renderMathInElement) {
+    try {
+      window.renderMathInElement(document.body, {
+        delimiters: [
+          { left: "$$", right: "$$", display: true },
+          { left: "\\[", right: "\\]", display: true },
+          { left: "\\(", right: "\\)", display: false },
+          { left: "$", right: "$", display: false }
+        ],
+        throwOnError: false
+      });
+    } catch (e) {
+      console.warn("KaTeX render error:", e);
+    }
+  }
+}
+
+// ==============================================================================
+// INITIALIZATION
+// ==============================================================================
+function init() {
+  renderTargetUI();
+  setupEventListeners();
+  renderTargetModal();
+  
+  if (!localStorage.getItem("conceptmcq_visited")) {
+    openTargetModal();
+    localStorage.setItem("conceptmcq_visited", "true");
+  }
+
+  // Initial Math pass
+  setTimeout(renderMath, 400);
+}
+
+// Render Target Header, Streams, and Subject Cards
+function renderTargetUI() {
+  const target = TARGET_CONFIGS[currentTargetId] || TARGET_CONFIGS.ssc;
+  currentTargetBadge.textContent = target.codeBadge;
+
+  if (!target.streams.some(s => s.id === currentStreamId)) {
+    currentStreamId = target.streams[0].id;
+    localStorage.setItem("conceptmcq_stream", currentStreamId);
+  }
+
+  const streamObj = target.streams.find(s => s.id === currentStreamId) || target.streams[0];
+
+  // Header Title
+  if (target.streams.length > 1 && streamObj) {
+    currentTargetLabel.textContent = `${target.label} • ${streamObj.label}`;
+  } else {
+    currentTargetLabel.textContent = target.label;
+  }
+
+  // Dynamic Banner Title reflecting Target & Stream
+  if (currentTargetId === "admission" && streamObj) {
+    bannerTitle.textContent = `ঢাকা বিশ্ববিদ্যালয় ও গুচ্ছ ${streamObj.label} স্পেশাল মডেল টেস্ট`;
+  } else if (currentTargetId === "ssc" && streamObj) {
+    bannerTitle.textContent = `এসএসসি স্পেশাল ${streamObj.label} মডেল টেস্ট`;
+  } else if (currentTargetId === "hsc" && streamObj) {
+    bannerTitle.textContent = `এইচএসসি স্পেশাল ${streamObj.label} মডেল টেস্ট`;
+  } else {
+    bannerTitle.textContent = target.bannerTitle;
+  }
+
+  // Active Stream Badge & Subtitle above Subjects
+  if (activeStreamBadge) {
+    if (target.streams.length > 1 && streamObj) {
+      activeStreamBadge.textContent = streamObj.label;
+      activeStreamBadge.style.display = "inline-flex";
+    } else {
+      activeStreamBadge.style.display = "none";
+    }
+  }
+
+  if (streamSubtitle) {
+    if (target.streams.length > 1 && streamObj) {
+      streamSubtitle.textContent = `${streamObj.label} • সিলেবাস অনুযায়ী অধ্যায়ভিত্তিক প্রস্তুতি ও মডেল টেস্ট`;
+    } else {
+      streamSubtitle.textContent = `পূর্ণাঙ্গ সিলেবাস অনুযায়ী বিষয়ভিত্তিক প্রস্তুতি ও মডেল টেস্ট`;
+    }
+  }
+
+  // Subject Cards (10MS Pastel Circular Icons)
+  const subjects = target.subjects[currentStreamId] || target.subjects[target.streams[0]?.id] || [];
+  subjectsGridContainer.innerHTML = subjects.map(sub => `
+    <div class="subject-card" data-subject="${sub.id}" data-name="${sub.name}">
+      <div class="subject-icon-box ${sub.pastel}">
+        <span>${sub.symbol}</span>
+      </div>
+      <h3 class="subject-name">${sub.name}</h3>
+      <span class="subject-questions-meta">${sub.questionsCount}</span>
+      <span class="subject-action-badge">অনুশীলন করুন →</span>
+    </div>
+  `).join("");
+
+  subjectsGridContainer.querySelectorAll(".subject-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const subId = card.dataset.subject;
+      openCustomQuizModal(subId);
+    });
+  });
+}
+
+// ==============================================================================
+// EXAM ENGINE LOGIC
+// ==============================================================================
+function startSubjectExam(subjectId, subjectName) {
+  const filtered = ALL_SAMPLE_QUESTIONS.filter(q => q.subjectId === subjectId);
+  currentQuestions = filtered.length > 0 ? filtered : [...ALL_SAMPLE_QUESTIONS];
+  document.getElementById("exam-category-badge").textContent = subjectName || "কনসেপ্ট অনুশীলন";
+  currentExamMode = "subject";
+  startExamSession(15 * 60);
+}
+
+function startExamSession(durationSeconds = 15 * 60) {
+  dashboardView.classList.add("hidden");
+  resultView.classList.add("hidden");
+  examView.classList.remove("hidden");
+
+  currentQIndex = 0;
+  userAnswers = {};
+  isBlurModeActive = false;
+  isEliminationModeActive = false;
+  toggleBlurBtn.classList.remove("active");
+  toggleStrikeBtn.classList.remove("active");
+
+  startTimer(durationSeconds);
+  loadQuestion(currentQIndex);
+}
+
+function startTimer(duration = 15 * 60) {
+  clearInterval(examTimer);
+  secondsRemaining = duration;
+  updateTimerDisplay();
+
+  examTimer = setInterval(() => {
+    secondsRemaining--;
+    updateTimerDisplay();
+    if (secondsRemaining <= 0) {
+      clearInterval(examTimer);
+      showToast("সময় শেষ! পরীক্ষার ফলাফল তৈরি হচ্ছে...", "warning");
+      submitExam();
+    }
+  }, 1000);
+}
+
+function updateTimerDisplay() {
+  const mins = Math.floor(secondsRemaining / 60);
+  const secs = secondsRemaining % 60;
+  timerText.textContent = `${mins.toString().padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+
+  if (secondsRemaining < 120) {
+    examTimerDisplay.classList.add("warning-pacing");
+  } else {
+    examTimerDisplay.classList.remove("warning-pacing");
+  }
 }
 
 function loadQuestion(index) {
-  const q = questions[index];
-  hasAnswered = false;
-  nextBtn.disabled = true;
-  explanationBox.classList.add("hidden");
+  const q = currentQuestions[index];
+  if (!q) return;
 
-  categoryEl.textContent = q.category || "General Concept";
-  counterEl.textContent = `Question ${index + 1} of ${questions.length}`;
-  titleEl.textContent = q.question;
+  questionNumberPill.textContent = `প্রশ্ন ${index + 1}`;
+  questionTopicPill.textContent = q.category || "কনসেপ্ট প্র্যাকটিস";
+  questionPromptText.innerHTML = q.question;
 
-  optionsContainer.innerHTML = "";
-  const prefixes = ["A", "B", "C", "D"];
+  const progressPercent = ((index + 1) / currentQuestions.length) * 100;
+  examProgressBar.style.width = `${progressPercent}%`;
+  questionProgressLabel.textContent = `প্রশ্ন ${index + 1} / ${currentQuestions.length}`;
 
-  q.options.forEach((opt, idx) => {
-    const btn = document.createElement("button");
-    btn.className = "option-btn";
-    btn.innerHTML = `<span class="option-prefix">${prefixes[idx]}</span> <span>${opt}</span>`;
-    btn.onclick = () => selectOption(idx, q.correctIndex, q.explanation);
-    optionsContainer.appendChild(btn);
+  explanationCard.classList.add("hidden");
+
+  // Check Bookmark state
+  const bookmarks = getBookmarks();
+  const isBookmarked = bookmarks.some(b => b.id === q.id);
+  markReviewBtn.classList.toggle("btn-bookmarked", isBookmarked);
+  markReviewBtn.textContent = isBookmarked ? "বুকমার্কড ✓" : "বুকমার্ক রাখুন";
+
+  const savedAns = userAnswers[index] || {};
+  const optionLetters = ["ক", "খ", "গ", "ঘ"];
+  
+  optionsContainer.className = `options-container ${isBlurModeActive ? 'blurred' : ''}`;
+  optionsContainer.innerHTML = q.options.map((optText, optIdx) => {
+    const isSelected = savedAns.selectedIndex === optIdx;
+    const isStriked = savedAns.strikedOptions?.includes(optIdx);
+
+    return `
+      <div class="option-item ${isSelected ? 'selected' : ''} ${isStriked ? 'strikethrough' : ''}" data-idx="${optIdx}">
+        <div class="option-left">
+          <div class="option-marker">${optionLetters[optIdx]}</div>
+          <span class="option-text">${optText}</span>
+        </div>
+        <button class="strike-btn" data-strike-idx="${optIdx}" title="এই অপশনটি নিশ্চিত ভুল হিসেবে কেটে দিন">
+          ✕
+        </button>
+      </div>
+    `;
+  }).join("");
+
+  optionsContainer.querySelectorAll(".option-item").forEach(item => {
+    item.addEventListener("click", (e) => {
+      if (e.target.closest(".strike-btn")) return;
+      const selectedIdx = parseInt(item.dataset.idx);
+      selectOption(selectedIdx);
+    });
+  });
+
+  optionsContainer.querySelectorAll(".strike-btn").forEach(btn => {
+    btn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const strikeIdx = parseInt(btn.dataset.strikeIdx);
+      toggleOptionStrike(strikeIdx);
+    });
+  });
+
+  document.querySelectorAll(".btn-confidence").forEach(btn => {
+    btn.classList.toggle("active", btn.dataset.confidence === savedAns.confidence);
+  });
+
+  prevBtn.disabled = index === 0;
+  if (index === currentQuestions.length - 1) {
+    nextBtn.classList.add("hidden");
+    finishExamBtn.classList.remove("hidden");
+  } else {
+    nextBtn.classList.remove("hidden");
+    finishExamBtn.classList.add("hidden");
+  }
+
+  if (savedAns.selectedIndex !== undefined) {
+    showExplanation(q, savedAns.selectedIndex);
+  }
+
+  // Update Desktop Question Palette
+  renderQuestionPalette();
+
+  // Trigger KaTeX render on question change
+  renderMath();
+}
+
+function renderQuestionPalette() {
+  const container = document.getElementById("question-palette-container");
+  if (!container) return;
+  const bookmarks = getBookmarks();
+  
+  container.innerHTML = currentQuestions.map((q, idx) => {
+    const isCurrent = idx === currentQIndex;
+    const isAnswered = userAnswers[idx]?.selectedIndex !== undefined;
+    const isBookmarked = bookmarks.some(b => b.id === q.id);
+
+    let statusClass = "unanswered";
+    if (isCurrent) statusClass = "current";
+    else if (isAnswered) statusClass = "answered";
+    else if (isBookmarked) statusClass = "bookmarked";
+
+    return `
+      <button class="palette-chip ${statusClass}" data-q-idx="${idx}" title="প্রশ্ন ${idx + 1} এ যান">
+        ${idx + 1}
+      </button>
+    `;
+  }).join("");
+
+  container.querySelectorAll(".palette-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      const qIdx = parseInt(chip.dataset.qIdx);
+      currentQIndex = qIdx;
+      loadQuestion(currentQIndex);
+    });
   });
 }
 
-function selectOption(selectedIdx, correctIdx, explanation) {
-  if (hasAnswered) return;
-  hasAnswered = true;
+function selectOption(optIndex) {
+  if (!userAnswers[currentQIndex]) userAnswers[currentQIndex] = {};
+  userAnswers[currentQIndex].selectedIndex = optIndex;
+  if (!userAnswers[currentQIndex].confidence) userAnswers[currentQIndex].confidence = "certain";
 
-  const buttons = optionsContainer.querySelectorAll(".option-btn");
-  buttons.forEach((btn, idx) => {
-    btn.disabled = true;
-    if (idx === correctIdx) {
-      btn.classList.add("correct");
-    } else if (idx === selectedIdx) {
-      btn.classList.add("wrong");
+  const q = currentQuestions[currentQIndex];
+  showExplanation(q, optIndex);
+
+  optionsContainer.querySelectorAll(".option-item").forEach((item, idx) => {
+    item.classList.remove("selected", "correct", "wrong");
+    if (idx === optIndex) {
+      item.classList.add(idx === q.correctIndex ? "correct" : "wrong");
+    } else if (idx === q.correctIndex) {
+      item.classList.add("correct");
     }
   });
 
-  explanationText.textContent = explanation;
-  explanationBox.classList.remove("hidden");
-  nextBtn.disabled = false;
+  if (isBlurModeActive) {
+    optionsContainer.classList.remove("blurred");
+  }
+
+  renderQuestionPalette();
 }
 
-nextBtn.onclick = () => {
-  currentQuestionIndex = (currentQuestionIndex + 1) % questions.length;
-  loadQuestion(currentQuestionIndex);
-};
+function toggleOptionStrike(optIdx) {
+  if (!userAnswers[currentQIndex]) userAnswers[currentQIndex] = {};
+  if (!userAnswers[currentQIndex].strikedOptions) userAnswers[currentQIndex].strikedOptions = [];
 
-// Initial load
-loadQuestion(currentQuestionIndex);
+  const arr = userAnswers[currentQIndex].strikedOptions;
+  const exists = arr.indexOf(optIdx);
+  if (exists > -1) {
+    arr.splice(exists, 1);
+  } else {
+    arr.push(optIdx);
+  }
+
+  loadQuestion(currentQIndex);
+}
+
+function showExplanation(q, userSelected) {
+  explanationCard.classList.remove("hidden");
+  explanationBodyText.innerHTML = q.explanation;
+
+  if (q.twisted) {
+    twistedQuestionBtn.parentElement.style.display = "block";
+    twistedQuestionBtn.onclick = () => {
+      questionPromptText.innerHTML = `<span style="color:var(--primary-magenta); font-weight:800;">[টুইস্টেড প্রশ্ন] </span>` + q.twisted.question;
+      const optionLetters = ["ক", "খ", "গ", "ঘ"];
+      optionsContainer.innerHTML = q.twisted.options.map((optText, optIdx) => `
+        <div class="option-item ${optIdx === q.twisted.correctIndex ? 'correct' : ''}" data-idx="${optIdx}">
+          <div class="option-left">
+            <div class="option-marker">${optionLetters[optIdx]}</div>
+            <span class="option-text">${optText}</span>
+          </div>
+        </div>
+      `).join("");
+      explanationBodyText.innerHTML = q.twisted.explanation;
+      twistedQuestionBtn.parentElement.style.display = "none";
+      renderMath();
+    };
+  } else {
+    twistedQuestionBtn.parentElement.style.display = "none";
+  }
+
+  renderMath();
+}
+
+// ==============================================================================
+// 3-DAY SPACED REPETITION & BOOKMARKS STORAGE
+// ==============================================================================
+function getRevisionBank() {
+  try {
+    return JSON.parse(localStorage.getItem("conceptmcq_revision_bank") || "[]");
+  } catch (e) {
+    return [];
+  }
+}
+
+function saveToRevisionBank(wrongQuestions) {
+  const currentBank = getRevisionBank();
+  const now = Date.now();
+  const threeDaysLater = now + (3 * 24 * 60 * 60 * 1000);
+
+  wrongQuestions.forEach(q => {
+    const existingIdx = currentBank.findIndex(item => item.id === q.id);
+    if (existingIdx > -1) {
+      currentBank[existingIdx].reviewDate = threeDaysLater;
+      currentBank[existingIdx].attemptCount = (currentBank[existingIdx].attemptCount || 1) + 1;
+    } else {
+      currentBank.push({
+        ...q,
+        addedDate: now,
+        reviewDate: threeDaysLater,
+        attemptCount: 1
+      });
+    }
+  });
+
+  localStorage.setItem("conceptmcq_revision_bank", JSON.stringify(currentBank));
+}
+
+function getBookmarks() {
+  try {
+    return JSON.parse(localStorage.getItem("conceptmcq_bookmarks") || "[]");
+  } catch (e) {
+    return [];
+  }
+}
+
+function toggleBookmark(question) {
+  const bookmarks = getBookmarks();
+  const idx = bookmarks.findIndex(b => b.id === question.id);
+  let isAdded = false;
+
+  if (idx > -1) {
+    bookmarks.splice(idx, 1);
+    isAdded = false;
+    showToast("প্রশ্নটি বুকমার্ক থেকে সরানো হয়েছে", "info");
+  } else {
+    bookmarks.push(question);
+    isAdded = true;
+    showToast("প্রশ্নটি বুকমার্কে সংরক্ষিত হয়েছে ✓", "success");
+  }
+
+  localStorage.setItem("conceptmcq_bookmarks", JSON.stringify(bookmarks));
+  markReviewBtn.classList.toggle("btn-bookmarked", isAdded);
+  markReviewBtn.textContent = isAdded ? "বুকমার্কড ✓" : "বুকমার্ক রাখুন";
+
+  renderQuestionPalette();
+}
+
+// ==============================================================================
+// SUBMISSION & DIAGNOSTIC REPORT
+// ==============================================================================
+function submitExam() {
+  clearInterval(examTimer);
+  examView.classList.add("hidden");
+  resultView.classList.remove("hidden");
+
+  let correctCount = 0;
+  let wrongCount = 0;
+  let certainWrong = 0;
+  let guessWrong = 0;
+  let failedQuestions = [];
+
+  currentQuestions.forEach((q, idx) => {
+    const ans = userAnswers[idx];
+    if (ans && ans.selectedIndex !== undefined) {
+      if (ans.selectedIndex === q.correctIndex) {
+        correctCount++;
+      } else {
+        wrongCount++;
+        failedQuestions.push(q);
+        if (ans.confidence === "certain") certainWrong++;
+        else guessWrong++;
+      }
+    }
+  });
+
+  // Save to 3-day revision bank if any wrong
+  if (failedQuestions.length > 0) {
+    saveToRevisionBank(failedQuestions);
+  }
+
+  const penalty = wrongCount * 0.25;
+  const netScore = Math.max(0, correctCount - penalty);
+
+  document.getElementById("res-score").textContent = `${correctCount} / ${currentQuestions.length}`;
+  document.getElementById("res-correct").textContent = `${correctCount}টি`;
+  document.getElementById("res-wrong").textContent = `${wrongCount}টি`;
+  document.getElementById("res-net").textContent = netScore.toFixed(2);
+
+  const feedbackEl = document.getElementById("res-confidence-feedback");
+  if (wrongCount === 0) {
+    feedbackEl.innerHTML = `<strong>অসাধারণ পারফরম্যান্স!</strong> আপনার প্রতিটি কনসেপ্ট শতভাগ নির্ভুল ও স্পষ্ট। কোনো নেগেটিভ মার্কিং নেই।`;
+  } else {
+    feedbackEl.innerHTML = `
+      আপনি নিশ্চিত থাকা প্রশ্নের একিউরেসি ছিল সন্তোষজনক। তবে 
+      ${guessWrong > 0 ? `<strong>${guessWrong}টি আন্দাজে দাগানো</strong>` : `ভুল`} প্রশ্নের কারণে 
+      <strong>-${penalty.toFixed(2)} নম্বর</strong> নেগেটিভ মার্কিং হয়েছে। 
+      পরীক্ষার হলে দ্বিধাদ্বন্দ্ব থাকা প্রশ্ন বাদ দিয়ে নিশ্চিত প্রশ্নে ফোকাস করাই মেধা তালিকার শীর্ষে থাকার মূল রহস্য।
+    `;
+  }
+}
+
+// ==============================================================================
+// MODAL & GLOBAL LISTENERS
+// ==============================================================================
+function renderTargetModal() {
+  const targets = Object.values(TARGET_CONFIGS);
+  targetsList.innerHTML = targets.map(t => {
+    const isTargetActive = t.id === modalSelectedTarget;
+    const hasMultipleStreams = t.streams.length > 1;
+
+    let accordionHtml = "";
+    if (hasMultipleStreams) {
+      accordionHtml = `
+        <div class="target-streams-accordion">
+          <div class="modal-stream-label">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <polyline points="6 9 12 15 18 9"></polyline>
+            </svg>
+            বিভাগ বা ইউনিট নির্বাচন করুন:
+          </div>
+          <div class="modal-stream-pills-row">
+            ${t.streams.map(stream => {
+              const isStreamActive = isTargetActive && (stream.id === modalSelectedStream);
+              return `
+                <button type="button" class="modal-stream-pill ${isStreamActive ? 'active' : ''}" data-target-id="${t.id}" data-stream-id="${stream.id}">
+                  ${isStreamActive ? '<span class="pill-check">✓</span> ' : ''}${stream.label}
+                </button>
+              `;
+            }).join("")}
+          </div>
+        </div>
+      `;
+    } else {
+      accordionHtml = `
+        <div class="target-streams-accordion">
+          <div class="single-stream-badge">
+            <span>✓ সকল পরীক্ষার্থীদের জন্য উন্মুক্ত পূর্ণাঙ্গ প্রস্তুতি ও মডেল টেস্ট</span>
+          </div>
+        </div>
+      `;
+    }
+
+    return `
+      <div class="target-option-card ${isTargetActive ? 'active' : ''}" data-target="${t.id}">
+        <div class="target-card-top-row">
+          <div class="target-card-badge">${t.codeBadge}</div>
+          <div class="target-card-info">
+            <h4>${t.label}</h4>
+            <p>${t.desc || 'সিলেবাস ও বিষয়ভিত্তিক মডেল টেস্ট'}</p>
+          </div>
+          <span class="target-check">✓</span>
+        </div>
+        ${accordionHtml}
+      </div>
+    `;
+  }).join("");
+
+  // Target card click listeners
+  targetsList.querySelectorAll(".target-option-card").forEach(card => {
+    card.addEventListener("click", (e) => {
+      if (e.target.closest(".modal-stream-pill")) return;
+      
+      const targetId = card.dataset.target;
+      if (modalSelectedTarget !== targetId) {
+        modalSelectedTarget = targetId;
+        const cfg = TARGET_CONFIGS[targetId];
+        modalSelectedStream = cfg.streams[0].id;
+        renderTargetModal();
+      }
+    });
+  });
+
+  // Modal stream pill click listeners
+  targetsList.querySelectorAll(".modal-stream-pill").forEach(pill => {
+    pill.addEventListener("click", (e) => {
+      e.stopPropagation();
+      const targetId = pill.dataset.targetId;
+      const streamId = pill.dataset.streamId;
+      modalSelectedTarget = targetId;
+      modalSelectedStream = streamId;
+      renderTargetModal();
+    });
+  });
+}
+
+function openTargetModal() {
+  modalSelectedTarget = currentTargetId;
+  modalSelectedStream = currentStreamId;
+  renderTargetModal();
+  targetModal.classList.remove("hidden");
+}
+
+function closeTargetModalDialog() {
+  targetModal.classList.add("hidden");
+}
+
+function setupMobileDock() {
+  const dockHome = document.getElementById("dock-home-btn");
+  const dockStudy = document.getElementById("dock-study-btn");
+  const dockRevision = document.getElementById("dock-revision-btn");
+  const dockProfile = document.getElementById("dock-profile-btn");
+
+  if (dockHome) {
+    dockHome.addEventListener("click", () => {
+      clearInterval(examTimer);
+      examView.classList.add("hidden");
+      resultView.classList.add("hidden");
+      dashboardView.classList.remove("hidden");
+      setActiveDockItem("dock-home-btn");
+    });
+  }
+
+  if (dockStudy) {
+    dockStudy.addEventListener("click", () => {
+      startLiveExamBtn.click();
+      setActiveDockItem("dock-study-btn");
+    });
+  }
+
+  if (dockRevision) {
+    dockRevision.addEventListener("click", () => {
+      handleMistakeBankTrigger();
+      setActiveDockItem("dock-revision-btn");
+    });
+  }
+
+  if (dockProfile) {
+    dockProfile.addEventListener("click", () => {
+      openTargetModal();
+      setActiveDockItem("dock-profile-btn");
+    });
+  }
+}
+
+function setActiveDockItem(btnId) {
+  document.querySelectorAll(".dock-item").forEach(item => {
+    item.classList.toggle("active", item.id === btnId);
+  });
+}
+
+function setupKeyboardShortcuts() {
+  window.addEventListener("keydown", (e) => {
+    if (examView.classList.contains("hidden")) return;
+    if (["INPUT", "TEXTAREA"].includes(document.activeElement?.tagName)) return;
+
+    const key = e.key.toLowerCase();
+    if (["1", "ক"].includes(key)) {
+      selectOption(0);
+    } else if (["2", "খ"].includes(key)) {
+      selectOption(1);
+    } else if (["3", "গ"].includes(key)) {
+      selectOption(2);
+    } else if (["4", "ঘ"].includes(key)) {
+      selectOption(3);
+    } else if (key === "enter") {
+      if (currentQIndex < currentQuestions.length - 1) {
+        currentQIndex++;
+        loadQuestion(currentQIndex);
+      } else {
+        submitExam();
+      }
+    } else if (key === "b") {
+      const q = currentQuestions[currentQIndex];
+      if (q) toggleBookmark(q);
+    } else if (key === "r") {
+      toggleBlurBtn.click();
+    } else if (key === "s") {
+      toggleStrikeBtn.click();
+    }
+  });
+}
+
+function handleMistakeBankTrigger() {
+  const bank = getRevisionBank();
+  if (bank.length === 0) {
+    showToast("আপনার ভুল উত্তর ব্যাংক বর্তমানে খালি! পরীক্ষায় ভুল করা প্রশ্নগুলো এখানে জমা হবে।", "info");
+  } else {
+    currentQuestions = [...bank];
+    document.getElementById("exam-category-badge").textContent = `ভুল উত্তর ব্যাংক (${bank.length}টি প্রশ্ন)`;
+    currentExamMode = "mistake_bank";
+    startExamSession(10 * 60);
+    showToast(`ভুল উত্তর ব্যাংক থেকে ${bank.length}টি প্রশ্ন লোড করা হয়েছে`, "success");
+  }
+}
+
+function handleBookmarksTrigger() {
+  const bookmarks = getBookmarks();
+  if (bookmarks.length === 0) {
+    showToast("আপনার কোনো বুকমার্ক করা প্রশ্ন নেই! পড়ার সময় বুকমার্ক আইকনে ক্লিক করে সংরক্ষণ করুন।", "info");
+  } else {
+    currentQuestions = [...bookmarks];
+    document.getElementById("exam-category-badge").textContent = `বুকমার্ক প্রশ্নসমূহ (${bookmarks.length}টি)`;
+    currentExamMode = "bookmarks";
+    startExamSession(10 * 60);
+    showToast(`বুকমার্ক থেকে ${bookmarks.length}টি প্রশ্ন লোড করা হয়েছে`, "success");
+  }
+}
+
+// ==============================================================================
+// CUSTOM CONCEPT & CHAPTER QUIZ BUILDER LOGIC
+// ==============================================================================
+function openCustomQuizModal(preselectedSubjectId = null) {
+  const target = TARGET_CONFIGS[currentTargetId] || TARGET_CONFIGS.ssc;
+  const currentSubjects = target.subjects[currentStreamId] || target.subjects[target.streams[0]?.id] || [];
+
+  const subjectList = [];
+  currentSubjects.forEach(s => {
+    if (SUBJECT_CHAPTERS_MAP[s.id] && !subjectList.some(item => item.id === s.id)) {
+      subjectList.push({ id: s.id, name: s.name });
+    }
+  });
+  Object.keys(SUBJECT_CHAPTERS_MAP).forEach(id => {
+    if (!subjectList.some(item => item.id === id)) {
+      subjectList.push({ id, name: SUBJECT_CHAPTERS_MAP[id].name });
+    }
+  });
+
+  customSubjectSelect.innerHTML = subjectList.map(s => `
+    <option value="${s.id}">${s.name}</option>
+  `).join("");
+
+  const chosenSubId = (preselectedSubjectId && SUBJECT_CHAPTERS_MAP[preselectedSubjectId])
+    ? preselectedSubjectId
+    : (subjectList[0]?.id || "general_math");
+
+  customSubjectSelect.value = chosenSubId;
+  updateChaptersForSubject(chosenSubId);
+
+  customQuizModal.classList.remove("hidden");
+}
+
+function updateChaptersForSubject(subjectId) {
+  const subData = SUBJECT_CHAPTERS_MAP[subjectId];
+  if (!subData || !subData.chapters || subData.chapters.length === 0) {
+    customChapterSelect.innerHTML = `<option value="all">সকল অধ্যায় (কমন)</option>`;
+    customConceptSelect.innerHTML = `<option value="all">সকল কনসেপ্ট</option>`;
+    return;
+  }
+
+  customChapterSelect.innerHTML = subData.chapters.map(ch => `
+    <option value="${ch.id}">${ch.title}</option>
+  `).join("");
+
+  updateConceptsForChapter(subjectId, subData.chapters[0].id);
+}
+
+function updateConceptsForChapter(subjectId, chapterId) {
+  const subData = SUBJECT_CHAPTERS_MAP[subjectId];
+  if (!subData) return;
+
+  const chapter = subData.chapters.find(c => c.id === chapterId);
+  if (!chapter || !chapter.concepts || chapter.concepts.length === 0) {
+    customConceptSelect.innerHTML = `<option value="all">অধ্যায়ের সকল কনসেপ্ট</option>`;
+    return;
+  }
+
+  customConceptSelect.innerHTML = chapter.concepts.map(con => `
+    <option value="${con.id}">${con.title}</option>
+  `).join("");
+}
+
+function closeCustomQuizModalDialog() {
+  customQuizModal.classList.add("hidden");
+}
+
+function startCustomQuizFromSelection() {
+  const subId = customSubjectSelect.value;
+  const chId = customChapterSelect.value;
+  const conId = customConceptSelect.value;
+
+  const subData = SUBJECT_CHAPTERS_MAP[subId];
+  const subName = subData?.name || "কাস্টম প্র্যাকটিস";
+  const chData = subData?.chapters?.find(c => c.id === chId);
+  const chName = chData?.title || "অধ্যায় কুইজ";
+  const conData = chData?.concepts?.find(c => c.id === conId);
+  const conName = conData?.title || "";
+
+  // Filtering Hierarchy: Concept -> Chapter -> Subject -> Fallback
+  let filtered = [];
+  if (conId && conId !== "all") {
+    filtered = ALL_SAMPLE_QUESTIONS.filter(q => q.subjectId === subId && q.conceptId === conId);
+  }
+  if (filtered.length === 0 && chId && chId !== "all") {
+    filtered = ALL_SAMPLE_QUESTIONS.filter(q => q.subjectId === subId && q.chapterId === chId);
+  }
+  if (filtered.length === 0) {
+    filtered = ALL_SAMPLE_QUESTIONS.filter(q => q.subjectId === subId);
+  }
+  if (filtered.length === 0) {
+    filtered = [...ALL_SAMPLE_QUESTIONS];
+  }
+
+  currentQuestions = [...filtered].sort(() => 0.5 - Math.random()).slice(0, selectedQuizCount);
+
+  // Set Exam category badge & mode
+  document.getElementById("exam-category-badge").textContent = `${subName} • ${chName}`;
+  currentExamMode = "custom_concept";
+
+  closeCustomQuizModalDialog();
+  startExamSession(selectedQuizDurationMins * 60);
+
+  const conceptNote = (conId && conId !== "all") ? ` (${conName})` : "";
+  showToast(`${subName} • ${chName}${conceptNote} এর ওপর কুইজ শুরু হয়েছে!`, "success");
+}
+
+function runRandomRapidQuiz() {
+  const shuffled = [...ALL_SAMPLE_QUESTIONS].sort(() => 0.5 - Math.random()).slice(0, 5);
+  currentQuestions = shuffled;
+  document.getElementById("exam-category-badge").textContent = "র‍্যাপিড ফায়ার কুইজ (৫ মিনিট)";
+  currentExamMode = "rapid";
+  startExamSession(5 * 60);
+  showToast("র‍্যাপিড ফায়ার শুরু! ৫ মিনিটে ৫টি প্রশ্ন সমাধান করুন", "warning");
+}
+
+function handleRapidQuizTrigger() {
+  openCustomQuizModal();
+}
+
+function setupEventListeners() {
+  targetSwitcherBtn.addEventListener("click", openTargetModal);
+  closeTargetModal.addEventListener("click", closeTargetModalDialog);
+  
+  targetModal.addEventListener("click", (e) => {
+    if (e.target === targetModal) closeTargetModalDialog();
+  });
+
+  confirmTargetBtn.addEventListener("click", () => {
+    currentTargetId = modalSelectedTarget;
+    currentStreamId = modalSelectedStream;
+    localStorage.setItem("conceptmcq_target", currentTargetId);
+    localStorage.setItem("conceptmcq_stream", currentStreamId);
+    renderTargetUI();
+    closeTargetModalDialog();
+    
+    const targetObj = TARGET_CONFIGS[currentTargetId];
+    const streamObj = targetObj?.streams.find(s => s.id === currentStreamId) || targetObj?.streams[0];
+    const streamText = (targetObj && targetObj.streams.length > 1 && streamObj) ? ` (${streamObj.label})` : "";
+    showToast(`আপনার লক্ষ্য ও বিভাগ নিশ্চিত হয়েছে: ${targetObj?.label || ""}${streamText}`, "success");
+  });
+
+  document.getElementById("logo-btn").addEventListener("click", () => {
+    clearInterval(examTimer);
+    examView.classList.add("hidden");
+    resultView.classList.add("hidden");
+    dashboardView.classList.remove("hidden");
+    setActiveDockItem("dock-home-btn");
+  });
+
+  startLiveExamBtn.addEventListener("click", () => {
+    currentQuestions = [...ALL_SAMPLE_QUESTIONS];
+    document.getElementById("exam-category-badge").textContent = "আজকের লাইভ মডেল টেস্ট";
+    currentExamMode = "live";
+    startExamSession(15 * 60);
+  });
+
+  exitExamBtn.addEventListener("click", () => {
+    if (confirm("আপনি কি নিশ্চিতভাবে পরীক্ষা থেকে বের হতে চান?")) {
+      clearInterval(examTimer);
+      examView.classList.add("hidden");
+      dashboardView.classList.remove("hidden");
+      setActiveDockItem("dock-home-btn");
+    }
+  });
+
+  nextBtn.addEventListener("click", () => {
+    if (currentQIndex < currentQuestions.length - 1) {
+      currentQIndex++;
+      loadQuestion(currentQIndex);
+    }
+  });
+
+  prevBtn.addEventListener("click", () => {
+    if (currentQIndex > 0) {
+      currentQIndex--;
+      loadQuestion(currentQIndex);
+    }
+  });
+
+  finishExamBtn.addEventListener("click", () => {
+    if (confirm("আপনি কি পরীক্ষা জমা দিতে প্রস্তুত?")) {
+      submitExam();
+    }
+  });
+
+  retakeExamBtn.addEventListener("click", () => {
+    startExamSession(15 * 60);
+  });
+
+  backHomeBtn.addEventListener("click", () => {
+    resultView.classList.add("hidden");
+    dashboardView.classList.remove("hidden");
+    setActiveDockItem("dock-home-btn");
+  });
+
+  toggleBlurBtn.addEventListener("click", () => {
+    isBlurModeActive = !isBlurModeActive;
+    toggleBlurBtn.classList.toggle("active", isBlurModeActive);
+    optionsContainer.classList.toggle("blurred", isBlurModeActive);
+  });
+
+  toggleStrikeBtn.addEventListener("click", () => {
+    isEliminationModeActive = !isEliminationModeActive;
+    toggleStrikeBtn.classList.toggle("active", isEliminationModeActive);
+  });
+
+  markReviewBtn.addEventListener("click", () => {
+    const q = currentQuestions[currentQIndex];
+    if (q) toggleBookmark(q);
+  });
+
+  document.querySelectorAll(".btn-confidence").forEach(btn => {
+    btn.addEventListener("click", () => {
+      document.querySelectorAll(".btn-confidence").forEach(b => b.classList.remove("active"));
+      btn.classList.add("active");
+      if (!userAnswers[currentQIndex]) userAnswers[currentQIndex] = {};
+      userAnswers[currentQIndex].confidence = btn.dataset.confidence;
+    });
+  });
+
+  // Feature Tiles Triggers (Desktop + Mobile IDs)
+  ["tile-mistake-bank-d", "tile-mistake-bank-m"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("click", handleMistakeBankTrigger);
+  });
+
+  ["tile-bookmarks-d", "tile-bookmarks-m"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("click", handleBookmarksTrigger);
+  });
+
+  ["tile-rapid-quiz-d", "tile-rapid-quiz-m"].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.addEventListener("click", handleRapidQuizTrigger);
+  });
+
+  // Custom Concept & Chapter Quiz Modal Listeners
+  if (closeCustomQuizModal) {
+    closeCustomQuizModal.addEventListener("click", closeCustomQuizModalDialog);
+  }
+  if (customQuizModal) {
+    customQuizModal.addEventListener("click", (e) => {
+      if (e.target === customQuizModal) closeCustomQuizModalDialog();
+    });
+  }
+  if (customSubjectSelect) {
+    customSubjectSelect.addEventListener("change", (e) => {
+      updateChaptersForSubject(e.target.value);
+    });
+  }
+  if (customChapterSelect) {
+    customChapterSelect.addEventListener("change", (e) => {
+      updateConceptsForChapter(customSubjectSelect.value, e.target.value);
+    });
+  }
+  if (quizLengthOptions) {
+    quizLengthOptions.querySelectorAll(".quiz-length-pill").forEach(pill => {
+      pill.addEventListener("click", () => {
+        quizLengthOptions.querySelectorAll(".quiz-length-pill").forEach(p => p.classList.remove("active"));
+        pill.classList.add("active");
+        selectedQuizCount = parseInt(pill.dataset.count, 10) || 5;
+        selectedQuizDurationMins = parseInt(pill.dataset.mins, 10) || 5;
+      });
+    });
+  }
+  if (startCustomQuizBtn) {
+    startCustomQuizBtn.addEventListener("click", startCustomQuizFromSelection);
+  }
+  if (randomRapidBtn) {
+    randomRapidBtn.addEventListener("click", () => {
+      closeCustomQuizModalDialog();
+      runRandomRapidQuiz();
+    });
+  }
+
+  const notifBtn = document.getElementById("notif-btn");
+  if (notifBtn) {
+    notifBtn.addEventListener("click", () => {
+      showToast("আপনার ৩-দিনের রিভিশন ব্যাংকে নতুন প্রশ্ন যোগ হয়েছে!", "info");
+    });
+  }
+}
+
+// Start
+document.addEventListener("DOMContentLoaded", () => {
+  init();
+  setupMobileDock();
+  setupKeyboardShortcuts();
+
+  // Register PWA Service Worker for Offline / App Wrapping
+  if ('serviceWorker' in navigator) {
+    navigator.serviceWorker.register('sw.js').catch(err => {
+      console.log('SW register non-critical:', err);
+    });
+  }
+});
+

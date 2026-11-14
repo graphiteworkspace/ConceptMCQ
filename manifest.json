@@ -1,0 +1,24 @@
+{
+  "name": "ConceptMCQ - কনসেপ্ট ক্লিয়ার, পরীক্ষা জয়",
+  "short_name": "ConceptMCQ",
+  "description": "১০ মিনিট স্কুল অনুপ্রাণিত কনসেপচুয়াল এমসিকিউ প্রস্তুতি প্ল্যাটফর্ম",
+  "start_url": "./index.html",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#F8FAFC",
+  "theme_color": "#EA1D5D",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
