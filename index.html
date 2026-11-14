@@ -30,11 +30,12 @@
 </head>
 <body class="clean-ui">
   <div id="app">
-    <!-- Top Navigation Header -->
-    <header class="header">
+    <!-- Top Navigation Header with Pink-Red Gradient & Watermark -->
+    <header class="header telco-header">
+      <div class="header-watermark-overlay"></div>
       <div class="container header-container">
-        <!-- Brand Logo -->
-        <div class="logo" id="logo-btn" title="হোমপেজে যান">
+        <!-- Desktop Brand Logo (Visible on Desktop) -->
+        <div class="logo desktop-only" id="logo-btn" title="হোমপেজে যান">
           <div class="logo-icon">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
@@ -43,15 +44,47 @@
           <div class="logo-text">Concept<span class="logo-accent">MCQ</span></div>
         </div>
 
-        <!-- Target Switcher Pill (10MS Style) -->
-        <button class="target-switcher-btn" id="target-switcher-btn" title="ক্লাস বা লক্ষ্য পরিবর্তন করুন">
-          <span class="target-badge" id="current-target-badge">SSC</span>
-          <span class="target-label" id="current-target-label">এসএসসি (৯-১০)</span>
-          <span class="dropdown-arrow">▾</span>
-        </button>
+        <!-- 4 Equal-Height White Rounded Action Blocks (Mobile First & Universal) -->
+        <div class="top-action-bar">
+          <!-- 1. Rounded Square Profile Avatar Block -->
+          <div class="top-bar-block avatar-block avatar-pill" id="header-avatar-btn" title="প্রোফাইল">
+            <div class="avatar-square">আ</div>
+          </div>
 
-        <!-- User Stats & Profile Controls (Pure Coolicons Vector Icons) -->
-        <div class="header-right">
+          <!-- 2. Large Rounded Search Bar Block -->
+          <div class="top-bar-block search-block" id="header-search-wrap">
+            <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="11" cy="11" r="8"></circle>
+              <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+            </svg>
+            <input type="text" id="header-search-input" class="search-input" placeholder="বিষয়, চ্যাপ্টার বা টপিক খুঁজুন" autocomplete="off">
+          </div>
+
+          <!-- 3. Notification Bell with Red Numeric Badge Block -->
+          <button class="top-bar-block icon-block notif-btn" id="notif-btn" title="নোটিফিকেশন">
+            <div class="notif-icon-rel">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M15 17V18C15 19.6569 13.6569 21 12 21C10.3431 21 9 19.6569 9 18V17M19 14L20 15V16C20 16.5523 19.5523 17 19 17H5C4.44772 17 4 16.5523 4 16V15L5 14V10C5 6.13401 8.134 3 12 3C15.866 3 19 6.13401 19 10V14Z"></path>
+              </svg>
+              <span class="notif-badge-num">৩</span>
+            </div>
+          </button>
+
+          <!-- 4. Target Switcher / Grid Menu Icon Block -->
+          <button class="top-bar-block icon-block target-switcher-btn" id="target-switcher-btn" title="ক্লাস বা লক্ষ্য পরিবর্তন করুন">
+            <span class="target-badge" id="current-target-badge">SSC</span>
+            <span class="target-label" id="current-target-label">এসএসসি</span>
+            <svg class="grid-menu-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="3" y="3" width="7" height="7" rx="1.5"></rect>
+              <rect x="14" y="3" width="7" height="7" rx="1.5"></rect>
+              <rect x="14" y="14" width="7" height="7" rx="1.5"></rect>
+              <rect x="3" y="14" width="7" height="7" rx="1.5"></rect>
+            </svg>
+          </button>
+        </div>
+
+        <!-- Desktop Stats (Preserved for Desktop Wide Views) -->
+        <div class="header-right desktop-only">
           <div class="stat-pill streak-pill" title="ধারাবাহিক পড়ার স্ট্রিক">
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
               <path d="M12 2C9.5 5 7 7.5 7 11C7 14.5 9.5 17 12 21C14.5 17 17 14.5 17 11C17 7.5 14.5 5 12 2Z"></path>
@@ -64,14 +97,6 @@
               <circle cx="12" cy="12" r="6"></circle>
             </svg>
             <span class="stat-val" id="user-coins">১২৫০</span>
-          </div>
-          <button class="icon-btn notif-btn" id="notif-btn" title="নোটিফিকেশন">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-              <path d="M15 17V18C15 19.6569 13.6569 21 12 21C10.3431 21 9 19.6569 9 18V17M19 14L20 15V16C20 16.5523 19.5523 17 19 17H5C4.44772 17 4 16.5523 4 16V15L5 14V10C5 6.13401 8.134 3 12 3C15.866 3 19 6.13401 19 10V14Z"></path>
-            </svg>
-          </button>
-          <div class="avatar-pill" title="প্রোফাইল">
-            <div class="avatar-circle">আ</div>
           </div>
         </div>
       </div>
@@ -99,39 +124,240 @@
               </div>
             </section>
 
-            <!-- Hero / Live Model Test Banner (Desktop Normal / Mobile Floating Overlay over bottom 1/6th) -->
-            <section class="live-banner-card">
-              <div class="banner-badge">
-                <span class="live-pulse"></span>
-                <span>আজকের লাইভ মডেল টেস্ট</span>
+            <!-- SECTION 4: Main Card with Folder-Style Tabs -->
+            <section class="live-banner-card telco-main-card">
+              <!-- Folder-style tabs for stream selection -->
+              <div class="card-folder-tabs" id="stream-folder-tabs">
+                <button class="folder-tab active" data-stream="science">বিজ্ঞান বিভাগ</button>
+                <button class="folder-tab" data-stream="humanities">মানবিক বিভাগ</button>
+                <button class="folder-tab" data-stream="commerce">ব্যবসায় শিক্ষা</button>
               </div>
-              <div class="banner-content">
-                <div class="banner-info">
-                  <h1 class="banner-title" id="banner-title">এসএসসি স্পেশাল সাধারণ গণিত ও বিজ্ঞান কুইজ</h1>
-                  <p class="banner-desc">পরীক্ষার আসল প্রস্তুতি নিন KaTeX সমীকরণ, নেগেটিভ মার্কিং ও কনসেপ্ট ব্যাখ্যা সহ।</p>
-                  <div class="banner-meta">
-                    <span class="meta-item">
-                      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="13" r="8"></circle>
-                        <path d="M12 9v4l2 2M10 2h4"></path>
-                      </svg>
-                      <span>১৫ মিনিট</span>
-                    </span>
-                    <span>•</span>
-                    <span>২০টি প্রশ্ন</span>
-                    <span>•</span>
-                    <span class="badge-negative">নেগেটিভ মার্কিং: -০.২৫</span>
-                    <span>•</span>
-                    <span>৪,৫২০+ পরীক্ষার্থী</span>
+
+              <div class="card-inner-body">
+                <!-- Top Row: Side-by-Side Streak & Coins Chips with small '+' -->
+                <div class="chips-row">
+                  <div class="stat-chip streak-chip" id="chip-streak" title="ধারাবাহিক পড়ার স্ট্রিক">
+                    <span class="chip-icon">🔥</span>
+                    <span class="chip-label">স্ট্রিক: <strong id="card-streak-val">৫ দিন</strong></span>
+                    <button class="chip-plus-btn" title="স্ট্রিক বিস্তারিত" id="btn-streak-plus">+</button>
+                  </div>
+                  <div class="stat-chip coin-chip" id="chip-coins" title="অর্জিত রিওয়ার্ড কয়েন">
+                    <span class="chip-icon">🪙</span>
+                    <span class="chip-label">কয়েন: <strong id="card-coins-val">১২৫০</strong></span>
+                    <button class="chip-plus-btn" title="কয়েন রিডিম" id="btn-coins-plus">+</button>
                   </div>
                 </div>
-                <button class="btn btn-magenta-cta" id="start-live-exam-btn">
-                  পরীক্ষা শুরু করুন →
-                </button>
+
+                <!-- Main Live Model Test Row -->
+                <div class="banner-content telco-exam-content">
+                  <div class="banner-info">
+                    <div class="exam-lead-row">
+                      <div class="score-stat-box" title="সাপ্তাহিক মডেল টেস্ট">
+                        <span class="score-large-num" id="exam-score-num">৮</span>
+                        <span class="score-small-label">মডেল টেস্ট</span>
+                      </div>
+                      <div class="exam-title-wrap">
+                        <div class="banner-badge">
+                          <span class="live-pulse"></span>
+                          <span>আজকের লাইভ মডেল টেস্ট</span>
+                        </div>
+                        <h1 class="banner-title" id="banner-title">এসএসসি স্পেশাল সাধারণ গণিত ও বিজ্ঞান কুইজ</h1>
+                      </div>
+                    </div>
+                    <p class="banner-desc">পরীক্ষার আসল প্রস্তুতি নিন KaTeX সমীকরণ, নেগেটিভ মার্কিং ও কনসেপ্ট ব্যাখ্যা সহ।</p>
+                    <div class="banner-meta">
+                      <span class="meta-item">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                          <circle cx="12" cy="13" r="8"></circle>
+                          <path d="M12 9v4l2 2M10 2h4"></path>
+                        </svg>
+                        <span>১৫ মিনিট</span>
+                      </span>
+                      <span>•</span>
+                      <span>২০টি প্রশ্ন</span>
+                      <span>•</span>
+                      <span class="badge-negative">নেগেটিভ মার্কিং: -০.২৫</span>
+                      <span>•</span>
+                      <span>৪,৫২০+ পরীক্ষার্থী</span>
+                    </div>
+                  </div>
+                  <div class="cta-action-wrap">
+                    <button class="btn btn-magenta-cta telco-cta-btn" id="start-live-exam-btn">
+                      ⚡ পরীক্ষা শুরু করুন
+                    </button>
+                  </div>
+                </div>
               </div>
             </section>
 
-            <!-- Subjects Header (Clean 10MS Style, Stream selected from top) -->
+            <!-- SECTION 5: Promo Strip / Horizontal Carousel -->
+            <section class="promo-strip-section">
+              <div class="promo-strip-scroll" id="promo-strip-scroll">
+                <!-- Promo Card 1: Mistake Bank -->
+                <div class="promo-card promo-pastel-peach" id="promo-tile-mistake-bank">
+                  <div class="promo-card-left">
+                    <div class="promo-icon-circle bg-peach">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F43F5E" stroke-width="2">
+                        <path d="M4 12C4 7.58 7.58 4 12 4c3.5 0 6.5 2.2 7.5 5.5M20 4v6h-6M20 12c0 4.42-3.58 8-8 8-3.5 0-6.5-2.2-7.5-5.5M4 20v-6h6"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="promo-card-body">
+                    <h3 class="promo-card-title">ভুল উত্তর ব্যাংক</h3>
+                    <p class="promo-card-subtitle">৩-দিনের স্পেসড রিপিটিশন রিভিশন</p>
+                  </div>
+                  <button class="promo-card-btn" id="promo-action-mistake-bank">রিভিশন দিন →</button>
+                </div>
+
+                <!-- Promo Card 2: Bookmarks -->
+                <div class="promo-card promo-pastel-green" id="promo-tile-bookmarks">
+                  <div class="promo-card-left">
+                    <div class="promo-icon-circle bg-soft-green">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2">
+                        <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="promo-card-body">
+                    <h3 class="promo-card-title">সংরক্ষিত কনসেপ্টসমূহ</h3>
+                    <p class="promo-card-subtitle">বুকমার্ক করা জটিল সমস্যা প্র্যাকটিস</p>
+                  </div>
+                  <button class="promo-card-btn" id="promo-action-bookmarks">প্র্যাকটিস →</button>
+                </div>
+
+                <!-- Promo Card 3: Rapid Fire -->
+                <div class="promo-card promo-pastel-lilac" id="promo-tile-rapid">
+                  <div class="promo-card-left">
+                    <div class="promo-icon-circle bg-soft-purple">
+                      <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2">
+                        <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="promo-card-body">
+                    <h3 class="promo-card-title">র‍্যাপিড ফায়ার কুইজ</h3>
+                    <p class="promo-card-subtitle">৫ মিনিটে দ্রুত ৫টি স্পিড টেস্ট</p>
+                  </div>
+                  <button class="promo-card-btn" id="promo-action-rapid">শুরু করুন →</button>
+                </div>
+              </div>
+              <!-- Pagination Indicator Dots for Promo Strip -->
+              <div class="promo-dots-indicator" id="promo-dots">
+                <span class="p-dot active"></span>
+                <span class="p-dot"></span>
+                <span class="p-dot"></span>
+              </div>
+            </section>
+
+            <!-- SECTION 6: "আমার শর্টকাট" / My Shortcuts Grid (4 cols x 2 rows = 8 items) -->
+            <section class="shortcuts-section">
+              <div class="section-header-compact">
+                <h2 class="section-title-bold">আমার শর্টকাট</h2>
+                <button class="all-features-link-btn" id="open-all-features-btn" title="সব ফিচার দেখুন">
+                  <span>সব ফিচার</span>
+                  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                    <line x1="7" y1="17" x2="17" y2="7"></line>
+                    <polyline points="7 7 17 7 17 17"></polyline>
+                  </svg>
+                </button>
+              </div>
+
+              <div class="shortcuts-grid-4x2">
+                <!-- 1. Live Model Test -->
+                <div class="shortcut-item" id="shortcut-live-test">
+                  <div class="shortcut-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F43F5E" stroke-width="2">
+                      <path d="M22 12h-4l-3 9L9 3l-3 9H2"></path>
+                    </svg>
+                  </div>
+                  <span class="shortcut-name">লাইভ টেস্ট</span>
+                  <span class="shortcut-tag tag-rose">লাইভ</span>
+                </div>
+
+                <!-- 2. Physics -->
+                <div class="shortcut-item subject-shortcut" data-subject="physics" id="shortcut-physics">
+                  <div class="shortcut-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#EF4444" stroke-width="2">
+                      <circle cx="12" cy="12" r="3"></circle>
+                      <path d="M12 2a10 10 0 0 0-7.07 17.07M12 22a10 10 0 0 0 7.07-17.07"></path>
+                    </svg>
+                  </div>
+                  <span class="shortcut-name">পদার্থবিজ্ঞান</span>
+                  <span class="shortcut-tag tag-phy">PHY • ১,৪০০+</span>
+                </div>
+
+                <!-- 3. Chemistry -->
+                <div class="shortcut-item subject-shortcut" data-subject="chemistry" id="shortcut-chemistry">
+                  <div class="shortcut-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2">
+                      <path d="M10 2v7.31M14 2v7.31M8.5 2h7M14 9.31a8 8 0 1 1-4 0"></path>
+                    </svg>
+                  </div>
+                  <span class="shortcut-name">রসায়ন</span>
+                  <span class="shortcut-tag tag-chm">CHM • ১,২০০+</span>
+                </div>
+
+                <!-- 4. Higher/General Math -->
+                <div class="shortcut-item subject-shortcut" data-subject="higher_math" id="shortcut-math">
+                  <div class="shortcut-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3B82F6" stroke-width="2">
+                      <line x1="4" y1="12" x2="20" y2="12"></line>
+                      <line x1="12" y1="4" x2="12" y2="20"></line>
+                      <line x1="18" y1="6" x2="6" y2="18"></line>
+                    </svg>
+                  </div>
+                  <span class="shortcut-name">উচ্চতর গণিত</span>
+                  <span class="shortcut-tag tag-math">MATH • ১,৬৫০+</span>
+                </div>
+
+                <!-- 5. Biology -->
+                <div class="shortcut-item subject-shortcut" data-subject="biology" id="shortcut-biology">
+                  <div class="shortcut-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#10B981" stroke-width="2">
+                      <path d="M11 20A7 7 0 0 1 9.8 6.1C15.5 5 17 4.48 19 2c1 2 2 4.18 2 8 0 5.5-4.78 10-10 10Z"></path>
+                      <path d="M2 21c0-3 1.85-5.36 5.08-6C9.5 14.52 12 13 13 12"></path>
+                    </svg>
+                  </div>
+                  <span class="shortcut-name">জীববিজ্ঞান</span>
+                  <span class="shortcut-tag tag-bio">BIO • ১,১০০+</span>
+                </div>
+
+                <!-- 6. Mistake Bank -->
+                <div class="shortcut-item" id="tile-mistake-bank-m">
+                  <div class="shortcut-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F43F5E" stroke-width="2">
+                      <path d="M4 12C4 7.58 7.58 4 12 4c3.5 0 6.5 2.2 7.5 5.5M20 4v6h-6M20 12c0 4.42-3.58 8-8 8-3.5 0-6.5-2.2-7.5-5.5M4 20v-6h6"></path>
+                    </svg>
+                  </div>
+                  <span class="shortcut-name">ভুল উত্তর ব্যাংক</span>
+                  <span class="shortcut-tag tag-gray">রিভিশন</span>
+                </div>
+
+                <!-- 7. Bookmarks -->
+                <div class="shortcut-item" id="tile-bookmarks-m">
+                  <div class="shortcut-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F59E0B" stroke-width="2">
+                      <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
+                    </svg>
+                  </div>
+                  <span class="shortcut-name">বুকমার্ক প্রশ্ন</span>
+                  <span class="shortcut-tag tag-gray">সংরক্ষিত</span>
+                </div>
+
+                <!-- 8. Rapid Quiz / Past Papers -->
+                <div class="shortcut-item" id="tile-rapid-quiz-m">
+                  <div class="shortcut-icon-box">
+                    <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#8B5CF6" stroke-width="2">
+                      <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
+                    </svg>
+                  </div>
+                  <span class="shortcut-name">র‍্যাপিড কুইজ</span>
+                  <span class="shortcut-tag tag-purple">স্পিড টেস্ট</span>
+                </div>
+              </div>
+            </section>
+
+            <!-- Subjects Header & Dynamic Grid (Fully preserved & styled) -->
             <section class="subjects-header-section">
               <div class="section-header">
                 <div>
@@ -149,39 +375,45 @@
               <!-- Dynamic Subject Cards injected by JS -->
             </section>
 
-            <!-- Mobile Quick Access Feature Tiles (Visible on Mobile / App Mode) -->
-            <section class="feature-tiles-grid mobile-tiles-only">
-              <div class="feature-tile" id="tile-mistake-bank-m">
-                <div class="tile-icon-wrap bg-rose-light">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 12C4 7.58 7.58 4 12 4c3.5 0 6.5 2.2 7.5 5.5M20 4v6h-6M20 12c0 4.42-3.58 8-8 8-3.5 0-6.5-2.2-7.5-5.5M4 20v-6h6"></path>
-                  </svg>
+            <!-- SECTION 7: "নতুন কী আছে" / What's New Cards -->
+            <section class="whats-new-section">
+              <div class="section-header-compact">
+                <div class="title-with-pill">
+                  <h2 class="section-title-bold">নতুন কী আছে</h2>
+                  <span class="badge-new-pill">নতুন</span>
                 </div>
-                <div class="tile-details">
-                  <h3>ভুল উত্তর ব্যাংক</h3>
-                  <p>৩-দিনের স্পেসড রিটেনশন রিভিশন</p>
-                </div>
+                <span class="whats-new-subtitle">আপডেট ও নতুন ফিচার</span>
               </div>
-              <div class="feature-tile" id="tile-bookmarks-m">
-                <div class="tile-icon-wrap bg-amber-light">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M19 21l-7-5-7 5V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2z"></path>
-                  </svg>
+
+              <div class="whats-new-cards-scroll">
+                <div class="whats-new-card">
+                  <div class="wn-card-badge">স্পেশাল সিরিজ</div>
+                  <h4 class="wn-card-title">SSC ২০২৬ স্পেশাল মডেল টেস্ট সিরিজ উন্মুক্ত!</h4>
+                  <p class="wn-card-desc">সাপ্তাহিক লাইভ র‍্যাঙ্কিং ও বিস্তারিত বিশ্লেষণসহ পূর্ণাঙ্গ প্রস্তুতি শুরু করুন।</p>
+                  <div class="wn-card-footer">
+                    <span class="wn-date">আজকের আপডেট</span>
+                    <button class="wn-card-link-btn" id="wn-btn-1">দেখুন →</button>
+                  </div>
                 </div>
-                <div class="tile-details">
-                  <h3>বুকমার্ক প্রশ্ন</h3>
-                  <p>সংরক্ষিত গুরুত্বপূর্ণ কনসেপ্ট</p>
+
+                <div class="whats-new-card">
+                  <div class="wn-card-badge bg-blue-soft">ফর্মুলা ব্যাংক</div>
+                  <h4 class="wn-card-title">উচ্চতর গণিত ত্রিকোণমিতি শর্টকাট ও ফর্মুলা ব্যাংক</h4>
+                  <p class="wn-card-desc">KaTeX রেন্ডার করা জটিল গাণিতিক সমীকরণ ও প্রমাণ এবার হাতের মুঠোয়।</p>
+                  <div class="wn-card-footer">
+                    <span class="wn-date">২ দিন আগে</span>
+                    <button class="wn-card-link-btn" id="wn-btn-2">পড়ুন →</button>
+                  </div>
                 </div>
-              </div>
-              <div class="feature-tile" id="tile-rapid-quiz-m">
-                <div class="tile-icon-wrap bg-purple-light">
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon>
-                  </svg>
-                </div>
-                <div class="tile-details">
-                  <h3>র‍্যাপিড ফায়ার</h3>
-                  <p>৫ মিনিটে ৫টি স্পিড টেস্ট</p>
+
+                <div class="whats-new-card">
+                  <div class="wn-card-badge bg-green-soft">অধ্যায় নোট</div>
+                  <h4 class="wn-card-title">পদার্থবিজ্ঞান: ৩য় অধ্যায় বল ও গতি কুইজ</h4>
+                  <p class="wn-card-desc">নিউটনের গতিসূত্র ও ভরবেগ সংক্রান্ত জটিল সমস্যার সমাধান ও ব্যাখ্যা।</p>
+                  <div class="wn-card-footer">
+                    <span class="wn-date">১ সপ্তাহ আগে</span>
+                    <button class="wn-card-link-btn" id="wn-btn-3">শুরু করুন →</button>
+                  </div>
                 </div>
               </div>
             </section>
@@ -508,9 +740,24 @@
 
     </main>
 
-    <!-- MOBILE APP BOTTOM NAVIGATION DOCK (Native App Feel on Mobile / WebViews) -->
-    <nav class="mobile-bottom-dock" id="mobile-dock">
+    <!-- SECTION 8: Floating Study Buddy Mascot Helper (Positioned above dock) -->
+    <button class="floating-study-buddy-btn" id="floating-study-buddy-btn" title="স্টাডি বাডি হেল্পার">
+      <div class="mascot-avatar-circle">
+        <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <circle cx="12" cy="12" r="9"></circle>
+          <circle cx="9" cy="10" r="1.5" fill="currentColor"></circle>
+          <circle cx="15" cy="10" r="1.5" fill="currentColor"></circle>
+          <path d="M8 15s1.5 2 4 2 4-2 4-2" stroke-linecap="round"></path>
+          <path d="M9 3.5l1.5 2.5M15 3.5l-1.5 2.5"></path>
+        </svg>
+      </div>
+      <span class="buddy-ping-dot"></span>
+    </button>
+
+    <!-- SECTION 10: MOBILE APP BOTTOM NAVIGATION DOCK (Native Floating Pill Style) -->
+    <nav class="mobile-bottom-dock telco-floating-dock" id="mobile-dock">
       <button class="dock-item active" id="dock-home-btn">
+        <div class="dock-active-blob"></div>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"></path>
           <polyline points="9 22 9 12 15 12 15 22"></polyline>
@@ -519,6 +766,7 @@
       </button>
 
       <button class="dock-item" id="dock-study-btn">
+        <div class="dock-active-blob"></div>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path>
           <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path>
@@ -527,6 +775,7 @@
       </button>
 
       <button class="dock-item" id="dock-revision-btn">
+        <div class="dock-active-blob"></div>
         <div class="dock-icon-rel">
           <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M4 12C4 7.58 7.58 4 12 4c3.5 0 6.5 2.2 7.5 5.5M20 4v6h-6M20 12c0 4.42-3.58 8-8 8-3.5 0-6.5-2.2-7.5-5.5M4 20v-6h6"></path>
@@ -536,6 +785,7 @@
       </button>
 
       <button class="dock-item" id="dock-profile-btn">
+        <div class="dock-active-blob"></div>
         <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path>
           <circle cx="12" cy="7" r="4"></circle>
@@ -543,6 +793,170 @@
         <span>প্রোফাইল</span>
       </button>
     </nav>
+
+    <!-- SECTION 9: "সব ফিচার" All Features Modal / Drawer -->
+    <div class="modal-backdrop hidden" id="all-features-modal-backdrop">
+      <div class="modal-card all-features-sheet">
+        <div class="all-features-header">
+          <button class="modal-close-btn sheet-back-btn" id="close-all-features-modal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+          </button>
+          <h3 class="all-features-title">সব ফিচার ও সুবিধাসমূহ</h3>
+        </div>
+
+        <div class="sheet-search-wrap">
+          <svg class="search-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="11" cy="11" r="8"></circle>
+            <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+          </svg>
+          <input type="text" id="features-search-input" class="search-input" placeholder="ফিচার বা সুবিধা খুঁজুন..." autocomplete="off">
+        </div>
+
+        <!-- Sticky Quick Grid -->
+        <div class="sticky-features-quick">
+          <div class="quick-title-bar">
+            <span>আমার শর্টকাট</span>
+            <span class="quick-hint">ট্যাপ করে সরাসরি যেকোনো ফিচারে যান</span>
+          </div>
+          <div class="features-quick-chips">
+            <button class="f-chip" data-action="live-test">লাইভ টেস্ট</button>
+            <button class="f-chip" data-action="mistake-bank">ভুল উত্তর ব্যাংক</button>
+            <button class="f-chip" data-action="bookmarks">বুকমার্ক</button>
+            <button class="f-chip" data-action="rapid-quiz">র‍্যাপিড ফায়ার</button>
+            <button class="f-chip" data-action="target-switch">টার্গেট বদলান</button>
+          </div>
+        </div>
+
+        <!-- Categorized Features List -->
+        <div class="features-categories-list" id="features-categories-list">
+          <!-- Category 1: পরীক্ষা -->
+          <div class="feature-category-group">
+            <h4 class="category-heading">📝 পরীক্ষা</h4>
+            <div class="category-cards-grid">
+              <div class="feature-row-item" id="f-item-live-exam">
+                <div class="f-icon bg-rose-soft">⚡</div>
+                <div class="f-info">
+                  <strong>লাইভ মডেল টেস্ট</strong>
+                  <span>রিয়েল-টাইম নেগেটিভ মার্কিং ও লিডারবোর্ড</span>
+                </div>
+                <span class="f-action">শুরু করুন →</span>
+              </div>
+              <div class="feature-row-item" id="f-item-custom-exam">
+                <div class="f-icon bg-blue-soft">🎯</div>
+                <div class="f-info">
+                  <strong>অধ্যায়ভিত্তিক কাস্টম কুইজ</strong>
+                  <span>পছন্দের বিষয় ও অধ্যায় বেছে প্র্যাকটিস</span>
+                </div>
+                <span class="f-action">তৈরি করুন →</span>
+              </div>
+              <div class="feature-row-item disabled-feature" title="শীঘ্রই আসছে">
+                <div class="f-icon bg-gray-soft">🏛️</div>
+                <div class="f-info">
+                  <strong>বিগত বছরের বোর্ড প্রশ্ন</strong>
+                  <span>বিগত ৫ বছরের বোর্ড ও শীর্ষ স্কুল প্রশ্ন</span>
+                </div>
+                <span class="badge-soon">শীঘ্রই আসছে</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 2: অনুশীলন -->
+          <div class="feature-category-group">
+            <h4 class="category-heading">📚 অনুশীলন</h4>
+            <div class="category-cards-grid">
+              <div class="feature-row-item" id="f-item-rapid-quiz">
+                <div class="f-icon bg-purple-soft">⚡</div>
+                <div class="f-info">
+                  <strong>র‍্যাপিড ফায়ার কুইজ</strong>
+                  <span>দ্রুত স্পিড ও অ্যাকুরেসি বাড়ানোর অনুশীলন</span>
+                </div>
+                <span class="f-action">কুইজ দিন →</span>
+              </div>
+              <div class="feature-row-item disabled-feature" title="শীঘ্রই আসছে">
+                <div class="f-icon bg-amber-soft">📐</div>
+                <div class="f-info">
+                  <strong>ফর্মুলা ও কনসেপ্ট চিটশিট</strong>
+                  <span>সকল সূত্রের দ্রুত রিভিশন ডায়েরি</span>
+                </div>
+                <span class="badge-soon">শীঘ্রই আসছে</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 3: রিভিশন -->
+          <div class="feature-category-group">
+            <h4 class="category-heading">🔄 রিভিশন</h4>
+            <div class="category-cards-grid">
+              <div class="feature-row-item" id="f-item-mistake-bank">
+                <div class="f-icon bg-rose-soft">❌</div>
+                <div class="f-info">
+                  <strong>ভুল উত্তর ব্যাংক</strong>
+                  <span>ভুল করা প্রশ্নের ৩-দিনের স্পেসড রিভিশন</span>
+                </div>
+                <span class="f-action">রিভিশন →</span>
+              </div>
+              <div class="feature-row-item" id="f-item-bookmarks">
+                <div class="f-icon bg-amber-soft">⭐</div>
+                <div class="f-info">
+                  <strong>বুকমার্ক করা প্রশ্ন</strong>
+                  <span>সংরক্ষিত গুরুত্বপূর্ণ কনসেপ্টসমূহ</span>
+                </div>
+                <span class="f-action">দেখুন →</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 4: অগ্রগতি -->
+          <div class="feature-category-group">
+            <h4 class="category-heading">📊 অগ্রগতি ও ট্র্যাকিং</h4>
+            <div class="category-cards-grid">
+              <div class="feature-row-item" id="f-item-streak">
+                <div class="f-icon bg-peach-soft">🔥</div>
+                <div class="f-info">
+                  <strong>সাপ্তাহিক স্ট্রিক ট্র্যাকার</strong>
+                  <span>ধারাবাহিকতা ধরে রেখে বোনাস কয়েন অর্জন</span>
+                </div>
+                <span class="f-action">৫ দিন সক্রিয়</span>
+              </div>
+              <div class="feature-row-item" id="f-item-leaderboard">
+                <div class="f-icon bg-blue-soft">🏆</div>
+                <div class="f-info">
+                  <strong>লিডারবোর্ড র‍্যাঙ্কিং</strong>
+                  <span>সারা দেশের সহপাঠীদের সাথে তুলনা</span>
+                </div>
+                <span class="f-action">র‍্যাংক দেখুন →</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Category 5: সেটিংস -->
+          <div class="feature-category-group">
+            <h4 class="category-heading">⚙️ সেটিংস ও অন্যান্য</h4>
+            <div class="category-cards-grid">
+              <div class="feature-row-item" id="f-item-target-switch">
+                <div class="f-icon bg-soft-green">🎓</div>
+                <div class="f-info">
+                  <strong>টার্গেট বা ক্লাস পরিবর্তন</strong>
+                  <span>SSC, HSC, মেডিকেল বা বিশ্ববিদ্যালয় ইউনিট</span>
+                </div>
+                <span class="f-action">পরিবর্তন →</span>
+              </div>
+              <div class="feature-row-item" id="f-item-theme-toggle">
+                <div class="f-icon bg-gray-soft">🌙</div>
+                <div class="f-info">
+                  <strong>ডার্ক মোড / লাইট মোড</strong>
+                  <span>চোখের আরামদায়ক থিম পরিবর্তন করুন</span>
+                </div>
+                <span class="f-action" id="theme-toggle-label">টগল করুন</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
 
     <!-- CUSTOM CONCEPT & CHAPTER QUIZ BUILDER MODAL -->
     <div class="modal-backdrop hidden" id="custom-quiz-modal-backdrop">

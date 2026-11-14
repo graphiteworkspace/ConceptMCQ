@@ -1659,6 +1659,7 @@ document.addEventListener("DOMContentLoaded", () => {
   init();
   setupMobileDock();
   setupKeyboardShortcuts();
+  initTelcoHomeScreen();
 
   // Register PWA Service Worker for Offline / App Wrapping
   if ('serviceWorker' in navigator) {
@@ -1937,5 +1938,274 @@ window.openSliderAdminModal = function() {
   const modal = document.getElementById("slider-admin-modal");
   if (modal) modal.classList.remove("hidden");
 };
+
+// ==============================================================================
+// TELCO-INSPIRED MODERN HOME SCREEN LOGIC
+// Tabs, Search Bar, Shortcuts, Promo Strip, What's New & All Features Modal
+// ==============================================================================
+function initTelcoHomeScreen() {
+  // 1. Stream folder tabs on Main Card
+  const folderTabs = document.querySelectorAll(".folder-tab");
+  folderTabs.forEach(tab => {
+    tab.addEventListener("click", () => {
+      folderTabs.forEach(t => t.classList.remove("active"));
+      tab.classList.add("active");
+      const streamId = tab.dataset.stream;
+      if (streamId) {
+        currentStreamId = streamId;
+        renderTargetDashboard();
+      }
+    });
+  });
+
+  // 2. Header Search Input Filter
+  const headerSearchInput = document.getElementById("header-search-input");
+  if (headerSearchInput) {
+    headerSearchInput.addEventListener("input", (e) => {
+      const query = e.target.value.toLowerCase().trim();
+      document.querySelectorAll(".shortcut-item.subject-shortcut").forEach(item => {
+        const name = item.querySelector(".shortcut-name")?.textContent.toLowerCase() || "";
+        const tag = item.querySelector(".shortcut-tag")?.textContent.toLowerCase() || "";
+        if (!query || name.includes(query) || tag.includes(query)) {
+          item.style.display = "flex";
+        } else {
+          item.style.display = "none";
+        }
+      });
+      document.querySelectorAll(".subject-card").forEach(card => {
+        const subName = card.dataset.name?.toLowerCase() || "";
+        if (!query || subName.includes(query)) {
+          card.style.display = "flex";
+        } else {
+          card.style.display = "none";
+        }
+      });
+    });
+  }
+
+  // 3. Promo Strip Action Buttons & Cards
+  const promoMistakeBtn = document.getElementById("promo-action-mistake-bank");
+  const promoMistakeCard = document.getElementById("promo-tile-mistake-bank");
+  if (promoMistakeBtn) {
+    promoMistakeBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      handleMistakeBankTrigger();
+    });
+  }
+  if (promoMistakeCard) {
+    promoMistakeCard.addEventListener("click", handleMistakeBankTrigger);
+  }
+
+  const promoBookmarksBtn = document.getElementById("promo-action-bookmarks");
+  const promoBookmarksCard = document.getElementById("promo-tile-bookmarks");
+  if (promoBookmarksBtn) {
+    promoBookmarksBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      handleBookmarksTrigger();
+    });
+  }
+  if (promoBookmarksCard) {
+    promoBookmarksCard.addEventListener("click", handleBookmarksTrigger);
+  }
+
+  const promoRapidBtn = document.getElementById("promo-action-rapid");
+  const promoRapidCard = document.getElementById("promo-tile-rapid");
+  if (promoRapidBtn) {
+    promoRapidBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      handleRapidQuizTrigger();
+    });
+  }
+  if (promoRapidCard) {
+    promoRapidCard.addEventListener("click", handleRapidQuizTrigger);
+  }
+
+  // Promo Strip Horizontal Scroll Pagination Indicator
+  const promoScroll = document.getElementById("promo-strip-scroll");
+  const promoDots = document.querySelectorAll("#promo-dots .p-dot");
+  if (promoScroll && promoDots.length > 0) {
+    promoScroll.addEventListener("scroll", () => {
+      const scrollLeft = promoScroll.scrollLeft;
+      const card = promoScroll.querySelector(".promo-card");
+      const cardWidth = card ? card.offsetWidth + 12 : 280;
+      const activeIndex = Math.min(Math.round(scrollLeft / cardWidth), promoDots.length - 1);
+      promoDots.forEach((dot, idx) => {
+        dot.classList.toggle("active", idx === activeIndex);
+      });
+    });
+  }
+
+  // 4. Shortcuts Grid Items
+  const shortcutLiveTest = document.getElementById("shortcut-live-test");
+  if (shortcutLiveTest && startLiveExamBtn) {
+    shortcutLiveTest.addEventListener("click", () => startLiveExamBtn.click());
+  }
+
+  document.querySelectorAll(".shortcut-item.subject-shortcut").forEach(item => {
+    item.addEventListener("click", () => {
+      const subId = item.dataset.subject;
+      if (subId) openCustomQuizModal(subId);
+    });
+  });
+
+  // 5. What's New Cards Action Buttons
+  const wnBtn1 = document.getElementById("wn-btn-1");
+  if (wnBtn1 && startLiveExamBtn) {
+    wnBtn1.addEventListener("click", () => startLiveExamBtn.click());
+  }
+  const wnBtn2 = document.getElementById("wn-btn-2");
+  if (wnBtn2) {
+    wnBtn2.addEventListener("click", () => openCustomQuizModal("higher_math"));
+  }
+  const wnBtn3 = document.getElementById("wn-btn-3");
+  if (wnBtn3) {
+    wnBtn3.addEventListener("click", () => openCustomQuizModal("physics"));
+  }
+
+  // 6. Plus Buttons on Streak & Coins Chips
+  const btnStreakPlus = document.getElementById("btn-streak-plus");
+  if (btnStreakPlus) {
+    btnStreakPlus.addEventListener("click", (e) => {
+      e.stopPropagation();
+      showToast("🔥 স্ট্রিক তথ্য: প্রতিদিন অন্তত ১টি মডেল টেস্ট দিয়ে স্ট্রিক ধরে রাখুন এবং বোনাস রিওয়ার্ড পান!");
+    });
+  }
+  const btnCoinsPlus = document.getElementById("btn-coins-plus");
+  if (btnCoinsPlus) {
+    btnCoinsPlus.addEventListener("click", (e) => {
+      e.stopPropagation();
+      showToast("🪙 কয়েন রিডিম: আপনার অর্জিত ১২৫০ কয়েন দিয়ে শীঘ্রই বিশেষ মডেল টেস্ট ও চিটশিট আনলক করতে পারবেন!");
+    });
+  }
+
+  // 7. Floating Study Buddy Mascot Helper
+  const studyBuddyBtn = document.getElementById("floating-study-buddy-btn");
+  if (studyBuddyBtn) {
+    studyBuddyBtn.addEventListener("click", () => {
+      const mascotTips = [
+        "🦉 স্টাডি বাডি: প্রতিদিন অন্তত ১টি মডেল টেস্ট দিলে পরীক্ষার আসল ভীতি দূর হবে!",
+        "💡 আজকের টিপস: দ্বিধাদ্বন্দ্ব থাকা প্রশ্ন স্কিপ করলে নেগেটিভ মার্কিং এড়ানো যায়।",
+        "🎯 ভুল উত্তর ব্যাংকে জমা হওয়া প্রশ্নগুলো রিভিশন দিয়ে রিটেনশন রেট বাড়ান!",
+        "⚡ দ্রুত ৫টি প্রশ্নে নিজেকে যাচাই করতে র‍্যাপিড ফায়ার কুইজ চেষ্টা করুন!"
+      ];
+      const randomTip = mascotTips[Math.floor(Math.random() * mascotTips.length)];
+      showToast(randomTip);
+    });
+  }
+
+  // 8. All Features Modal / Drawer
+  const openAllFeaturesBtn = document.getElementById("open-all-features-btn");
+  const allFeaturesModal = document.getElementById("all-features-modal-backdrop");
+  const closeAllFeaturesModal = document.getElementById("close-all-features-modal");
+
+  function openFeaturesModal() {
+    if (allFeaturesModal) allFeaturesModal.classList.remove("hidden");
+  }
+  function closeFeaturesModal() {
+    if (allFeaturesModal) allFeaturesModal.classList.add("hidden");
+  }
+
+  if (openAllFeaturesBtn) openAllFeaturesBtn.addEventListener("click", openFeaturesModal);
+  if (closeAllFeaturesModal) closeAllFeaturesModal.addEventListener("click", closeFeaturesModal);
+  if (allFeaturesModal) {
+    allFeaturesModal.addEventListener("click", (e) => {
+      if (e.target === allFeaturesModal) closeFeaturesModal();
+    });
+  }
+
+  // Quick chips inside All Features Modal
+  document.querySelectorAll(".features-quick-chips .f-chip").forEach(chip => {
+    chip.addEventListener("click", () => {
+      closeFeaturesModal();
+      const action = chip.dataset.action;
+      if (action === "live-test" && startLiveExamBtn) startLiveExamBtn.click();
+      else if (action === "mistake-bank") handleMistakeBankTrigger();
+      else if (action === "bookmarks") handleBookmarksTrigger();
+      else if (action === "rapid-quiz") handleRapidQuizTrigger();
+      else if (action === "target-switch" && targetSwitcherBtn) targetSwitcherBtn.click();
+    });
+  });
+
+  // Categorized Items inside All Features Modal
+  const fLiveExam = document.getElementById("f-item-live-exam");
+  if (fLiveExam) {
+    fLiveExam.addEventListener("click", () => {
+      closeFeaturesModal();
+      if (startLiveExamBtn) startLiveExamBtn.click();
+    });
+  }
+  const fCustomExam = document.getElementById("f-item-custom-exam");
+  if (fCustomExam) {
+    fCustomExam.addEventListener("click", () => {
+      closeFeaturesModal();
+      openCustomQuizModal();
+    });
+  }
+  const fRapidQuiz = document.getElementById("f-item-rapid-quiz");
+  if (fRapidQuiz) {
+    fRapidQuiz.addEventListener("click", () => {
+      closeFeaturesModal();
+      handleRapidQuizTrigger();
+    });
+  }
+  const fMistakeBank = document.getElementById("f-item-mistake-bank");
+  if (fMistakeBank) {
+    fMistakeBank.addEventListener("click", () => {
+      closeFeaturesModal();
+      handleMistakeBankTrigger();
+    });
+  }
+  const fBookmarks = document.getElementById("f-item-bookmarks");
+  if (fBookmarks) {
+    fBookmarks.addEventListener("click", () => {
+      closeFeaturesModal();
+      handleBookmarksTrigger();
+    });
+  }
+  const fStreak = document.getElementById("f-item-streak");
+  if (fStreak) {
+    fStreak.addEventListener("click", () => {
+      closeFeaturesModal();
+      showToast("🔥 ৫ দিনের স্ট্রিক সক্রিয় রয়েছে!");
+    });
+  }
+  const fLeaderboard = document.getElementById("f-item-leaderboard");
+  if (fLeaderboard) {
+    fLeaderboard.addEventListener("click", () => {
+      closeFeaturesModal();
+      showToast("🏆 সাপ্তাহিক লিডারবোর্ড: আপনি ৭ম স্থানে রয়েছেন!");
+    });
+  }
+  const fTargetSwitch = document.getElementById("f-item-target-switch");
+  if (fTargetSwitch && targetSwitcherBtn) {
+    fTargetSwitch.addEventListener("click", () => {
+      closeFeaturesModal();
+      targetSwitcherBtn.click();
+    });
+  }
+  const fThemeToggle = document.getElementById("f-item-theme-toggle");
+  if (fThemeToggle) {
+    fThemeToggle.addEventListener("click", () => {
+      document.body.classList.toggle("dark-mode");
+      const isDark = document.body.classList.contains("dark-mode");
+      const label = document.getElementById("theme-toggle-label");
+      if (label) label.textContent = isDark ? "লাইট মোড" : "ডার্ক মোড";
+      showToast(isDark ? "🌙 ডার্ক মোড সক্রিয় করা হয়েছে" : "☀️ লাইট মোড সক্রিয় করা হয়েছে");
+    });
+  }
+
+  // Feature Search inside All Features Modal
+  const featuresSearchInput = document.getElementById("features-search-input");
+  if (featuresSearchInput) {
+    featuresSearchInput.addEventListener("input", (e) => {
+      const q = e.target.value.toLowerCase().trim();
+      document.querySelectorAll(".feature-row-item").forEach(item => {
+        const text = item.textContent.toLowerCase();
+        item.style.display = (!q || text.includes(q)) ? "flex" : "none";
+      });
+    });
+  }
+}
+
 
 

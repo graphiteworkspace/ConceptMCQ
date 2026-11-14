@@ -2789,3 +2789,1117 @@ kbd {
   cursor: pointer;
 }
 
+/* ==========================================================================
+   TELCO-INSPIRED MODERN HOME SCREEN REDESIGN STYLES
+   Pink-Red Primary: #F43F5E | Mobile First (360-412px) | Touch Targets >= 48px
+   ========================================================================== */
+
+/* 1. Header with Pink-Red Gradient & Education Watermark */
+.header.telco-header {
+  background: linear-gradient(135deg, #F43F5E 0%, #E11D48 100%);
+  border-bottom: none;
+  position: sticky;
+  top: 0;
+  z-index: 50;
+  box-shadow: 0 4px 20px rgba(244, 63, 94, 0.25);
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+  overflow: hidden;
+  padding: 8px 0;
+}
+
+.header-watermark-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  opacity: 0.08;
+  background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='1' fill-rule='evenodd'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3Ccircle cx='35' cy='18' r='3'/%3E%3Ccircle cx='12' cy='48' r='3'/%3E%3C/g%3E%3C/svg%3E");
+  pointer-events: none;
+}
+
+.telco-header .header-container {
+  height: auto;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  z-index: 2;
+  gap: 10px;
+}
+
+/* 4-Block Action Bar on Header */
+.top-action-bar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+}
+
+.top-bar-block {
+  height: 44px;
+  background: #FFFFFF;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  transition: all 0.2s ease;
+}
+
+/* Block 1: Profile Avatar */
+.avatar-block {
+  width: 44px;
+  flex-shrink: 0;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.avatar-square {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  background: linear-gradient(135deg, #FFE4E6 0%, #FECDD3 100%);
+  color: #E11D48;
+  font-weight: 800;
+  font-size: 15px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid #FDA4AF;
+}
+
+/* Block 2: Search Bar */
+.search-block {
+  flex: 1;
+  padding: 0 12px;
+  gap: 8px;
+  cursor: text;
+}
+
+.search-block .search-icon {
+  color: #94A3B8;
+  flex-shrink: 0;
+}
+
+.search-block .search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13.5px;
+  font-weight: 500;
+  color: var(--text-main);
+}
+
+.search-block .search-input::placeholder {
+  color: #94A3B8;
+}
+
+/* Block 3: Notification Bell with Badge */
+.icon-block.notif-btn {
+  width: 44px;
+  flex-shrink: 0;
+  justify-content: center;
+  cursor: pointer;
+  position: relative;
+  padding: 0;
+}
+
+.notif-icon-rel {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1E293B;
+}
+
+.notif-badge-num {
+  position: absolute;
+  top: -6px;
+  right: -8px;
+  background: #F43F5E;
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 800;
+  height: 16px;
+  min-width: 16px;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 3px;
+  border: 2px solid #FFFFFF;
+}
+
+/* Block 4: Target Switcher / Grid Menu */
+.icon-block.target-switcher-btn {
+  flex-shrink: 0;
+  padding: 0 10px;
+  gap: 6px;
+  cursor: pointer;
+  color: #1E293B;
+}
+
+.icon-block.target-switcher-btn .target-badge {
+  background: #FFE4E6;
+  color: #E11D48;
+  font-weight: 800;
+  font-size: 11px;
+  padding: 3px 6px;
+  border-radius: 6px;
+}
+
+.icon-block.target-switcher-btn .target-label {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: #1E293B;
+}
+
+.grid-menu-icon {
+  color: #64748B;
+}
+
+/* Hide desktop logo and stats on small mobile screen */
+@media (max-width: 768px) {
+  .desktop-only {
+    display: none !important;
+  }
+}
+
+@media (min-width: 769px) {
+  .top-action-bar {
+    max-width: 600px;
+  }
+}
+
+/* ==========================================================================
+   SECTION 4: MAIN CARD WITH FOLDER-STYLE TABS
+   ========================================================================== */
+.telco-main-card {
+  border: 1.5px solid rgba(244, 63, 94, 0.25) !important;
+  border-radius: 20px !important;
+  box-shadow: 0 10px 25px rgba(244, 63, 94, 0.08), 0 2px 10px rgba(0, 0, 0, 0.04) !important;
+  background: #FFFFFF !important;
+  overflow: visible !important;
+  padding: 0 !important;
+}
+
+/* Folder Tabs on Top of Card */
+.card-folder-tabs {
+  display: flex;
+  background: #FFF1F5;
+  border-bottom: 1.5px solid rgba(244, 63, 94, 0.2);
+  border-top-left-radius: 18px;
+  border-top-right-radius: 18px;
+  padding: 4px 8px 0 8px;
+  gap: 4px;
+}
+
+.folder-tab {
+  padding: 8px 14px;
+  font-size: 13px;
+  font-weight: 600;
+  color: #64748B;
+  background: transparent;
+  border: none;
+  border-top-left-radius: 12px;
+  border-top-right-radius: 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  font-family: inherit;
+}
+
+.folder-tab.active {
+  background: #FFFFFF;
+  color: #F43F5E;
+  font-weight: 700;
+  box-shadow: 0 -2px 8px rgba(244, 63, 94, 0.08);
+  border-top: 2px solid #F43F5E;
+}
+
+.card-inner-body {
+  padding: 16px 18px 18px 18px;
+}
+
+/* Side-by-side chips with white plus buttons */
+.chips-row {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 14px;
+}
+
+.stat-chip {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 6px 10px;
+  border-radius: 30px;
+  background: #FFF1F5;
+  border: 1px solid rgba(244, 63, 94, 0.2);
+  font-size: 12.5px;
+  font-weight: 600;
+  color: #1E293B;
+}
+
+.stat-chip strong {
+  color: #E11D48;
+  font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
+}
+
+.chip-plus-btn {
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 1px solid rgba(244, 63, 94, 0.3);
+  color: #F43F5E;
+  font-size: 14px;
+  font-weight: 800;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  line-height: 1;
+  transition: transform 0.15s ease;
+}
+
+.chip-plus-btn:active {
+  transform: scale(0.9);
+}
+
+/* Exam Lead Row with Big Score Number */
+.exam-lead-row {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+
+.score-stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: #FFF1F2;
+  border: 1.5px solid #FECDD3;
+  border-radius: 14px;
+  padding: 6px 12px;
+  min-width: 58px;
+  text-align: center;
+}
+
+.score-large-num {
+  font-size: 26px;
+  font-weight: 800;
+  color: #F43F5E;
+  line-height: 1;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+}
+
+.score-small-label {
+  font-size: 10px;
+  font-weight: 700;
+  color: #9F1239;
+  margin-top: 2px;
+  white-space: nowrap;
+}
+
+.exam-title-wrap {
+  flex: 1;
+}
+
+.exam-title-wrap .banner-badge {
+  margin-bottom: 4px;
+}
+
+.exam-title-wrap .banner-title {
+  margin-bottom: 0;
+  font-size: 18px;
+  line-height: 1.35;
+}
+
+.telco-cta-btn {
+  background: linear-gradient(135deg, #F43F5E 0%, #E11D48 100%) !important;
+  color: #FFFFFF !important;
+  font-size: 14.5px !important;
+  font-weight: 700 !important;
+  padding: 12px 20px !important;
+  border-radius: 14px !important;
+  box-shadow: 0 6px 18px rgba(244, 63, 94, 0.3) !important;
+  border: none !important;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  cursor: pointer;
+  min-height: 48px;
+}
+
+/* ==========================================================================
+   SECTION 5: PROMO STRIP (HORIZONTAL SCROLL)
+   ========================================================================== */
+.promo-strip-section {
+  margin-bottom: 22px;
+}
+
+.promo-strip-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  padding: 4px 2px 8px 2px;
+  scrollbar-width: none;
+}
+
+.promo-strip-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.promo-card {
+  flex: 0 0 calc(85% - 8px);
+  scroll-snap-align: start;
+  border-radius: 18px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  border: 1px solid rgba(0, 0, 0, 0.05);
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+}
+
+.promo-pastel-peach {
+  background: linear-gradient(135deg, #FFF5F2 0%, #FFEBE4 100%);
+  border-color: #FCD8CD;
+}
+
+.promo-pastel-green {
+  background: linear-gradient(135deg, #F0FDF4 0%, #E1F9EB 100%);
+  border-color: #BBF7D0;
+}
+
+.promo-pastel-lilac {
+  background: linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 100%);
+  border-color: #E9D5FF;
+}
+
+.promo-icon-circle {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.bg-peach {
+  background: #FFE4DC;
+}
+
+.bg-soft-green {
+  background: #DCFCE7;
+}
+
+.bg-soft-purple {
+  background: #EDE9FE;
+}
+
+.promo-card-body {
+  flex: 1;
+}
+
+.promo-card-title {
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 2px;
+}
+
+.promo-card-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.promo-card-btn {
+  background: #FFFFFF;
+  border: 1.5px solid currentColor;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  min-height: 36px;
+}
+
+.promo-pastel-peach .promo-card-btn {
+  color: #F43F5E;
+}
+
+.promo-pastel-green .promo-card-btn {
+  color: #10B981;
+}
+
+.promo-pastel-lilac .promo-card-btn {
+  color: #8B5CF6;
+}
+
+.promo-dots-indicator {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  margin-top: 6px;
+}
+
+.p-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: #CBD5E1;
+  transition: all 0.25s ease;
+}
+
+.p-dot.active {
+  width: 18px;
+  border-radius: 10px;
+  background: #F43F5E;
+}
+
+/* ==========================================================================
+   SECTION 6: "আমার শর্টকাট" 4X2 GRID
+   ========================================================================== */
+.shortcuts-section {
+  margin-bottom: 24px;
+}
+
+.section-header-compact {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+}
+
+.section-title-bold {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.all-features-link-btn {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  background: transparent;
+  border: none;
+  color: #F43F5E;
+  font-size: 13.5px;
+  font-weight: 700;
+  cursor: pointer;
+  padding: 4px 8px;
+}
+
+.shortcuts-grid-4x2 {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 10px;
+}
+
+.shortcut-item {
+  background: #FFFFFF;
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 10px 4px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  cursor: pointer;
+  min-height: 84px;
+  justify-content: center;
+  transition: transform 0.15s ease, background-color 0.15s ease;
+}
+
+.shortcut-item:active {
+  transform: scale(0.96);
+  background: #FFF1F5;
+}
+
+.shortcut-icon-box {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 6px;
+  background: #FFF1F5;
+}
+
+.shortcut-name {
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.2;
+  margin-bottom: 4px;
+}
+
+.shortcut-tag {
+  font-size: 9.5px;
+  font-weight: 700;
+  padding: 2px 6px;
+  border-radius: 8px;
+  line-height: 1.1;
+}
+
+/* Subject tags */
+.tag-phy {
+  background: #FEE2E2;
+  color: #EF4444;
+}
+
+.tag-chm {
+  background: #F3E8FF;
+  color: #8B5CF6;
+}
+
+.tag-math {
+  background: #DBEAFE;
+  color: #2563EB;
+}
+
+.tag-bio {
+  background: #D1FAE5;
+  color: #059669;
+}
+
+.tag-rose {
+  background: #FFE4E6;
+  color: #E11D48;
+}
+
+.tag-purple {
+  background: #F3E8FF;
+  color: #7C3AED;
+}
+
+.tag-gray {
+  background: #F1F5F9;
+  color: #475569;
+}
+
+/* ==========================================================================
+   SECTION 7: "নতুন কী আছে" CARDS
+   ========================================================================== */
+.whats-new-section {
+  margin-bottom: 24px;
+}
+
+.title-with-pill {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.badge-new-pill {
+  background: #F43F5E;
+  color: #FFFFFF;
+  font-size: 10px;
+  font-weight: 800;
+  padding: 2px 8px;
+  border-radius: 12px;
+}
+
+.whats-new-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.whats-new-cards-scroll {
+  display: flex;
+  gap: 12px;
+  overflow-x: auto;
+  scrollbar-width: none;
+  scroll-snap-type: x mandatory;
+  padding: 4px 2px 10px 2px;
+}
+
+.whats-new-cards-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+.whats-new-card {
+  flex: 0 0 calc(80% - 6px);
+  scroll-snap-align: start;
+  background: #FFFFFF;
+  border: 1px solid var(--border-light);
+  border-radius: 18px;
+  padding: 14px 16px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 125px;
+}
+
+.wn-card-badge {
+  display: inline-block;
+  padding: 3px 8px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 700;
+  background: #FFE4E6;
+  color: #E11D48;
+  width: fit-content;
+  margin-bottom: 6px;
+}
+
+.bg-blue-soft {
+  background: #EFF6FF !important;
+  color: #2563EB !important;
+}
+
+.bg-green-soft {
+  background: #ECFDF5 !important;
+  color: #059669 !important;
+}
+
+.wn-card-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+  margin-bottom: 4px;
+  line-height: 1.35;
+}
+
+.wn-card-desc {
+  font-size: 12px;
+  color: var(--text-muted);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  margin-bottom: 8px;
+}
+
+.wn-card-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px dashed var(--border-light);
+  padding-top: 8px;
+  margin-top: auto;
+}
+
+.wn-date {
+  font-size: 11px;
+  color: var(--text-light);
+}
+
+.wn-card-link-btn {
+  background: none;
+  border: none;
+  color: #F43F5E;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+/* ==========================================================================
+   SECTION 8: FLOATING STUDY BUDDY MASCOT
+   ========================================================================== */
+.floating-study-buddy-btn {
+  position: fixed;
+  bottom: 84px;
+  right: 18px;
+  z-index: 85;
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2px solid #F43F5E;
+  box-shadow: 0 6px 20px rgba(244, 63, 94, 0.28);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  padding: 0;
+}
+
+.floating-study-buddy-btn:active {
+  transform: scale(0.92);
+}
+
+.mascot-avatar-circle {
+  color: #F43F5E;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.buddy-ping-dot {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 10px;
+  height: 10px;
+  background: #10B981;
+  border: 2px solid #FFFFFF;
+  border-radius: 50%;
+}
+
+/* ==========================================================================
+   SECTION 9: "সব ফিচার" ALL FEATURES MODAL / DRAWER
+   ========================================================================== */
+.all-features-sheet {
+  max-width: 520px;
+  max-height: 85vh;
+  overflow-y: auto;
+  border-radius: 24px 24px 0 0;
+  padding: 20px 20px 40px 20px;
+}
+
+.all-features-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 14px;
+}
+
+.sheet-back-btn {
+  background: #F1F5F9;
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  cursor: pointer;
+  color: #1E293B;
+}
+
+.all-features-title {
+  font-size: 18px;
+  font-weight: 800;
+  color: var(--text-main);
+}
+
+.sheet-search-wrap {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  background: #F8FAFC;
+  border: 1px solid var(--border-light);
+  border-radius: 12px;
+  padding: 10px 14px;
+  margin-bottom: 16px;
+}
+
+.sheet-search-wrap .search-input {
+  width: 100%;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 14px;
+  color: var(--text-main);
+}
+
+.sticky-features-quick {
+  background: #FFF1F5;
+  border: 1px solid rgba(244, 63, 94, 0.2);
+  border-radius: 16px;
+  padding: 12px 14px;
+  margin-bottom: 20px;
+}
+
+.quick-title-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+  font-weight: 700;
+  color: #9F1239;
+  margin-bottom: 8px;
+}
+
+.quick-hint {
+  font-size: 11px;
+  color: #BE123C;
+  font-weight: 500;
+}
+
+.features-quick-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.f-chip {
+  background: #FFFFFF;
+  border: 1px solid rgba(244, 63, 94, 0.25);
+  border-radius: 20px;
+  padding: 4px 10px;
+  font-size: 12px;
+  font-weight: 600;
+  color: #E11D48;
+  cursor: pointer;
+}
+
+.feature-category-group {
+  margin-bottom: 20px;
+}
+
+.category-heading {
+  font-size: 15px;
+  font-weight: 800;
+  color: var(--text-main);
+  margin-bottom: 10px;
+}
+
+.category-cards-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.feature-row-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  background: #FFFFFF;
+  border: 1px solid var(--border-light);
+  border-radius: 14px;
+  padding: 12px 14px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.feature-row-item:active {
+  background: #F8FAFC;
+}
+
+.f-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 18px;
+  flex-shrink: 0;
+}
+
+.bg-rose-soft {
+  background: #FFE4E6;
+}
+
+.bg-purple-soft {
+  background: #F3E8FF;
+}
+
+.bg-amber-soft {
+  background: #FEF3C7;
+}
+
+.bg-peach-soft {
+  background: #FFEDD5;
+}
+
+.bg-gray-soft {
+  background: #F1F5F9;
+}
+
+.f-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.f-info strong {
+  font-size: 13.5px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+
+.f-info span {
+  font-size: 11.5px;
+  color: var(--text-muted);
+}
+
+.f-action {
+  font-size: 12px;
+  font-weight: 700;
+  color: #F43F5E;
+  white-space: nowrap;
+}
+
+.disabled-feature {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.badge-soon {
+  background: #F1F5F9;
+  color: #64748B;
+  font-size: 10px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 10px;
+}
+
+/* ==========================================================================
+   SECTION 10: FLOATING PILL BOTTOM NAVIGATION DOCK
+   ========================================================================== */
+.telco-floating-dock {
+  position: fixed;
+  bottom: 12px;
+  left: 14px;
+  right: 14px;
+  max-width: 460px;
+  margin: 0 auto;
+  height: 62px;
+  background: rgba(255, 255, 255, 0.96);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border-radius: 36px;
+  border: 1px solid rgba(244, 63, 94, 0.18);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  z-index: 90;
+  padding: 0 8px;
+}
+
+.telco-floating-dock .dock-item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  color: #64748B;
+  background: transparent;
+  border: none;
+  font-family: inherit;
+  font-size: 11px;
+  font-weight: 600;
+  cursor: pointer;
+  height: 48px;
+  border-radius: 24px;
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.telco-floating-dock .dock-item.active {
+  color: #F43F5E;
+  font-weight: 700;
+}
+
+.dock-active-blob {
+  position: absolute;
+  top: 0;
+  left: 4px;
+  right: 4px;
+  bottom: 0;
+  background: #FFF1F5;
+  border-radius: 24px;
+  opacity: 0;
+  transition: opacity 0.2s ease;
+  z-index: -1;
+}
+
+.telco-floating-dock .dock-item.active .dock-active-blob {
+  opacity: 1;
+}
+
+/* Mobile-First Spacing */
+@media (max-width: 768px) {
+  .main-content {
+    padding-bottom: 110px !important;
+  }
+}
+
+/* ==========================================================================
+   DARK MODE ADAPTATIONS
+   ========================================================================== */
+body.dark-mode .telco-header {
+  background: linear-gradient(135deg, #BE123C 0%, #9F1239 100%);
+}
+
+body.dark-mode .top-bar-block {
+  background: #1E293B;
+  border-color: #334155;
+  color: #F8FAFC;
+}
+
+body.dark-mode .search-block .search-input {
+  color: #F8FAFC;
+}
+
+body.dark-mode .notif-icon-rel {
+  color: #F8FAFC;
+}
+
+body.dark-mode .icon-block.target-switcher-btn .target-label {
+  color: #F8FAFC;
+}
+
+body.dark-mode .telco-main-card {
+  background: #1E293B !important;
+  border-color: rgba(244, 63, 94, 0.4) !important;
+}
+
+body.dark-mode .card-folder-tabs {
+  background: #0F172A;
+  border-color: rgba(244, 63, 94, 0.3);
+}
+
+body.dark-mode .folder-tab.active {
+  background: #1E293B;
+  color: #FB7185;
+}
+
+body.dark-mode .stat-chip {
+  background: #0F172A;
+  border-color: #334155;
+  color: #F8FAFC;
+}
+
+body.dark-mode .score-stat-box {
+  background: #2D1520;
+  border-color: #9F1239;
+}
+
+body.dark-mode .shortcut-item,
+body.dark-mode .whats-new-card,
+body.dark-mode .feature-row-item {
+  background: #1E293B;
+  border-color: #334155;
+}
+
+body.dark-mode .telco-floating-dock {
+  background: rgba(30, 41, 59, 0.95);
+  border-color: rgba(244, 63, 94, 0.3);
+}
+
+body.dark-mode .floating-study-buddy-btn {
+  background: #1E293B;
+}
+
+body.dark-mode .all-features-sheet {
+  background: #1E293B;
+  color: #F8FAFC;
+}
+
+
