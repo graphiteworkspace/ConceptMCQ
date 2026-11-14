@@ -24,8 +24,20 @@ CREATE TABLE IF NOT EXISTS public.quiz_results (
     completed_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
+-- 3. Create Mobile Sliders Table
+CREATE TABLE IF NOT EXISTS public.mobile_sliders (
+    id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    image_url TEXT NOT NULL,
+    destination_link TEXT DEFAULT '#',
+    is_active BOOLEAN DEFAULT true,
+    end_date TIMESTAMP WITH TIME ZONE DEFAULT (NOW() + INTERVAL '30 days'),
+    sort_order INT DEFAULT 1,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
 ALTER TABLE public.questions ENABLE ROW LEVEL SECURITY;
 ALTER TABLE public.quiz_results ENABLE ROW LEVEL SECURITY;
+ALTER TABLE public.mobile_sliders ENABLE ROW LEVEL SECURITY;
 
 DROP POLICY IF EXISTS "Allow public read access to questions" ON public.questions;
 CREATE POLICY "Allow public read access to questions"
@@ -34,6 +46,14 @@ ON public.questions FOR SELECT USING (true);
 DROP POLICY IF EXISTS "Allow public insert to quiz_results" ON public.quiz_results;
 CREATE POLICY "Allow public insert to quiz_results"
 ON public.quiz_results FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow public read access to mobile_sliders" ON public.mobile_sliders;
+CREATE POLICY "Allow public read access to mobile_sliders"
+ON public.mobile_sliders FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Allow public manage mobile_sliders" ON public.mobile_sliders;
+CREATE POLICY "Allow public manage mobile_sliders"
+ON public.mobile_sliders FOR ALL USING (true);
 
 INSERT INTO public.questions (category, question, options, correct_index, explanation, difficulty)
 VALUES

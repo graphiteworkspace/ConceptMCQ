@@ -86,7 +86,20 @@
           
           <!-- LEFT COLUMN: Primary Content Feed -->
           <div class="dashboard-main-col">
-            <!-- Hero / Live Model Test Banner -->
+            <!-- Mobile Dynamic Hero Slider (33vh height, touch-swipe, WebP optimized) -->
+            <section class="mobile-hero-slider-section" id="mobile-hero-slider-wrapper">
+              <div class="mobile-slider-container" id="mobile-slider-container">
+                <div class="mobile-slider-track" id="mobile-slider-track">
+                  <!-- Dynamically populated from Supabase mobile_sliders -->
+                </div>
+                <!-- White Gradient Overlay at bottom -->
+                <div class="slider-gradient-overlay"></div>
+                <!-- Dynamic Pagination Dots (Pill for active #ff5a00) -->
+                <div class="slider-pagination-dots" id="slider-pagination-dots"></div>
+              </div>
+            </section>
+
+            <!-- Hero / Live Model Test Banner (Desktop Normal / Mobile Floating Overlay over bottom 1/6th) -->
             <section class="live-banner-card">
               <div class="banner-badge">
                 <span class="live-pulse"></span>
@@ -668,6 +681,64 @@
             লক্ষ্য নিশ্চিত করুন ✓
           </button>
         </div>
+      </div>
+    </div>
+
+    <!-- ADMIN SLIDER MANAGER MODAL (Super Admin / Mobile Slider Setup) -->
+    <div class="modal-backdrop hidden" id="slider-admin-modal">
+      <div class="modal-card slider-admin-card">
+        <div class="modal-header">
+          <div>
+            <h3 class="modal-title">মোবাইল স্লাইডার ম্যানেজমেন্ট</h3>
+            <p class="modal-subtitle">WebP কনভার্সন, ডেস্টিনেশন লিংক, অ্যাক্টিভেশন ও সর্ট অর্ডার সেট করুন।</p>
+          </div>
+          <button class="modal-close-btn" id="close-slider-admin">✕</button>
+        </div>
+
+        <form id="slider-admin-form" class="slider-admin-form">
+          <div class="form-group">
+            <label class="form-label">ইমেজ আপলোড (Auto WebP Conversion):</label>
+            <input type="file" id="slider-image-input" accept="image/png, image/jpeg, image/webp" class="form-input-file">
+            <div id="slider-webp-preview" class="slider-webp-preview hidden">
+              <img id="preview-slider-img" alt="WebP Preview">
+              <span id="webp-status-pill" class="badge-status-pill">WebP Ready</span>
+            </div>
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">বা ইমেজ URL দিন:</label>
+            <input type="url" id="slider-url-input" placeholder="https://images.unsplash.com/..." class="form-input">
+          </div>
+
+          <div class="form-group">
+            <label class="form-label">ক্লিক ডেস্টিনেশন লিঙ্ক (Destination Link):</label>
+            <input type="text" id="slider-dest-input" placeholder="#live-exam বা https://..." class="form-input" required>
+          </div>
+
+          <div class="form-row-2">
+            <div class="form-group">
+              <label class="form-label">সর্ট অর্ডার (Sort Order):</label>
+              <input type="number" id="slider-sort-input" value="1" min="1" class="form-input">
+            </div>
+            <div class="form-group">
+              <label class="form-label">মেয়াদ শেষ (End Date):</label>
+              <input type="datetime-local" id="slider-date-input" class="form-input">
+            </div>
+          </div>
+
+          <div class="form-group toggle-group">
+            <label class="toggle-label">
+              <input type="checkbox" id="slider-active-input" checked>
+              <span>স্লাইডার সক্রিয় রাখুন (is_active: true)</span>
+            </label>
+          </div>
+
+          <div class="modal-footer" style="padding: 0; margin-top: 16px;">
+            <button type="submit" class="btn btn-primary-magenta w-full" id="save-slider-btn">
+              স্লাইডার সেভ করুন ✓
+            </button>
+          </div>
+        </form>
       </div>
     </div>
 

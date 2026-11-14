@@ -2602,3 +2602,190 @@ kbd {
     }
   }
 
+/* ==============================================================================
+   4. MASTER HERO SLIDER (Mobile Only: <= 768px, 33vh height, Bottom Gradient)
+   ============================================================================== */
+.mobile-hero-slider-section {
+  display: none; /* Hidden on desktop screens by default */
+  width: 100%;
+  position: relative;
+  overflow: hidden;
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .mobile-hero-slider-section {
+    display: block !important;
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    margin-right: calc(-50vw + 50%);
+    margin-top: -12px; /* Smooth flush under mobile header */
+    height: 33vh !important; /* Exactly 1/3 viewport height as specified */
+    position: relative;
+    overflow: hidden;
+    background: #0B0F19;
+  }
+
+  .mobile-slider-container {
+    width: 100%;
+    height: 100%;
+    position: relative;
+    overflow: hidden;
+    touch-action: pan-y;
+  }
+
+  .mobile-slider-track {
+    display: flex;
+    width: 100%;
+    height: 100%;
+    transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+    will-change: transform;
+  }
+
+  .mobile-slide-item {
+    flex: 0 0 100%;
+    width: 100%;
+    height: 100%;
+    position: relative;
+  }
+
+  .mobile-slide-item a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+    text-decoration: none;
+  }
+
+  .mobile-slide-item img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    user-select: none;
+    -webkit-user-drag: none;
+  }
+
+  /* Bottom White Gradient Overlay */
+  .slider-gradient-overlay {
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 65%;
+    background: linear-gradient(to top, rgba(255, 255, 255, 1) 0%, rgba(255, 255, 255, 0.85) 25%, rgba(255, 255, 255, 0.4) 60%, rgba(255, 255, 255, 0) 100%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* Pagination Dots on top of gradient overlay */
+  .slider-pagination-dots {
+    position: absolute;
+    bottom: calc(16.5vh + 10px); /* Positioned cleanly over visible 1/6th transition */
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 6px;
+    z-index: 5;
+    pointer-events: none;
+  }
+
+  .slider-dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.7);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
+    transition: all 0.25s ease;
+  }
+
+  .slider-dot.active {
+    width: 22px;
+    height: 7px;
+    border-radius: 10px;
+    background: #ff5a00 !important; /* Master prompt requirement */
+    box-shadow: 0 2px 6px rgba(255, 90, 0, 0.4);
+  }
+
+  /* Floating Card Over Slider: 1/6th of slider visible, rest covered by content */
+  .live-banner-card {
+    position: relative !important;
+    z-index: 6 !important;
+    margin-top: -16.5vh !important; /* Pull up by 1/2 of 33vh = exactly 1/6th visible */
+    margin-bottom: 18px !important;
+    border-radius: 20px !important;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08), 0 2px 8px rgba(0, 0, 0, 0.04) !important;
+    border: 1px solid rgba(234, 29, 93, 0.15) !important;
+    background: #FFFFFF !important;
+  }
+}
+
+/* Admin Slider Modal Styling */
+.slider-admin-card {
+  max-width: 520px !important;
+}
+
+.slider-admin-form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.form-input-file {
+  width: 100%;
+  padding: 8px 12px;
+  background: var(--bg-neutral);
+  border: 1px dashed var(--primary-border);
+  border-radius: var(--radius-md);
+  font-size: 13px;
+  cursor: pointer;
+}
+
+.slider-webp-preview {
+  margin-top: 8px;
+  position: relative;
+  border-radius: 10px;
+  overflow: hidden;
+  height: 110px;
+  border: 1px solid var(--primary-border);
+}
+
+.slider-webp-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.badge-status-pill {
+  position: absolute;
+  top: 8px;
+  right: 8px;
+  background: #10B981;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 20px;
+}
+
+.form-row-2 {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+.toggle-group {
+  margin-top: 4px;
+}
+
+.toggle-label {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 13.5px;
+  font-weight: 600;
+  cursor: pointer;
+}
+

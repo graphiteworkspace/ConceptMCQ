@@ -1666,5 +1666,276 @@ document.addEventListener("DOMContentLoaded", () => {
       console.log('SW register non-critical:', err);
     });
   }
+
+  // Initialize Master Mobile Hero Slider
+  initMobileHeroSlider();
 });
+
+// ==============================================================================
+// MASTER DYNAMIC MOBILE HERO SLIDER LOGIC
+// Height 33vh • Touch-Swipe • WebP Support • Supabase Sync • Auto-play (3s)
+// ==============================================================================
+let sliderItems = [];
+let currentSlideIndex = 0;
+let sliderAutoPlayTimer = null;
+let touchStartX = 0;
+let touchEndX = 0;
+
+const defaultMobileSliders = [
+  {
+    id: "slide-1",
+    image_url: "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=800&q=80",
+    destination_link: "#live-exam"
+  },
+  {
+    id: "slide-2",
+    image_url: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?auto=format&fit=crop&w=800&q=80",
+    destination_link: "#model-test"
+  },
+  {
+    id: "slide-3",
+    image_url: "https://images.unsplash.com/photo-1509062522246-3755977927d7?auto=format&fit=crop&w=800&q=80",
+    destination_link: "#subjects"
+  }
+];
+
+async function initMobileHeroSlider() {
+  const track = document.getElementById("mobile-slider-track");
+  const dotsContainer = document.getElementById("slider-pagination-dots");
+  if (!track || !dotsContainer) return;
+
+  // Fetch sliders from Supabase or Fallback
+  sliderItems = await fetchMobileSliders();
+  renderMobileSlider(sliderItems);
+  setupSliderTouchControls();
+  startSliderAutoPlay();
+  setupSliderAdmin();
+}
+
+async function fetchMobileSliders() {
+  try {
+    if (supabaseClient) {
+      const now = new Date().toISOString();
+      const { data, error } = await supabaseClient
+        .from('mobile_sliders')
+        .select('*')
+        .eq('is_active', true)
+        .gt('end_date', now)
+        .order('sort_order', { ascending: true });
+
+      if (!error && data && data.length > 0) {
+        return data;
+      }
+    }
+  } catch (err) {
+    console.warn("Supabase slider fetch fallback to local:", err);
+  }
+  return defaultMobileSliders;
+}
+
+function renderMobileSlider(slides) {
+  const track = document.getElementById("mobile-slider-track");
+  const dotsContainer = document.getElementById("slider-pagination-dots");
+  if (!track || !dotsContainer || !slides.length) return;
+
+  track.innerHTML = "";
+  dotsContainer.innerHTML = "";
+
+  slides.forEach((slide, idx) => {
+    // 1st image eager load, others lazy load (Prompt requirement)
+    const loadingStrategy = idx === 0 ? 'loading="eager" fetchpriority="high"' : 'loading="lazy"';
+
+    const slideEl = document.createElement("div");
+    slideEl.className = "mobile-slide-item";
+    slideEl.innerHTML = `
+      <a href="${slide.destination_link || '#'}" title="Slide Banner ${idx + 1}">
+        <img src="${slide.image_url}" alt="Hero Banner ${idx + 1}" ${loadingStrategy}>
+      </a>
+    `;
+    track.appendChild(slideEl);
+
+    // Pagination Dot
+    const dot = document.createElement("div");
+    dot.className = `slider-dot ${idx === 0 ? 'active' : ''}`;
+    dot.dataset.index = idx;
+    dot.addEventListener("click", () => goToSlide(idx));
+    dotsContainer.appendChild(dot);
+  });
+
+  currentSlideIndex = 0;
+  updateSliderTrackPosition();
+}
+
+function updateSliderTrackPosition() {
+  const track = document.getElementById("mobile-slider-track");
+  const dots = document.querySelectorAll(".slider-dot");
+  if (!track) return;
+
+  track.style.transform = `translateX(-${currentSlideIndex * 100}%)`;
+
+  dots.forEach((dot, idx) => {
+    if (idx === currentSlideIndex) {
+      dot.classList.add("active");
+    } else {
+      dot.classList.remove("active");
+    }
+  });
+}
+
+function goToSlide(index) {
+  if (!sliderItems.length) return;
+  currentSlideIndex = (index + sliderItems.length) % sliderItems.length;
+  updateSliderTrackPosition();
+  resetSliderAutoPlay();
+}
+
+function nextSlide() {
+  goToSlide(currentSlideIndex + 1);
+}
+
+function prevSlide() {
+  goToSlide(currentSlideIndex - 1);
+}
+
+function startSliderAutoPlay() {
+  clearInterval(sliderAutoPlayTimer);
+  // Auto-play every 3 seconds (Prompt Requirement)
+  sliderAutoPlayTimer = setInterval(nextSlide, 3000);
+}
+
+function resetSliderAutoPlay() {
+  clearInterval(sliderAutoPlayTimer);
+  startSliderAutoPlay();
+}
+
+function setupSliderTouchControls() {
+  const container = document.getElementById("mobile-slider-container");
+  if (!container) return;
+
+  container.addEventListener("touchstart", (e) => {
+    touchStartX = e.changedTouches[0].screenX;
+  }, { passive: true });
+
+  container.addEventListener("touchend", (e) => {
+    touchEndX = e.changedTouches[0].screenX;
+    handleSliderSwipe();
+  }, { passive: true });
+}
+
+function handleSliderSwipe() {
+  const diffX = touchEndX - touchStartX;
+  // Threshold of 45px for mobile swipe
+  if (Math.abs(diffX) > 45) {
+    if (diffX < 0) {
+      nextSlide(); // Swiped left -> next slide
+    } else {
+      prevSlide(); // Swiped right -> prev slide
+    }
+  }
+}
+
+// Client-Side Canvas WebP Converter (Max Performance & Image Optimization)
+function convertImageToWebP(file) {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      const img = new Image();
+      img.onload = () => {
+        const canvas = document.createElement("canvas");
+        canvas.width = img.width;
+        canvas.height = img.height;
+        const ctx = canvas.getContext("2d");
+        ctx.drawImage(img, 0, 0);
+        // Convert to WebP format with 0.82 quality
+        const webpDataUrl = canvas.toDataURL("image/webp", 0.82);
+        resolve(webpDataUrl);
+      };
+      img.onerror = reject;
+      img.src = e.target.result;
+    };
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
+function setupSliderAdmin() {
+  const modal = document.getElementById("slider-admin-modal");
+  const closeBtn = document.getElementById("close-slider-admin");
+  const form = document.getElementById("slider-admin-form");
+  const fileInput = document.getElementById("slider-image-input");
+  const previewWrap = document.getElementById("slider-webp-preview");
+  const previewImg = document.getElementById("preview-slider-img");
+  let convertedWebPUrl = "";
+
+  if (fileInput) {
+    fileInput.addEventListener("change", async (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        try {
+          convertedWebPUrl = await convertImageToWebP(file);
+          if (previewImg && previewWrap) {
+            previewImg.src = convertedWebPUrl;
+            previewWrap.classList.remove("hidden");
+          }
+        } catch (err) {
+          console.error("WebP conversion error:", err);
+        }
+      }
+    });
+  }
+
+  if (closeBtn && modal) {
+    closeBtn.addEventListener("click", () => modal.classList.add("hidden"));
+  }
+
+  if (form) {
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const imageUrl = convertedWebPUrl || document.getElementById("slider-url-input")?.value?.trim();
+      const destLink = document.getElementById("slider-dest-input")?.value?.trim() || "#";
+      const sortOrder = parseInt(document.getElementById("slider-sort-input")?.value, 10) || 1;
+      const endDateVal = document.getElementById("slider-date-input")?.value;
+      const isActive = document.getElementById("slider-active-input")?.checked ?? true;
+
+      if (!imageUrl) {
+        alert("অনুগ্রহ করে একটি ছবি আপলোড করুন অথবা ইমেজ লিঙ্ক দিন!");
+        return;
+      }
+
+      const newSlide = {
+        id: "slide-" + Date.now(),
+        image_url: imageUrl,
+        destination_link: destLink,
+        sort_order: sortOrder,
+        is_active: isActive,
+        end_date: endDateVal ? new Date(endDateVal).toISOString() : new Date(Date.now() + 30 * 86400000).toISOString()
+      };
+
+      // If Supabase is connected, insert directly
+      if (supabaseClient) {
+        try {
+          const { error } = await supabaseClient.from("mobile_sliders").insert([newSlide]);
+          if (error) console.warn("Supabase insert warning:", error);
+        } catch (err) {
+          console.warn("DB error:", err);
+        }
+      }
+
+      // Add to local state and re-render
+      sliderItems.push(newSlide);
+      sliderItems.sort((a, b) => (a.sort_order || 1) - (b.sort_order || 1));
+      renderMobileSlider(sliderItems);
+
+      if (modal) modal.classList.add("hidden");
+      alert("মোবাইল স্লাইডার সফলভাবে যুক্ত করা হয়েছে!");
+    });
+  }
+}
+
+// Global hook to open slider manager
+window.openSliderAdminModal = function() {
+  const modal = document.getElementById("slider-admin-modal");
+  if (modal) modal.classList.remove("hidden");
+};
+
 
