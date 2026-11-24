@@ -765,10 +765,12 @@ function renderTargetUI() {
   const streamObj = target.streams.find(s => s.id === currentStreamId) || target.streams[0];
 
   // Header Title
-  if (target.streams.length > 1 && streamObj) {
-    currentTargetLabel.textContent = `${target.label} • ${streamObj.label}`;
-  } else {
-    currentTargetLabel.textContent = target.label;
+  if (currentTargetLabel) {
+    if (target.streams.length > 1 && streamObj) {
+      currentTargetLabel.textContent = `${target.label} • ${streamObj.label}`;
+    } else {
+      currentTargetLabel.textContent = target.label;
+    }
   }
 
   // Dynamic Banner Title reflecting Target & Stream
@@ -1969,7 +1971,7 @@ function initTelcoHomeScreen() {
   if (headerSearchInput) {
     headerSearchInput.addEventListener("input", (e) => {
       const query = e.target.value.toLowerCase().trim();
-      document.querySelectorAll(".shortcut-item.subject-shortcut").forEach(item => {
+      document.querySelectorAll(".subject-shortcut").forEach(item => {
         const name = item.querySelector(".shortcut-name")?.textContent.toLowerCase() || "";
         const tag = item.querySelector(".shortcut-tag")?.textContent.toLowerCase() || "";
         if (!query || name.includes(query) || tag.includes(query)) {
@@ -2047,7 +2049,7 @@ function initTelcoHomeScreen() {
     shortcutLiveTest.addEventListener("click", () => startLiveExamBtn.click());
   }
 
-  document.querySelectorAll(".shortcut-item.subject-shortcut").forEach(item => {
+  document.querySelectorAll(".subject-shortcut").forEach(item => {
     item.addEventListener("click", () => {
       const subId = item.dataset.subject;
       if (subId) openCustomQuizModal(subId);

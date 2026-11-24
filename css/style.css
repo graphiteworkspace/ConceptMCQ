@@ -2623,7 +2623,7 @@ kbd {
     height: 33vh !important; /* Exactly 1/3 viewport height as specified */
     position: relative;
     overflow: hidden;
-    background: #0B0F19;
+    background: linear-gradient(180deg, #dcf0fd 0%, #edf6fc 100%);
   }
 
   .mobile-slider-container {
@@ -2794,30 +2794,50 @@ kbd {
    Exact Reference Matching: Pure White Top Bar + Top Pink Border + 33vh Slider
    ========================================================================== */
 
-/* 1. Header with Pure White Background & Pink Top Accent */
+/* ==========================================================================
+   TELCO-INSPIRED CLEAN MCQ UI STYLES
+   - Soft sky-blue wash gradient on page & header
+   - 4 separate floating white rounded action blocks on top bar
+   - Folder-tab silhouette for Stream selector
+   - Dual metric chips with '+' buttons (Streak & Coins)
+   - Vibrant exam action row with bold exam title & green CTA button
+   - Study Buddy Mascot Promo Cards
+   - "আমার শর্টকাট" 4x2 Clean Grid inside a single unified card
+   - What's New banner with timer
+   - Floating live status pill and Study Buddy mascot
+   - 5-tab floating bottom navigation dock
+   ========================================================================== */
+
+/* Page Background Soft Sky Wash */
+body.clean-ui {
+  background: linear-gradient(180deg, #dcf0fb 0%, #edf6fc 140px, #f5f8fb 280px, #f8f9fa 100%) !important;
+  min-height: 100vh;
+}
+
+/* 1. Header with Transparent Sky Background & Floating Blocks */
 .header.telco-header {
-  background: #FFFFFF !important;
-  border-bottom: 1px solid rgba(244, 63, 94, 0.1);
-  border-top: 4px solid #F43F5E;
+  background: linear-gradient(180deg, #cae8fc 0%, #dcf0fd 100%) !important;
+  border-top: none !important;
+  border-bottom: none !important;
   position: sticky;
   top: 0;
   z-index: 50;
-  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.04);
+  box-shadow: none !important;
   padding: 8px 0;
 }
 
 .telco-header .header-container {
   height: auto;
-  min-height: 52px;
+  min-height: 48px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   position: relative;
   z-index: 2;
-  gap: 10px;
+  gap: 8px;
 }
 
-/* 4-Block Action Bar on Header (Clean White Telco Look) */
+/* 4 Floating White Action Blocks */
 .top-action-bar {
   display: flex;
   align-items: center;
@@ -2826,37 +2846,33 @@ kbd {
 }
 
 .top-bar-block {
-  height: 42px;
-  background: #FFFFFF;
-  border-radius: 50px;
+  height: 46px;
+  background: #FFFFFF !important;
+  border-radius: 14px !important;
   display: flex;
   align-items: center;
-  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
-  border: 1px solid #E2E8F0;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.05) !important;
+  border: 1px solid rgba(255, 255, 255, 0.9) !important;
   transition: all 0.2s ease;
 }
 
 /* Block 1: Profile Avatar */
 .avatar-block {
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   flex-shrink: 0;
   justify-content: center;
   cursor: pointer;
-  border-radius: 12px !important;
-  border: 1px solid #FECDD3 !important;
-  background: #FFF1F3 !important;
-  box-shadow: none !important;
 }
 
-.avatar-square {
-  width: 100%;
-  height: 100%;
-  border-radius: 10px;
-  background: transparent;
-  color: #E11D48;
-  font-weight: 800;
-  font-size: 16px;
+.avatar-student-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #FF5A00;
+  color: #FFFFFF;
+  font-weight: 700;
+  font-size: 15px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2866,16 +2882,10 @@ kbd {
 .search-block {
   flex: 1;
   padding: 0 14px;
-  gap: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   cursor: text;
-  background: #F8FAFC !important;
-  border: 1px solid #E2E8F0 !important;
-  border-radius: 50px !important;
-}
-
-.search-block .search-icon {
-  color: #94A3B8;
-  flex-shrink: 0;
 }
 
 .search-block .search-input {
@@ -2886,25 +2896,27 @@ kbd {
   font-family: inherit;
   font-size: 13.5px;
   font-weight: 500;
-  color: var(--text-main);
+  color: #1E293B;
 }
 
 .search-block .search-input::placeholder {
   color: #94A3B8;
 }
 
+.search-block .search-icon {
+  color: #64748B;
+  flex-shrink: 0;
+}
+
 /* Block 3: Notification Bell with Badge */
 .icon-block.notif-btn {
-  width: 40px;
-  height: 40px;
+  width: 46px;
+  height: 46px;
   flex-shrink: 0;
   justify-content: center;
   cursor: pointer;
   position: relative;
   padding: 0;
-  border-radius: 12px !important;
-  background: #FFFFFF !important;
-  border: 1px solid #E2E8F0 !important;
 }
 
 .notif-icon-rel {
@@ -2912,54 +2924,46 @@ kbd {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: #1E293B;
 }
 
 .notif-badge-num {
   position: absolute;
-  top: -4px;
-  right: -4px;
-  background: #F43F5E;
+  top: -6px;
+  right: -6px;
+  background: #EF4444;
   color: #FFFFFF;
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
-  height: 14px;
-  min-width: 14px;
+  height: 16px;
+  min-width: 16px;
   border-radius: 10px;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0 3px;
+  padding: 0 4px;
   border: 2px solid #FFFFFF;
 }
 
 /* Block 4: Target Switcher / Grid Menu */
 .icon-block.target-switcher-btn {
+  height: 46px;
   flex-shrink: 0;
   padding: 0 10px;
   gap: 6px;
   cursor: pointer;
-  color: #1E293B;
-  background: #FFF1F3 !important;
-  border: 1px solid #FECDD3 !important;
-  border-radius: 50px !important;
-  height: 40px;
 }
 
-.icon-block.target-switcher-btn .target-badge {
-  background: transparent;
-  color: #E11D48;
+.target-badge {
+  background: #FFF0E6;
+  color: #FF5A00;
   font-weight: 800;
-  font-size: 12px;
-  padding: 0;
-}
-
-.icon-block.target-switcher-btn .target-label {
-  display: none !important; /* Keep mobile bar clean and identical to screenshot */
+  font-size: 11.5px;
+  padding: 2px 6px;
+  border-radius: 6px;
 }
 
 .grid-menu-icon {
-  color: #64748B;
+  color: #475569;
 }
 
 /* Hide desktop logo and stats on small mobile screen */
@@ -2971,42 +2975,31 @@ kbd {
 
 @media (min-width: 769px) {
   .top-action-bar {
-    max-width: 600px;
-  }
-  .icon-block.target-switcher-btn .target-label {
-    display: inline !important;
+    max-width: 620px;
   }
 }
 
 /* ==========================================================================
-   SECTION 4: MAIN CARD WITH STREAM PILL TABS
+   SECTION 4: MAIN CARD WITH FOLDER-TAB SILHOUETTE
    ========================================================================== */
-.telco-main-card {
-  border: 1.5px solid rgba(244, 63, 94, 0.15) !important;
-  border-radius: 24px !important;
-  box-shadow: 0 12px 32px rgba(244, 63, 94, 0.06), 0 2px 8px rgba(0, 0, 0, 0.03) !important;
-  background: #FFFFFF !important;
-  overflow: visible !important;
-  padding: 0 !important;
-}
-
-/* Folder Tabs on Top of Card */
 .card-folder-tabs {
   display: flex;
-  align-items: center;
-  background: transparent;
-  padding: 12px 14px 4px 14px;
-  gap: 8px;
+  align-items: flex-end;
+  gap: 4px;
+  margin-top: 14px;
+  margin-bottom: -1.5px;
+  padding-left: 2px;
 }
 
 .folder-tab {
-  padding: 6px 14px;
+  padding: 8px 18px;
   font-size: 13.5px;
   font-weight: 600;
   color: #64748B;
   background: transparent;
-  border: 1px solid transparent;
-  border-radius: 50px;
+  border: 1.5px solid transparent;
+  border-bottom: none;
+  border-radius: 14px 14px 0 0;
   cursor: pointer;
   transition: all 0.2s ease;
   font-family: inherit;
@@ -3014,21 +3007,34 @@ kbd {
 
 .folder-tab.active {
   background: #FFFFFF;
-  color: #F43F5E;
+  color: #FF5A00;
   font-weight: 700;
-  border: 1.5px solid rgba(244, 63, 94, 0.3);
-  box-shadow: 0 2px 8px rgba(244, 63, 94, 0.08);
+  border: 1.5px solid #FF5A00;
+  border-bottom: 1.5px solid #FFFFFF;
+  position: relative;
+  z-index: 2;
+}
+
+.telco-main-card {
+  border: 1.5px solid #FF5A00 !important;
+  border-radius: 22px !important;
+  border-top-left-radius: 0 !important;
+  box-shadow: 0 8px 24px rgba(255, 90, 0, 0.08), 0 2px 6px rgba(0, 0, 0, 0.03) !important;
+  background: #FFFFFF !important;
+  overflow: visible !important;
+  padding: 0 !important;
+  margin-bottom: 20px;
 }
 
 .card-inner-body {
-  padding: 14px 18px 20px 18px;
+  padding: 16px 16px 18px 16px;
 }
 
 /* Side-by-side chips with white plus buttons */
 .chips-row {
   display: flex;
   gap: 10px;
-  margin-bottom: 16px;
+  margin-bottom: 14px;
 }
 
 .stat-chip {
@@ -3036,29 +3042,52 @@ kbd {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 8px 12px;
-  border-radius: 50px;
-  background: #FFF5F7;
-  border: 1px solid rgba(244, 63, 94, 0.16);
+  padding: 10px 12px;
+  border-radius: 14px;
+  background: #F8FAFC;
+  border: 1px solid #EEF2F6;
   font-size: 13px;
   font-weight: 600;
   color: #1E293B;
 }
 
-.stat-chip strong {
-  color: #E11D48;
+.chip-content {
+  display: flex;
+  flex-direction: column;
+}
+
+.chip-val-bold {
+  font-size: 17px;
+  font-weight: 800;
+  color: #0F172A;
+  line-height: 1.2;
   font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
 }
 
+.streak-chip .chip-val-bold {
+  color: #FF5A00;
+}
+
+.coin-chip .chip-val-bold {
+  color: #0F172A;
+}
+
+.chip-unit {
+  font-size: 11px;
+  color: #64748B;
+  margin-top: 2px;
+}
+
 .chip-plus-btn {
-  width: 22px;
-  height: 22px;
-  border-radius: 50%;
+  width: 28px;
+  height: 28px;
+  border-radius: 8px;
   background: #FFFFFF;
-  border: 1px solid rgba(244, 63, 94, 0.3);
-  color: #F43F5E;
-  font-size: 15px;
-  font-weight: 800;
+  border: 1px solid #E2E8F0;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.06);
+  color: #FF5A00;
+  font-size: 18px;
+  font-weight: 700;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -3068,119 +3097,94 @@ kbd {
 }
 
 .chip-plus-btn:active {
-  transform: scale(0.9);
+  transform: scale(0.92);
 }
 
-/* Badges Row (Model Test Count + Live Pulse Badge) */
-.card-badges-row {
+/* Card Action Row: Exam details + Green CTA Button */
+.card-balance-action-row {
   display: flex;
   align-items: center;
+  justify-content: space-between;
   gap: 12px;
-  margin-bottom: 12px;
+  padding-top: 4px;
 }
 
-.score-stat-box {
+.card-balance-left {
+  flex: 1;
+}
+
+.balance-amount-wrap {
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  background: #FFF1F3;
-  border: 1px solid #FECDD3;
-  border-radius: 12px;
-  padding: 6px 12px;
-  min-width: 60px;
-  text-align: center;
-}
-
-.score-large-num {
-  font-size: 24px;
-  font-weight: 800;
-  color: #F43F5E;
-  line-height: 1;
-  font-family: 'Plus Jakarta Sans', sans-serif;
-}
-
-.score-small-label {
-  font-size: 10px;
-  font-weight: 700;
-  color: #9F1239;
-  margin-top: 2px;
-  white-space: nowrap;
-}
-
-.telco-main-card .banner-badge {
-  display: inline-flex;
   align-items: center;
   gap: 8px;
-  background: #FFF1F5;
-  color: #E11D48;
-  padding: 6px 14px;
-  border-radius: 50px;
-  font-size: 12.5px;
-  font-weight: 700;
-  border: 1px solid rgba(244, 63, 94, 0.2);
-  margin-bottom: 0;
+  margin-bottom: 4px;
 }
 
-.telco-main-card .banner-title {
+.balance-badge-model {
   font-size: 18px;
   font-weight: 800;
   color: #0F172A;
-  margin: 10px 0 6px 0;
-  line-height: 1.4;
+  font-family: 'Plus Jakarta Sans', 'Hind Siliguri', sans-serif;
 }
 
-.telco-main-card .banner-desc {
-  font-size: 13px;
-  color: #64748B;
-  line-height: 1.5;
-  margin-bottom: 12px;
-}
-
-.telco-main-card .banner-meta {
-  display: flex;
-  flex-wrap: wrap;
-  align-items: center;
-  gap: 8px;
-  margin-bottom: 18px;
-  font-size: 12px;
-  color: #64748B;
-}
-
-.telco-main-card .badge-negative {
-  background: #FFF1F2;
-  color: #E11D48;
-  padding: 3px 8px;
-  border-radius: 8px;
+.exam-live-pill {
+  font-size: 11px;
   font-weight: 700;
-  border: 1px solid #FECDD3;
+  background: #FEE2E2;
+  color: #EF4444;
+  padding: 2px 8px;
+  border-radius: 12px;
 }
 
-.telco-cta-btn {
-  width: 100% !important;
-  background: linear-gradient(135deg, #F43F5E 0%, #E11D48 100%) !important;
+.balance-subtext {
+  font-size: 13px;
+  font-weight: 600;
+  color: #334155;
+  margin-bottom: 4px;
+  line-height: 1.3;
+}
+
+.banner-meta-compact {
+  font-size: 11.5px;
+  color: #64748B;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex-wrap: wrap;
+}
+
+.badge-negative {
+  background: #FFF1F2;
+  color: #EF4444;
+  padding: 2px 6px;
+  border-radius: 6px;
+  font-weight: 600;
+  font-size: 10.5px;
+}
+
+.exam-green-btn {
+  background: #00A651 !important;
   color: #FFFFFF !important;
-  font-size: 16px !important;
   font-weight: 700 !important;
-  padding: 14px 24px !important;
-  border-radius: 16px !important;
-  box-shadow: 0 8px 24px rgba(244, 63, 94, 0.35) !important;
-  border: none !important;
+  font-size: 14.5px !important;
+  border-radius: 14px !important;
+  padding: 12px 20px !important;
   display: flex !important;
   align-items: center !important;
-  justify-content: center !important;
-  gap: 8px !important;
+  gap: 6px !important;
+  border: none !important;
+  box-shadow: 0 4px 14px rgba(0, 166, 81, 0.3) !important;
   cursor: pointer;
-  min-height: 52px;
+  white-space: nowrap;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
 }
 
-.telco-cta-btn:active {
-  transform: scale(0.98);
+.exam-green-btn:active {
+  transform: scale(0.96);
 }
 
 /* ==========================================================================
-   SECTION 5: PROMO STRIP (HORIZONTAL SCROLL)
+   SECTION 5: PROMO STRIP (STUDY BUDDY MASCOT CARDS)
    ========================================================================== */
 .promo-strip-section {
   margin-bottom: 22px;
@@ -3200,52 +3204,36 @@ kbd {
   display: none;
 }
 
-.promo-card {
+.promo-card.telco-tiger-card {
   flex: 0 0 calc(85% - 8px);
   scroll-snap-align: start;
+  background: #FFF5F0;
+  border: 1px solid #FFE0D1;
   border-radius: 18px;
-  padding: 14px 16px;
+  padding: 12px 14px;
   display: flex;
   align-items: center;
-  gap: 12px;
-  border: 1px solid rgba(0, 0, 0, 0.05);
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.03);
+  gap: 10px;
+  box-shadow: 0 4px 14px rgba(255, 90, 0, 0.04);
 }
 
-.promo-pastel-peach {
-  background: linear-gradient(135deg, #FFF5F2 0%, #FFEBE4 100%);
-  border-color: #FCD8CD;
-}
-
-.promo-pastel-green {
-  background: linear-gradient(135deg, #F0FDF4 0%, #E1F9EB 100%);
-  border-color: #BBF7D0;
-}
-
-.promo-pastel-lilac {
-  background: linear-gradient(135deg, #FAF5FF 0%, #F3E8FF 100%);
-  border-color: #E9D5FF;
-}
-
-.promo-icon-circle {
+.tiger-mascot-avatar {
   width: 44px;
   height: 44px;
-  border-radius: 14px;
+  border-radius: 12px;
+  background: #FFEADF;
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 24px;
   flex-shrink: 0;
 }
 
-.bg-peach {
-  background: #FFE4DC;
+.tiger-mascot-avatar.bg-amber {
+  background: #FEF3C7;
 }
 
-.bg-soft-green {
-  background: #DCFCE7;
-}
-
-.bg-soft-purple {
+.tiger-mascot-avatar.bg-purple {
   background: #EDE9FE;
 }
 
@@ -3254,40 +3242,34 @@ kbd {
 }
 
 .promo-card-title {
-  font-size: 14.5px;
+  font-size: 13.5px;
   font-weight: 700;
-  color: var(--text-main);
+  color: #0F172A;
   margin-bottom: 2px;
 }
 
 .promo-card-subtitle {
-  font-size: 12px;
-  color: var(--text-muted);
+  font-size: 11.5px;
+  color: #64748B;
+  line-height: 1.3;
 }
 
 .promo-card-btn {
   background: #FFFFFF;
-  border: 1.5px solid currentColor;
-  border-radius: 20px;
+  color: #FF5A00;
+  border: 1.5px solid #FFD4C0;
+  border-radius: 12px;
   padding: 6px 12px;
   font-size: 12px;
   font-weight: 700;
   cursor: pointer;
   white-space: nowrap;
   flex-shrink: 0;
-  min-height: 36px;
+  transition: transform 0.15s ease;
 }
 
-.promo-pastel-peach .promo-card-btn {
-  color: #F43F5E;
-}
-
-.promo-pastel-green .promo-card-btn {
-  color: #10B981;
-}
-
-.promo-pastel-lilac .promo-card-btn {
-  color: #8B5CF6;
+.promo-card-btn:active {
+  transform: scale(0.95);
 }
 
 .promo-dots-indicator {
@@ -3308,7 +3290,7 @@ kbd {
 .p-dot.active {
   width: 18px;
   border-radius: 10px;
-  background: #F43F5E;
+  background: #FF5A00;
 }
 
 /* ==========================================================================
@@ -3328,7 +3310,7 @@ kbd {
 .section-title-bold {
   font-size: 18px;
   font-weight: 800;
-  color: var(--text-main);
+  color: #0F172A;
 }
 
 .all-features-link-btn {
@@ -3337,537 +3319,242 @@ kbd {
   gap: 4px;
   background: transparent;
   border: none;
-  color: #F43F5E;
-  font-size: 13.5px;
+  color: #FF5A00;
+  font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  padding: 4px 8px;
+  padding: 4px 6px;
+}
+
+.shortcuts-card-container {
+  background: #FFFFFF;
+  border-radius: 20px;
+  border: 1px solid #EEF2F6;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.03);
+  overflow: hidden;
 }
 
 .shortcuts-grid-4x2 {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
-  gap: 10px;
 }
 
-.shortcut-item {
-  background: #FFFFFF;
-  border: 1px solid var(--border-light);
-  border-radius: 16px;
-  padding: 10px 4px;
+.shortcut-cell {
+  padding: 14px 6px;
   display: flex;
   flex-direction: column;
   align-items: center;
   text-align: center;
   cursor: pointer;
-  min-height: 84px;
-  justify-content: center;
-  transition: transform 0.15s ease, background-color 0.15s ease;
+  border-right: 1px solid #F1F5F9;
+  border-bottom: 1px solid #F1F5F9;
+  transition: background-color 0.15s ease;
 }
 
-.shortcut-item:active {
-  transform: scale(0.96);
-  background: #FFF1F5;
+.shortcut-cell:nth-child(4n) {
+  border-right: none;
 }
 
-.shortcut-icon-box {
-  width: 38px;
-  height: 38px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 6px;
-  background: #FFF1F5;
+.shortcut-cell:nth-child(n+5) {
+  border-bottom: none;
 }
 
-.shortcut-name {
-  font-size: 12px;
-  font-weight: 700;
-  color: var(--text-main);
-  line-height: 1.2;
-  margin-bottom: 4px;
+.shortcut-cell:active {
+  background: #FFF5F0;
 }
 
-.shortcut-tag {
-  font-size: 9.5px;
-  font-weight: 700;
-  padding: 2px 6px;
-  border-radius: 8px;
-  line-height: 1.1;
-}
-
-/* Subject tags */
-.tag-phy {
-  background: #FEE2E2;
-  color: #EF4444;
-}
-
-.tag-chm {
-  background: #F3E8FF;
-  color: #8B5CF6;
-}
-
-.tag-math {
-  background: #DBEAFE;
-  color: #2563EB;
-}
-
-.tag-bio {
-  background: #D1FAE5;
-  color: #059669;
-}
-
-.tag-rose {
-  background: #FFE4E6;
-  color: #E11D48;
-}
-
-.tag-purple {
-  background: #F3E8FF;
-  color: #7C3AED;
-}
-
-.tag-gray {
-  background: #F1F5F9;
-  color: #475569;
-}
-
-/* ==========================================================================
-   SECTION 7: "নতুন কী আছে" CARDS
-   ========================================================================== */
-.whats-new-section {
-  margin-bottom: 24px;
-}
-
-.title-with-pill {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-}
-
-.badge-new-pill {
-  background: #F43F5E;
-  color: #FFFFFF;
-  font-size: 10px;
-  font-weight: 800;
-  padding: 2px 8px;
-  border-radius: 12px;
-}
-
-.whats-new-subtitle {
-  font-size: 12px;
-  color: var(--text-muted);
-}
-
-.whats-new-cards-scroll {
-  display: flex;
-  gap: 12px;
-  overflow-x: auto;
-  scrollbar-width: none;
-  scroll-snap-type: x mandatory;
-  padding: 4px 2px 10px 2px;
-}
-
-.whats-new-cards-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-.whats-new-card {
-  flex: 0 0 calc(80% - 6px);
-  scroll-snap-align: start;
-  background: #FFFFFF;
-  border: 1px solid var(--border-light);
-  border-radius: 18px;
-  padding: 14px 16px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.04);
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  min-height: 125px;
-}
-
-.wn-card-badge {
-  display: inline-block;
-  padding: 3px 8px;
-  border-radius: 6px;
-  font-size: 11px;
-  font-weight: 700;
-  background: #FFE4E6;
-  color: #E11D48;
-  width: fit-content;
-  margin-bottom: 6px;
-}
-
-.bg-blue-soft {
-  background: #EFF6FF !important;
-  color: #2563EB !important;
-}
-
-.bg-green-soft {
-  background: #ECFDF5 !important;
-  color: #059669 !important;
-}
-
-.wn-card-title {
-  font-size: 14px;
-  font-weight: 700;
-  color: var(--text-main);
-  margin-bottom: 4px;
-  line-height: 1.35;
-}
-
-.wn-card-desc {
-  font-size: 12px;
-  color: var(--text-muted);
-  line-height: 1.4;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-  margin-bottom: 8px;
-}
-
-.wn-card-footer {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-top: 1px dashed var(--border-light);
-  padding-top: 8px;
-  margin-top: auto;
-}
-
-.wn-date {
-  font-size: 11px;
-  color: var(--text-light);
-}
-
-.wn-card-link-btn {
-  background: none;
-  border: none;
-  color: #F43F5E;
-  font-size: 12px;
-  font-weight: 700;
-  cursor: pointer;
-}
-
-/* ==========================================================================
-   SECTION 8: FLOATING STUDY BUDDY MASCOT
-   ========================================================================== */
-.floating-study-buddy-btn {
-  position: fixed;
-  bottom: 84px;
-  right: 18px;
-  z-index: 85;
-  width: 50px;
-  height: 50px;
-  border-radius: 50%;
-  background: #FFFFFF;
-  border: 2px solid #F43F5E;
-  box-shadow: 0 6px 20px rgba(244, 63, 94, 0.28);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
-  transition: transform 0.2s ease, box-shadow 0.2s ease;
-  padding: 0;
-}
-
-.floating-study-buddy-btn:active {
-  transform: scale(0.92);
-}
-
-.mascot-avatar-circle {
-  color: #F43F5E;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-
-.buddy-ping-dot {
-  position: absolute;
-  top: 2px;
-  right: 2px;
-  width: 10px;
-  height: 10px;
-  background: #10B981;
-  border: 2px solid #FFFFFF;
-  border-radius: 50%;
-}
-
-/* ==========================================================================
-   SECTION 9: "সব ফিচার" ALL FEATURES MODAL / DRAWER
-   ========================================================================== */
-.all-features-sheet {
-  max-width: 520px;
-  max-height: 85vh;
-  overflow-y: auto;
-  border-radius: 24px 24px 0 0;
-  padding: 20px 20px 40px 20px;
-}
-
-.all-features-header {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  margin-bottom: 14px;
-}
-
-.sheet-back-btn {
-  background: #F1F5F9;
-  border-radius: 50%;
+.shortcut-cell .shortcut-icon-box {
   width: 36px;
   height: 36px;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: none;
-  cursor: pointer;
-  color: #1E293B;
+  margin-bottom: 6px;
 }
 
-.all-features-title {
-  font-size: 18px;
-  font-weight: 800;
-  color: var(--text-main);
-}
-
-.sheet-search-wrap {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  background: #F8FAFC;
-  border: 1px solid var(--border-light);
-  border-radius: 12px;
-  padding: 10px 14px;
-  margin-bottom: 16px;
-}
-
-.sheet-search-wrap .search-input {
-  width: 100%;
-  border: none;
-  outline: none;
-  background: transparent;
-  font-family: inherit;
-  font-size: 14px;
-  color: var(--text-main);
-}
-
-.sticky-features-quick {
-  background: #FFF1F5;
-  border: 1px solid rgba(244, 63, 94, 0.2);
-  border-radius: 16px;
-  padding: 12px 14px;
-  margin-bottom: 20px;
-}
-
-.quick-title-bar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  font-size: 13px;
-  font-weight: 700;
-  color: #9F1239;
-  margin-bottom: 8px;
-}
-
-.quick-hint {
-  font-size: 11px;
-  color: #BE123C;
-  font-weight: 500;
-}
-
-.features-quick-chips {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 6px;
-}
-
-.f-chip {
-  background: #FFFFFF;
-  border: 1px solid rgba(244, 63, 94, 0.25);
-  border-radius: 20px;
-  padding: 4px 10px;
-  font-size: 12px;
-  font-weight: 600;
-  color: #E11D48;
-  cursor: pointer;
-}
-
-.feature-category-group {
-  margin-bottom: 20px;
-}
-
-.category-heading {
-  font-size: 15px;
-  font-weight: 800;
-  color: var(--text-main);
-  margin-bottom: 10px;
-}
-
-.category-cards-grid {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.feature-row-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  background: #FFFFFF;
-  border: 1px solid var(--border-light);
-  border-radius: 14px;
-  padding: 12px 14px;
-  cursor: pointer;
-  transition: all 0.15s ease;
-}
-
-.feature-row-item:active {
-  background: #F8FAFC;
-}
-
-.f-icon {
-  width: 40px;
-  height: 40px;
-  border-radius: 12px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-  flex-shrink: 0;
-}
-
-.bg-rose-soft {
-  background: #FFE4E6;
-}
-
-.bg-purple-soft {
-  background: #F3E8FF;
-}
-
-.bg-amber-soft {
-  background: #FEF3C7;
-}
-
-.bg-peach-soft {
-  background: #FFEDD5;
-}
-
-.bg-gray-soft {
-  background: #F1F5F9;
-}
-
-.f-info {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
-.f-info strong {
-  font-size: 13.5px;
-  font-weight: 700;
-  color: var(--text-main);
-}
-
-.f-info span {
+.shortcut-cell .shortcut-name {
   font-size: 11.5px;
-  color: var(--text-muted);
-}
-
-.f-action {
-  font-size: 12px;
-  font-weight: 700;
-  color: #F43F5E;
-  white-space: nowrap;
-}
-
-.disabled-feature {
-  opacity: 0.65;
-  cursor: not-allowed;
-}
-
-.badge-soon {
-  background: #F1F5F9;
-  color: #64748B;
-  font-size: 10px;
-  font-weight: 700;
-  padding: 3px 8px;
-  border-radius: 10px;
+  font-weight: 600;
+  color: #334155;
+  line-height: 1.25;
 }
 
 /* ==========================================================================
-   SECTION 10: FLOATING PILL BOTTOM NAVIGATION DOCK
+   SECTION 7: WHAT'S NEW SPECIAL BANNER
    ========================================================================== */
-.telco-floating-dock {
+.whats-new-offer-card {
+  background: #FFF5ED;
+  border: 1px solid #FFE4D6;
+  border-radius: 18px;
+  padding: 14px 16px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  box-shadow: 0 4px 14px rgba(255, 90, 0, 0.04);
+}
+
+.wn-offer-left {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+}
+
+.wn-offer-icon {
+  width: 40px;
+  height: 40px;
+  border-radius: 12px;
+  background: #FFE8DB;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+
+.wn-offer-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.wn-offer-title {
+  font-size: 14px;
+  font-weight: 700;
+  color: #0F172A;
+  margin-bottom: 2px;
+}
+
+.wn-offer-desc {
+  font-size: 11.5px;
+  color: #64748B;
+}
+
+.wn-offer-right {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-shrink: 0;
+}
+
+.wn-timer-pill {
+  background: #EF4444;
+  color: #FFFFFF;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.wn-close-btn {
+  background: transparent;
+  border: none;
+  color: #94A3B8;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+}
+
+/* ==========================================================================
+   FLOATING WIDGETS
+   ========================================================================== */
+.floating-live-match-pill {
+  position: fixed;
+  bottom: 84px;
+  left: 16px;
+  z-index: 45;
+  background: #FFFFFF;
+  border-radius: 50px;
+  padding: 6px 12px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.1);
+  border: 1px solid #EEF2F6;
+  font-size: 12px;
+  font-weight: 700;
+}
+
+.floating-live-match-pill .stump-badge {
+  color: #EF4444;
+}
+
+.floating-live-match-pill .match-flags {
+  color: #334155;
+}
+
+.floating-study-buddy-btn.telco-mascot-btn {
+  position: fixed;
+  bottom: 80px;
+  right: 16px;
+  z-index: 45;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: #FFFFFF;
+  border: 2px solid #FF5A00;
+  box-shadow: 0 4px 16px rgba(255, 90, 0, 0.25);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  cursor: pointer;
+  transition: transform 0.15s ease;
+}
+
+.floating-study-buddy-btn.telco-mascot-btn:active {
+  transform: scale(0.92);
+}
+
+/* ==========================================================================
+   SECTION 10: 5-TAB FLOATING BOTTOM NAVIGATION DOCK
+   ========================================================================== */
+.mobile-bottom-dock.telco-floating-dock {
   position: fixed;
   bottom: 12px;
   left: 14px;
   right: 14px;
-  max-width: 460px;
-  margin: 0 auto;
-  height: 62px;
-  background: rgba(255, 255, 255, 0.96);
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-radius: 36px;
-  border: 1px solid rgba(244, 63, 94, 0.18);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.12), 0 2px 8px rgba(0, 0, 0, 0.04);
+  z-index: 50;
+  background: #FFFFFF;
+  border-radius: 20px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.08);
+  border: 1px solid #EEF2F6;
   display: flex;
   justify-content: space-around;
-  align-items: center;
-  z-index: 90;
-  padding: 0 8px;
+  padding: 8px 4px 6px 4px;
 }
 
-.telco-floating-dock .dock-item {
-  flex: 1;
+.mobile-bottom-dock .dock-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
   gap: 3px;
-  color: #64748B;
   background: transparent;
   border: none;
-  font-family: inherit;
   font-size: 11px;
   font-weight: 600;
+  color: #64748B;
   cursor: pointer;
-  height: 48px;
-  border-radius: 24px;
-  position: relative;
-  transition: all 0.2s ease;
+  flex: 1;
+  padding: 2px 0;
+  transition: color 0.15s ease;
 }
 
-.telco-floating-dock .dock-item.active {
-  color: #F43F5E;
+.mobile-bottom-dock .dock-item.active {
+  color: #FF5A00;
   font-weight: 700;
 }
 
-.dock-active-blob {
-  position: absolute;
-  top: 0;
-  left: 4px;
-  right: 4px;
-  bottom: 0;
-  background: #FFF1F5;
-  border-radius: 24px;
-  opacity: 0;
-  transition: opacity 0.2s ease;
-  z-index: -1;
+.mobile-bottom-dock .dock-item svg {
+  transition: stroke 0.15s ease, fill 0.15s ease;
 }
 
-.telco-floating-dock .dock-item.active .dock-active-blob {
-  opacity: 1;
-}
-
-/* Mobile-First Spacing */
 @media (max-width: 768px) {
   .main-content {
     padding-bottom: 110px !important;
   }
 }
+
 
 /* ==========================================================================
    DARK MODE ADAPTATIONS
