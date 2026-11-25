@@ -997,6 +997,70 @@
         </div>
       </div>
 
+      <!-- VIEW 7: UNIT PRACTICE PAGE (/vocabulary/units/:unitId/practice) -->
+      <div id="vocab-practice-view" class="hidden vocab-page-view">
+        <div class="vocab-page-header vocab-practice-header">
+          <!-- Top bar with NO hide-answers icon button (Removed per requirement) -->
+          <div class="vocab-practice-top-bar">
+            <button class="back-link-btn vocab-back-btn" id="vocab-practice-back-btn">
+              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="19" y1="12" x2="5" y2="12"></line>
+                <polyline points="12 19 5 12 12 5"></polyline>
+              </svg>
+              ইউনিট পেজে ফিরুন
+            </button>
+          </div>
+
+          <div class="vocab-breadcrumb">
+            <span class="crumb-target">Vocabulary</span>
+            <span class="crumb-sep">›</span>
+            <span class="crumb-unit">লেসন ইউনিট</span>
+            <span class="crumb-sep">›</span>
+            <span class="crumb-unit" id="vocab-practice-breadcrumb-unit">Unit 1</span>
+            <span class="crumb-sep">›</span>
+            <span class="crumb-sub">প্র্যাকটিস</span>
+          </div>
+
+          <div class="vocab-unit-title-row">
+            <h1 class="vocab-page-title" id="vocab-practice-header-title">Unit 1 প্র্যাকটিস</h1>
+            <span class="vocab-count-badge" id="vocab-practice-questions-count">৩টি প্রশ্ন</span>
+          </div>
+
+          <!-- Progress Bar (Untouched / Preserved) -->
+          <div class="vocab-practice-progress-box">
+            <div class="vpp-header">
+              <span class="vpp-label">অনুশীলন অগ্রগতি</span>
+              <span class="vpp-text" id="vocab-practice-progress-text">০/৩ সম্পন্ন (০%)</span>
+            </div>
+            <div class="vpp-track">
+              <div class="vpp-fill" id="vocab-practice-progress-fill" style="width: 0%;"></div>
+            </div>
+          </div>
+
+          <!-- Filter Row with Toggle Chip as the FIRST chip -->
+          <div class="vocab-filter-row" id="vocab-practice-filters">
+            <!-- 1. The Toggle Chip (Placed as the FIRST chip, styled same way as other filter chips) -->
+            <button type="button" class="vocab-filter-chip vocab-toggle-answer-chip" id="vocab-toggle-answers-btn">
+              <span class="toggle-indicator-dot" id="vocab-toggle-indicator-dot"></span>
+              <span class="toggle-chip-label" id="vocab-toggle-answers-label">উত্তর অফ</span>
+            </button>
+
+            <!-- 2. Untouched / preserved filter chips -->
+            <button type="button" class="vocab-filter-chip active" data-filter="all">সব</button>
+            <button type="button" class="vocab-filter-chip" data-filter="unread">পড়া হয়নি</button>
+            <button type="button" class="vocab-filter-chip" data-filter="read">পড়া হয়েছে</button>
+            <button type="button" class="vocab-filter-chip" data-filter="bookmarked">বুকমার্ক</button>
+            <button type="button" class="vocab-filter-chip" data-filter="mistakes">ভুল</button>
+            <button type="button" class="vocab-filter-chip" data-filter="flagged">ফ্ল্যাগ করা</button>
+          </div>
+        </div>
+
+        <!-- Questions List Container -->
+        <div class="vocab-practice-questions-list" id="vocab-practice-questions-list">
+          <!-- Dynamically populated by JS -->
+        </div>
+      </div>
+
     </main>
 
     <!-- Floating Study Buddy Mascot Helper (Positioned above dock) -->

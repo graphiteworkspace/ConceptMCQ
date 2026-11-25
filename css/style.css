@@ -4697,3 +4697,416 @@ body.dark-mode .vocab-mode-card.active {
   color: #FFFFFF;
 }
 
+/* ==============================================================================
+   UNIT PRACTICE PAGE STYLES (/vocabulary/units/:unitId/practice)
+   Filter Row, Toggle Chip ("উত্তর অফ" / "উত্তর অন"), Questions List & Reveal Logic
+   ============================================================================== */
+
+.vocab-practice-top-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 8px;
+}
+
+.vocab-practice-progress-box {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: 14px;
+  padding: 12px 16px;
+  margin: 16px 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vpp-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 13px;
+}
+
+.vpp-label {
+  color: var(--text-muted);
+  font-weight: 600;
+}
+
+.vpp-text {
+  color: #047857;
+  font-weight: 700;
+}
+
+.vpp-track {
+  width: 100%;
+  height: 7px;
+  background: var(--border-light);
+  border-radius: 10px;
+  overflow: hidden;
+}
+
+.vpp-fill {
+  height: 100%;
+  background: linear-gradient(90deg, #10B981, #059669);
+  border-radius: 10px;
+  transition: width 0.35s ease;
+}
+
+/* Filter Row & Filter Chips */
+.vocab-filter-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  overflow-x: auto;
+  padding-bottom: 8px;
+  margin-bottom: 20px;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+}
+
+.vocab-filter-row::-webkit-scrollbar {
+  height: 4px;
+}
+
+.vocab-filter-row::-webkit-scrollbar-thumb {
+  background: var(--border-light);
+  border-radius: 4px;
+}
+
+.vocab-filter-chip {
+  padding: 8px 14px;
+  min-height: 40px; /* Touch target */
+  border-radius: 20px;
+  border: 1.5px solid var(--border-light);
+  background: var(--bg-card);
+  color: var(--text-main);
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+  font-family: inherit;
+  flex-shrink: 0;
+}
+
+.vocab-filter-chip:hover {
+  border-color: var(--primary-border);
+  background: var(--primary-light);
+  color: var(--primary-magenta);
+}
+
+.vocab-filter-chip.active {
+  background: var(--primary-magenta);
+  color: #FFFFFF;
+  border-color: var(--primary-magenta);
+  box-shadow: 0 2px 8px rgba(234, 29, 93, 0.25);
+}
+
+/* 1. Toggle Answer Chip (First chip in filter row) */
+.vocab-toggle-answer-chip {
+  border-color: #CBD5E1;
+  font-weight: 800;
+}
+
+.vocab-toggle-answer-chip.answers-off {
+  background: #F8FAFC;
+  color: #475569;
+  border-color: #CBD5E1;
+}
+
+.vocab-toggle-answer-chip.answers-on {
+  background: #ECFDF5;
+  color: #065F46;
+  border-color: #6EE7B7;
+}
+
+.toggle-indicator-dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  display: inline-block;
+  transition: all 0.2s ease;
+}
+
+.toggle-indicator-dot.off {
+  background: #94A3B8;
+  box-shadow: 0 0 0 2px rgba(148, 163, 184, 0.3);
+}
+
+.toggle-indicator-dot.on {
+  background: #10B981;
+  box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.35);
+  animation: pulseGreenDot 1.8s infinite;
+}
+
+@keyframes pulseGreenDot {
+  0% { transform: scale(0.95); box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4); }
+  50% { transform: scale(1.15); box-shadow: 0 0 0 5px rgba(16, 185, 129, 0.15); }
+  100% { transform: scale(0.95); box-shadow: 0 0 0 2px rgba(16, 185, 129, 0.4); }
+}
+
+/* Practice Questions List & Cards */
+.vocab-practice-questions-list {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.vocab-practice-q-card {
+  background: var(--bg-card);
+  border: 1.5px solid var(--border-light);
+  border-radius: 18px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.03);
+  transition: all 0.22s cubic-bezier(0.4, 0, 0.2, 1);
+  user-select: none;
+}
+
+.vocab-practice-q-card:hover {
+  border-color: #CBD5E1;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.06);
+}
+
+.vocab-practice-q-card.is-collapsed-answer {
+  cursor: pointer;
+  border-style: dashed;
+}
+
+.vocab-practice-q-card.is-collapsed-answer:hover {
+  border-color: #3B82F6;
+  background: #F8FAFC;
+}
+
+.vpq-top-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+
+.vpq-meta-left {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.vpq-q-num {
+  font-size: 11.5px;
+  font-weight: 800;
+  color: var(--primary-magenta);
+  background: var(--primary-light);
+  padding: 3px 8px;
+  border-radius: 6px;
+  border: 1px solid var(--primary-border);
+}
+
+.vpq-category-tag {
+  font-size: 12px;
+  color: var(--text-muted);
+}
+
+.vpq-meta-actions {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.vpq-action-icon-btn {
+  background: transparent;
+  border: none;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 6px;
+  transition: transform 0.15s ease;
+}
+
+.vpq-action-icon-btn:hover {
+  transform: scale(1.15);
+}
+
+.vpq-action-icon-btn.active {
+  background: #FEF3C7;
+  border-radius: 6px;
+}
+
+.vpq-question-text {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+  line-height: 1.5;
+  margin-bottom: 12px;
+}
+
+/* Prompt for hidden questions */
+.vpq-hidden-tap-prompt {
+  background: #EFF6FF;
+  border: 1.5px dashed #93C5FD;
+  color: #1D4ED8;
+  padding: 12px 16px;
+  border-radius: 12px;
+  font-size: 13.5px;
+  font-weight: 700;
+  text-align: center;
+  margin-top: 10px;
+  transition: all 0.2s ease;
+}
+
+.vpq-hidden-tap-prompt:hover {
+  background: #DBEAFE;
+  border-color: #60A5FA;
+}
+
+/* Answers Section (Options + Explanation) */
+.vpq-answer-section {
+  margin-top: 14px;
+  animation: fadeInAnswer 0.25s ease-out;
+}
+
+@keyframes fadeInAnswer {
+  from { opacity: 0; transform: translateY(4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.vpq-answer-section.hidden-answer {
+  display: none !important;
+}
+
+.vpq-options-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vpq-option {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 14px;
+  background: var(--bg-page);
+  border: 1.5px solid var(--border-light);
+  border-radius: 12px;
+  font-size: 13.5px;
+  color: var(--text-main);
+  transition: all 0.15s ease;
+}
+
+.vpq-option.correct-option {
+  background: #ECFDF5;
+  border-color: #34D399;
+  color: #065F46;
+  font-weight: 700;
+}
+
+.vpq-opt-letter {
+  width: 26px;
+  height: 26px;
+  border-radius: 50%;
+  background: var(--border-light);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  font-weight: 800;
+  color: var(--text-main);
+  flex-shrink: 0;
+}
+
+.vpq-option.correct-option .vpq-opt-letter {
+  background: #10B981;
+  color: #FFFFFF;
+}
+
+.vpq-opt-text {
+  flex: 1;
+}
+
+.vpq-correct-badge {
+  background: #10B981;
+  color: #FFFFFF;
+  font-size: 11px;
+  font-weight: 800;
+  padding: 3px 8px;
+  border-radius: 6px;
+  flex-shrink: 0;
+}
+
+.vpq-explanation-card {
+  background: #F8FAFC;
+  border: 1px solid #E2E8F0;
+  border-left: 4px solid #10B981;
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-top: 14px;
+}
+
+.vpq-exp-header {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 13.5px;
+  color: #065F46;
+  margin-bottom: 8px;
+}
+
+.vpq-exp-body {
+  font-size: 13px;
+  color: var(--text-main);
+  line-height: 1.55;
+}
+
+/* DARK MODE OVERRIDES FOR PRACTICE PAGE */
+body.dark-mode .vocab-practice-progress-box,
+body.dark-mode .vocab-practice-q-card,
+body.dark-mode .vocab-filter-chip {
+  background: #1E293B;
+  border-color: #334155;
+  color: #F8FAFC;
+}
+
+body.dark-mode .vocab-toggle-answer-chip.answers-off {
+  background: #0F172A;
+  color: #94A3B8;
+  border-color: #334155;
+}
+
+body.dark-mode .vocab-toggle-answer-chip.answers-on {
+  background: #064E3B;
+  color: #A7F3D0;
+  border-color: #059669;
+}
+
+body.dark-mode .vpq-question-text {
+  color: #F8FAFC;
+}
+
+body.dark-mode .vpq-option {
+  background: #0F172A;
+  border-color: #334155;
+  color: #F8FAFC;
+}
+
+body.dark-mode .vpq-option.correct-option {
+  background: #064E3B;
+  border-color: #059669;
+  color: #A7F3D0;
+}
+
+body.dark-mode .vpq-explanation-card {
+  background: #0F172A;
+  border-color: #334155;
+  border-left-color: #10B981;
+  color: #E2E8F0;
+}
+
+body.dark-mode .vpq-hidden-tap-prompt {
+  background: #172554;
+  border-color: #1E40AF;
+  color: #93C5FD;
+}
+
+

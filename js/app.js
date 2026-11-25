@@ -1808,7 +1808,8 @@ function showPage(viewId) {
     "result-view",
     "vocab-home-view",
     "vocab-units-view",
-    "vocab-unit-view"
+    "vocab-unit-view",
+    "vocab-practice-view"
   ];
 
   views.forEach(id => {
@@ -1850,6 +1851,15 @@ function handleRoute(pathname) {
   if (cleanPath === "/vocabulary/units") {
     renderVocabUnitsListPage();
     showPage("vocab-units-view");
+    return;
+  }
+
+  // Route: /vocabulary/units/:unitId/practice (Practice Page)
+  const practiceMatch = cleanPath.match(/^\/vocabulary\/units\/([^/]+)\/practice$/);
+  if (practiceMatch) {
+    const rawUnitId = decodeURIComponent(practiceMatch[1]);
+    renderVocabUnitPracticePage(rawUnitId);
+    showPage("vocab-practice-view");
     return;
   }
 
@@ -2059,11 +2069,22 @@ function renderVocabUnitModeContent(unit, mode) {
         `).join("")}
       </div>
       <div class="vocab-mode-footer-action">
+        <button class="vocab-practice-link-btn" id="start-unit-practice-btn" style="width: 100%; padding: 13px; font-size: 14px; font-weight: 700; background: var(--bg-card); border: 1.5px solid var(--primary-border); color: var(--primary-magenta); border-radius: 12px; cursor: pointer; margin-bottom: 10px; font-family: inherit;">
+          🎯 ${unit.lesson_unit} প্রশ্ন প্র্যাকটিস পেজ →
+        </button>
         <button class="vocab-quiz-btn" id="start-unit-quiz-btn" style="width: 100%; padding: 14px; font-size: 15px;">
           ⚡ ${unit.lesson_unit} কুইজ শুরু করুন
         </button>
       </div>
     `;
+
+    const practiceNavBtn = document.getElementById("start-unit-practice-btn");
+    if (practiceNavBtn) {
+      practiceNavBtn.addEventListener("click", () => {
+        const uId = unit.lesson_unit.toLowerCase().replace(/\s+/g, "_");
+        navigateTo(`/vocabulary/units/${uId}/practice`);
+      });
+    }
 
     const quizBtn = document.getElementById("start-unit-quiz-btn");
     if (quizBtn) {
@@ -2275,6 +2296,346 @@ function startVocabularyQuizForUnit(unitName, unitId) {
   currentExamMode = "standard";
   startExamSession(10 * 60);
   showToast(`Vocabulary ${unitName} কুইজ শুরু হয়েছে!`, "success");
+}
+
+// ==============================================================================
+// VOCABULARY UNIT PRACTICE PAGE (/vocabulary/units/:unitId/practice)
+// ==============================================================================
+let vocabPracticeFilter = "all";
+let vocabPracticeRevealedQuestions = new Set();
+
+function getVocabAnswersHiddenState() {
+  const stored = localStorage.getItem("conceptmcq_vocab_hide_answers");
+  return stored !== null ? stored === "true" : true; // Default: hidden ("উত্তর অফ")
+}
+
+function setVocabAnswersHiddenState(hidden) {
+  localStorage.setItem("conceptmcq_vocab_hide_answers", hidden ? "true" : "false");
+}
+
+function getVocabReadQuestions() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem("conceptmcq_vocab_read_questions") || "[]"));
+  } catch (e) {
+    return new Set();
+  }
+}
+
+function markVocabQuestionRead(qId) {
+  const set = getVocabReadQuestions();
+  set.add(qId);
+  localStorage.setItem("conceptmcq_vocab_read_questions", JSON.stringify([...set]));
+}
+
+function getVocabFlaggedQuestions() {
+  try {
+    return new Set(JSON.parse(localStorage.getItem("conceptmcq_vocab_flagged_questions") || "[]"));
+  } catch (e) {
+    return new Set();
+  }
+}
+
+function toggleVocabQuestionFlag(qId) {
+  const set = getVocabFlaggedQuestions();
+  if (set.has(qId)) {
+    set.delete(qId);
+  } else {
+    set.add(qId);
+  }
+  localStorage.setItem("conceptmcq_vocab_flagged_questions", JSON.stringify([...set]));
+}
+
+function renderVocabUnitPracticePage(unitId) {
+  const lessonUnits = getVocabLessonUnits();
+  const unit = lessonUnits.find(u => 
+    u.lesson_unit.toLowerCase().replace(/\s+/g, "_") === unitId.toLowerCase() ||
+    u.lesson_unit.toLowerCase() === unitId.toLowerCase()
+  ) || lessonUnits[0];
+
+  if (!unit) {
+    navigateTo("/vocabulary/units");
+    return;
+  }
+
+  const unitSlug = unit.lesson_unit.toLowerCase().replace(/\s+/g, "_");
+
+  // Breadcrumb & titles
+  const bcUnit = document.getElementById("vocab-practice-breadcrumb-unit");
+  if (bcUnit) {
+    bcUnit.textContent = unit.lesson_unit;
+    bcUnit.style.cursor = "pointer";
+    bcUnit.onclick = () => navigateTo(`/vocabulary/units/${unitSlug}`);
+  }
+
+  const headTitle = document.getElementById("vocab-practice-header-title");
+  if (headTitle) headTitle.textContent = `${unit.lesson_unit} প্র্যাকটিস`;
+
+  // Top bar back button: navigate back to /vocabulary/units/:unitId
+  const backBtn = document.getElementById("vocab-practice-back-btn");
+  if (backBtn) {
+    backBtn.onclick = () => navigateTo(`/vocabulary/units/${unitSlug}`);
+  }
+
+  // Get Questions for this unit
+  const questions = getUnitPracticeQuestions(unit);
+
+  const qCountBadge = document.getElementById("vocab-practice-questions-count");
+  if (qCountBadge) qCountBadge.textContent = `${questions.length}টি প্রশ্ন`;
+
+  // Progress Bar updating
+  function updatePracticeProgressBar() {
+    const readSet = getVocabReadQuestions();
+    const completedCount = questions.filter(q => readSet.has(q.id)).length;
+    const total = questions.length;
+    const pct = total > 0 ? Math.round((completedCount / total) * 100) : 0;
+
+    const pText = document.getElementById("vocab-practice-progress-text");
+    if (pText) pText.textContent = `${completedCount}/${total} সম্পন্ন (${pct}%)`;
+
+    const pFill = document.getElementById("vocab-practice-progress-fill");
+    if (pFill) pFill.style.width = `${pct}%`;
+  }
+
+  // Toggle Answers Chip logic
+  const toggleBtn = document.getElementById("vocab-toggle-answers-btn");
+  const toggleLabel = document.getElementById("vocab-toggle-answers-label");
+  const indicatorDot = document.getElementById("vocab-toggle-indicator-dot");
+
+  function updateToggleChipUI() {
+    const isHidden = getVocabAnswersHiddenState();
+    if (toggleLabel) {
+      toggleLabel.textContent = isHidden ? "উত্তর অফ" : "উত্তর অন";
+    }
+    if (toggleBtn) {
+      toggleBtn.classList.toggle("answers-off", isHidden);
+      toggleBtn.classList.toggle("answers-on", !isHidden);
+      toggleBtn.title = isHidden ? "উত্তর ও অপশন বর্তমানে লুকানো (ট্যাপ করে অন করুন)" : "উত্তর ও অপশন দৃশ্যমান (ট্যাপ করে অফ করুন)";
+    }
+    if (indicatorDot) {
+      indicatorDot.className = `toggle-indicator-dot ${isHidden ? 'off' : 'on'}`;
+    }
+  }
+
+  if (toggleBtn) {
+    updateToggleChipUI();
+    toggleBtn.onclick = (e) => {
+      e.stopPropagation();
+      const currentHidden = getVocabAnswersHiddenState();
+      const newHidden = !currentHidden;
+      setVocabAnswersHiddenState(newHidden);
+      if (newHidden) {
+        // Switching to "উত্তর অফ" resets temporary reveals so questions start hidden until tapped
+        vocabPracticeRevealedQuestions.clear();
+      }
+      updateToggleChipUI();
+      renderQuestionsList();
+    };
+  }
+
+  // Filter Chips setup
+  const filtersContainer = document.getElementById("vocab-practice-filters");
+  if (filtersContainer) {
+    filtersContainer.querySelectorAll(".vocab-filter-chip[data-filter]").forEach(chip => {
+      chip.classList.toggle("active", chip.dataset.filter === vocabPracticeFilter);
+      chip.onclick = () => {
+        filtersContainer.querySelectorAll(".vocab-filter-chip[data-filter]").forEach(c => c.classList.remove("active"));
+        chip.classList.add("active");
+        vocabPracticeFilter = chip.dataset.filter;
+        renderQuestionsList();
+      };
+    });
+  }
+
+  // Render Questions list
+  function renderQuestionsList() {
+    const container = document.getElementById("vocab-practice-questions-list");
+    if (!container) return;
+
+    const readSet = getVocabReadQuestions();
+    const bookmarks = getBookmarks();
+    const mistakeBank = getVocabMistakes();
+    const flaggedSet = getVocabFlaggedQuestions();
+    const isAnswersHidden = getVocabAnswersHiddenState();
+
+    // Filter questions based on active filter
+    let filtered = questions.filter(q => {
+      if (vocabPracticeFilter === "unread") return !readSet.has(q.id);
+      if (vocabPracticeFilter === "read") return readSet.has(q.id);
+      if (vocabPracticeFilter === "bookmarked") return bookmarks.some(b => b.id === q.id);
+      if (vocabPracticeFilter === "mistakes") return mistakeBank.some(m => m.id === q.id);
+      if (vocabPracticeFilter === "flagged") return flaggedSet.has(q.id);
+      return true; // "all"
+    });
+
+    updatePracticeProgressBar();
+
+    if (filtered.length === 0) {
+      container.innerHTML = `
+        <div class="empty-state-card" style="padding: 32px 16px; text-align: center; color: var(--text-muted); background: var(--bg-card); border: 1.5px solid var(--border-light); border-radius: 16px;">
+          <p style="font-size: 15px; margin: 0;">এই ফিল্টারে কোনো প্রশ্ন পাওয়া যায়নি।</p>
+        </div>
+      `;
+      return;
+    }
+
+    container.innerHTML = filtered.map((q, idx) => {
+      const isBookmarked = bookmarks.some(b => b.id === q.id);
+      const isFlagged = flaggedSet.has(q.id);
+      const isRevealed = vocabPracticeRevealedQuestions.has(q.id);
+      const shouldHide = isAnswersHidden && !isRevealed;
+
+      return `
+        <div class="vocab-practice-q-card ${shouldHide ? 'is-collapsed-answer' : 'is-revealed-answer'}" id="vpq-${q.id}" data-qid="${q.id}">
+          <div class="vpq-top-row">
+            <div class="vpq-meta-left">
+              <span class="vpq-q-num">প্রশ্ন ${idx + 1}</span>
+              <span class="vpq-category-tag">${q.category || unit.lesson_unit}</span>
+            </div>
+            <div class="vpq-meta-actions">
+              <button type="button" class="vpq-action-icon-btn vpq-flag-btn ${isFlagged ? 'active' : ''}" data-qid="${q.id}" title="ফ্ল্যাগ করুন">
+                🚩
+              </button>
+              <button type="button" class="vpq-action-icon-btn vpq-bookmark-btn ${isBookmarked ? 'active' : ''}" data-qid="${q.id}" title="বুকমার্ক করুন">
+                🔖
+              </button>
+            </div>
+          </div>
+
+          <div class="vpq-question-text">${q.question}</div>
+
+          <!-- Tap prompt when in "উত্তর অফ" state and not yet revealed -->
+          <div class="vpq-hidden-tap-prompt ${shouldHide ? '' : 'hidden'}">
+            <span>👆 ট্যাপ করে অপশন, উত্তর ও ব্যাখ্যা দেখুন</span>
+          </div>
+
+          <!-- Options & Explanation (Hidden when "উত্তর অফ" until tapped) -->
+          <div class="vpq-answer-section ${shouldHide ? 'hidden-answer' : ''}">
+            <div class="vpq-options-grid">
+              ${q.options.map((opt, oIdx) => `
+                <div class="vpq-option ${oIdx === q.correctIndex ? 'correct-option' : ''}">
+                  <span class="vpq-opt-letter">${String.fromCharCode(65 + oIdx)}</span>
+                  <span class="vpq-opt-text">${opt}</span>
+                  ${oIdx === q.correctIndex ? '<span class="vpq-correct-badge">✓ সঠিক উত্তর</span>' : ''}
+                </div>
+              `).join("")}
+            </div>
+
+            <div class="vpq-explanation-card">
+              <div class="vpq-exp-header">
+                <span class="vpq-exp-icon">💡</span>
+                <strong>বিস্তারিত ব্যাখ্যা ও নোটস</strong>
+              </div>
+              <div class="vpq-exp-body">${q.explanation}</div>
+            </div>
+          </div>
+        </div>
+      `;
+    }).join("");
+
+    // Attach card tap listeners for revealing in "উত্তর অফ" state
+    container.querySelectorAll(".vocab-practice-q-card").forEach(card => {
+      const qId = card.dataset.qid;
+
+      card.addEventListener("click", (e) => {
+        // If clicking bookmark or flag buttons, do not trigger question reveal
+        if (e.target.closest(".vpq-action-icon-btn")) return;
+
+        const currentAnswersHidden = getVocabAnswersHiddenState();
+        if (currentAnswersHidden) {
+          // If answers are hidden, tapping reveals them for that question only!
+          if (!vocabPracticeRevealedQuestions.has(qId)) {
+            vocabPracticeRevealedQuestions.add(qId);
+            markVocabQuestionRead(qId);
+            updatePracticeProgressBar();
+
+            // Reveal answers for this specific card
+            card.classList.remove("is-collapsed-answer");
+            card.classList.add("is-revealed-answer");
+            const answerSec = card.querySelector(".vpq-answer-section");
+            if (answerSec) answerSec.classList.remove("hidden-answer");
+            const tapPrompt = card.querySelector(".vpq-hidden-tap-prompt");
+            if (tapPrompt) tapPrompt.classList.add("hidden");
+          }
+        }
+      });
+
+      // Bookmark action
+      const bmBtn = card.querySelector(".vpq-bookmark-btn");
+      if (bmBtn) {
+        bmBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          const targetQ = questions.find(item => item.id === qId);
+          if (targetQ) {
+            toggleBookmark(targetQ);
+            renderQuestionsList();
+          }
+        });
+      }
+
+      // Flag action
+      const flagBtn = card.querySelector(".vpq-flag-btn");
+      if (flagBtn) {
+        flagBtn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          toggleVocabQuestionFlag(qId);
+          renderQuestionsList();
+        });
+      }
+    });
+
+    renderMath();
+  }
+
+  // Initial render
+  renderQuestionsList();
+}
+
+function getUnitPracticeQuestions(unit) {
+  const unitSlug = unit.lesson_unit.toLowerCase().replace(/\s+/g, "_");
+  const directQuestions = ALL_SAMPLE_QUESTIONS.filter(q => 
+    q.subjectId === "vocabulary" && (
+      q.chapterId === unitSlug ||
+      q.chapterId === unit.lesson_unit.toLowerCase() ||
+      (q.category && q.category.toLowerCase().includes(unit.lesson_unit.toLowerCase()))
+    )
+  );
+
+  const existingConceptIds = new Set(directQuestions.map(q => q.conceptId || q.id));
+  const generatedQuestions = [];
+
+  unit.words.forEach((w) => {
+    if (!existingConceptIds.has(w.id)) {
+      const otherWords = VOCAB_ITEMS.filter(item => item.id !== w.id);
+      const wrongDistractors = otherWords.slice(0, 3).map(o => o.meaning_bn);
+
+      const allOpts = [w.meaning_bn, ...wrongDistractors];
+      const correctText = w.meaning_bn;
+      allOpts.sort();
+      const correctIdx = allOpts.indexOf(correctText);
+
+      generatedQuestions.push({
+        id: `q_gen_${w.id}`,
+        subjectId: "vocabulary",
+        chapterId: unitSlug,
+        conceptId: w.id,
+        category: `Vocabulary (${unit.lesson_unit})`,
+        question: `What is the appropriate meaning or context of the word '${w.word}'?`,
+        options: allOpts,
+        correctIndex: correctIdx,
+        explanation: `
+          <strong>শব্দার্থ ও কনসেপ্ট:</strong><br>
+          • <strong>${w.word} (${w.part_of_speech || 'noun'}):</strong> ${w.meaning_bn}<br>
+          ${w.meaning_en ? `• <em>${w.meaning_en}</em><br>` : ''}
+          ${(w.synonyms && w.synonyms.length) ? `• <strong>Synonyms:</strong> ${w.synonyms.join(", ")}<br>` : ''}
+          ${(w.antonyms && w.antonyms.length) ? `• <strong>Antonyms:</strong> ${w.antonyms.join(", ")}<br>` : ''}
+          ${w.example ? `• <strong>Example:</strong> "${w.example}"<br>` : ''}
+          ${w.source ? `• <strong>উৎস:</strong> ${w.source}` : ''}
+        `
+      });
+    }
+  });
+
+  return [...directQuestions, ...generatedQuestions];
 }
 
 function setupEventListeners() {
