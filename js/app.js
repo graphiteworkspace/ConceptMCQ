@@ -1113,7 +1113,7 @@ function renderTargetUI() {
     card.addEventListener("click", () => {
       const subId = card.dataset.subject;
       if (subId === "vocabulary") {
-        navigateTo("/vocabulary");
+        navigateTo("/vocabulary/units");
       } else {
         openCustomQuizModal(subId);
       }
@@ -2043,71 +2043,93 @@ function renderVocabUnitModeContent(unit, mode) {
   if (!container) return;
 
   if (mode === "browse") {
-    // Mode 1: "শব্দ দেখা" - Renders the exact existing word card design
+    // Mode 1: "শব্দ দেখা" - Bland options vertically, tapping an option reveals answer & full detailed explanation
+    const questions = getUnitPracticeQuestions(unit);
+    const bnOptionLetters = ['ক', 'খ', 'গ', 'ঘ'];
+    const isAnswersHidden = getVocabAnswersHiddenState();
+
     container.innerHTML = `
-      <div class="vocab-words-grid">
-        ${unit.words.map(w => `
-          <div class="vocab-word-card" id="card-${w.id}">
-            <div class="vocab-card-top">
-              <div class="vocab-headword-wrap">
-                <span class="vocab-headword">${w.word}</span>
-                ${w.part_of_speech ? `<span class="vocab-pos">(${w.part_of_speech})</span>` : ''}
+      <div class="vocab-practice-pills-row" style="margin-bottom: 14px;">
+        <button type="button" class="vocab-filter-chip vocab-toggle-answer-chip ${isAnswersHidden ? 'answers-off' : 'answers-on'}" id="browse-toggle-answers-btn">
+          <span class="toggle-indicator-dot ${isAnswersHidden ? 'off' : 'on'}"></span>
+          <span>${isAnswersHidden ? 'উত্তর অফ' : 'উত্তর অন'}</span>
+        </button>
+      </div>
+      <div class="vocab-practice-questions-list" id="browse-questions-stream">
+        ${questions.map((q, idx) => {
+          const selectedIdx = vocabPracticeSelectedOptions.has(q.id) ? vocabPracticeSelectedOptions.get(q.id) : null;
+          const hasAnswered = selectedIdx !== null;
+          const showResult = !isAnswersHidden || hasAnswered;
+          const isWrong = hasAnswered && selectedIdx !== q.correctIndex;
+
+          return `
+            <div class="vocab-practice-q-card" data-qid="${q.id}">
+              <div class="vpq-top-row">
+                <div class="vpq-meta-left">
+                  <span class="vpq-q-title">Question ${toBnNum(idx + 1)}</span>
+                  ${isWrong ? '<span class="vpq-wrong-pill">ভুল</span>' : ''}
+                </div>
               </div>
-              <span class="vocab-order-tag">#${w.sort_order}</span>
+              <div class="vpq-question-text">${q.question}</div>
+              <div class="vpq-options-grid">
+                ${q.options.map((opt, oIdx) => {
+                  let optStateClass = "";
+                  let statusSymbol = "";
+                  if (showResult) {
+                    if (oIdx === q.correctIndex) {
+                      optStateClass = "correct-option";
+                      statusSymbol = '<span class="vpq-opt-status correct">✓</span>';
+                    } else if (hasAnswered && oIdx === selectedIdx && oIdx !== q.correctIndex) {
+                      optStateClass = "wrong-option";
+                      statusSymbol = '<span class="vpq-opt-status wrong">✕</span>';
+                    }
+                  }
+                  return `
+                    <button type="button" class="vpq-option ${optStateClass}" data-qid="${q.id}" data-oidx="${oIdx}">
+                      <span class="vpq-opt-letter">${bnOptionLetters[oIdx] || String.fromCharCode(65 + oIdx)}</span>
+                      <span class="vpq-opt-text">${opt}</span>
+                      ${statusSymbol}
+                    </button>
+                  `;
+                }).join("")}
+              </div>
+              <div class="vpq-explanation-card ${showResult ? '' : 'hidden'}">
+                <div class="vpq-exp-header">
+                  <span class="vpq-exp-info-badge">i</span>
+                  <strong>ব্যাখ্যা</strong>
+                </div>
+                <div class="vpq-exp-body">${q.explanation}</div>
+              </div>
             </div>
-
-            <div class="vocab-meaning-bn">${w.meaning_bn}</div>
-            ${w.meaning_en ? `<div class="vocab-meaning-en">${w.meaning_en}</div>` : ''}
-
-            ${(w.synonyms && w.synonyms.length) ? `
-              <div class="vocab-meta-row">
-                <span class="vocab-meta-label">Synonyms:</span>
-                <div class="vocab-chips-wrap">
-                  ${w.synonyms.map(s => `<span class="vocab-chip syn-chip">${s}</span>`).join("")}
-                </div>
-              </div>
-            ` : ''}
-
-            ${(w.antonyms && w.antonyms.length) ? `
-              <div class="vocab-meta-row">
-                <span class="vocab-meta-label">Antonyms:</span>
-                <div class="vocab-chips-wrap">
-                  ${w.antonyms.map(a => `<span class="vocab-chip ant-chip">${a}</span>`).join("")}
-                </div>
-              </div>
-            ` : ''}
-
-            ${w.example ? `
-              <div class="vocab-example-box">
-                <strong>Example:</strong> "${w.example}"
-              </div>
-            ` : ''}
-
-            ${w.source ? `
-              <div class="vocab-source-meta">
-                <span>📌 ${w.source}</span>
-              </div>
-            ` : ''}
-          </div>
-        `).join("")}
+          `;
+        }).join("")}
       </div>
       <div class="vocab-mode-footer-action">
-        <button class="vocab-practice-link-btn" id="start-unit-practice-btn" style="width: 100%; padding: 13px; font-size: 14px; font-weight: 700; background: var(--bg-card); border: 1.5px solid var(--primary-border); color: var(--primary-magenta); border-radius: 12px; cursor: pointer; margin-bottom: 10px; font-family: inherit;">
-          🎯 ${unit.lesson_unit} প্রশ্ন প্র্যাকটিস পেজ →
-        </button>
         <button class="vocab-quiz-btn" id="start-unit-quiz-btn" style="width: 100%; padding: 14px; font-size: 15px;">
           ⚡ ${unit.lesson_unit} কুইজ শুরু করুন
         </button>
       </div>
     `;
 
-    const practiceNavBtn = document.getElementById("start-unit-practice-btn");
-    if (practiceNavBtn) {
-      practiceNavBtn.addEventListener("click", () => {
-        const uId = unit.lesson_unit.toLowerCase().replace(/\s+/g, "_");
-        navigateTo(`/vocabulary/units/${uId}/practice`);
+    const browseToggleBtn = document.getElementById("browse-toggle-answers-btn");
+    if (browseToggleBtn) {
+      browseToggleBtn.addEventListener("click", () => {
+        const nextHidden = !getVocabAnswersHiddenState();
+        setVocabAnswersHiddenState(nextHidden);
+        if (nextHidden) vocabPracticeSelectedOptions.clear();
+        renderVocabUnitModeContent(unit, "browse");
       });
     }
+
+    container.querySelectorAll(".vpq-option").forEach(optBtn => {
+      optBtn.addEventListener("click", () => {
+        const qId = optBtn.dataset.qid;
+        const oIdx = parseInt(optBtn.dataset.oidx, 10);
+        vocabPracticeSelectedOptions.set(qId, oIdx);
+        markVocabQuestionRead(qId);
+        renderVocabUnitModeContent(unit, "browse");
+      });
+    });
 
     const quizBtn = document.getElementById("start-unit-quiz-btn");
     if (quizBtn) {
