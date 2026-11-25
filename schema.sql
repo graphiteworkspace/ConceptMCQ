@@ -81,3 +81,46 @@ VALUES
     'Isolation ensures that concurrent transactions do not interfere with or see uncommitted intermediate states of each other.',
     'medium'
 );
+
+
+-- ==============================================================================
+-- 4. Create Vocab Items Table (Admission Unit "খ" Vocabulary Model)
+-- ==============================================================================
+CREATE TABLE IF NOT EXISTS public.vocab_items (
+    id TEXT PRIMARY KEY,
+    subject TEXT NOT NULL,
+    section TEXT NOT NULL DEFAULT 'vocabulary',
+    admission_unit TEXT NOT NULL DEFAULT 'kha',
+    lesson_unit TEXT NOT NULL,
+    sort_order INT NOT NULL DEFAULT 0,
+    word TEXT NOT NULL,
+    part_of_speech TEXT,
+    meaning_bn TEXT NOT NULL,
+    meaning_en TEXT,
+    synonyms TEXT[] NOT NULL DEFAULT '{}'::text[],
+    antonyms TEXT[] NOT NULL DEFAULT '{}'::text[],
+    example TEXT,
+    source TEXT,
+    tags TEXT[] NOT NULL DEFAULT '{}'::text[],
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    content_version INT NOT NULL DEFAULT 1
+);
+
+-- Compound Index on admission_unit, lesson_unit, and sort_order
+CREATE INDEX IF NOT EXISTS idx_vocab_items_unit_lesson_sort 
+ON public.vocab_items (admission_unit, lesson_unit, sort_order);
+
+ALTER TABLE public.vocab_items ENABLE ROW LEVEL SECURITY;
+
+DROP POLICY IF EXISTS "Allow public read access to vocab_items" ON public.vocab_items;
+CREATE POLICY "Allow public read access to vocab_items"
+ON public.vocab_items FOR SELECT USING (true);
+
+DROP POLICY IF EXISTS "Allow public insert to vocab_items" ON public.vocab_items;
+CREATE POLICY "Allow public insert to vocab_items"
+ON public.vocab_items FOR INSERT WITH CHECK (true);
+
+DROP POLICY IF EXISTS "Allow public update to vocab_items" ON public.vocab_items;
+CREATE POLICY "Allow public update to vocab_items"
+ON public.vocab_items FOR UPDATE USING (true);

@@ -100,7 +100,8 @@ const TARGET_CONFIGS = {
       b_unit: [
         { id: "bangla_1", name: "বাংলা ভাষা ও সাহিত্য", symbol: "অ", pastel: "pastel-pink", questionsCount: "২,১০০+ প্রশ্ন", topic: "আধুনিক যুগ ও ব্যাকরণ" },
         { id: "english_1", name: "English Language", symbol: "En", pastel: "pastel-blue", questionsCount: "২,৩০০+ প্রশ্ন", topic: "Vocabulary & Prepositions" },
-        { id: "bd_world", name: "বাংলাদেশ বিষয়াবলী", symbol: "BD", pastel: "pastel-green", questionsCount: "২,৫০০+ প্রশ্ন", topic: "সংবিধান ও ইতিহাস" }
+        { id: "bd_world", name: "বাংলাদেশ বিষয়াবলী", symbol: "BD", pastel: "pastel-green", questionsCount: "২,৫০০+ প্রশ্ন", topic: "সংবিধান ও ইতিহাস" },
+        { id: "vocabulary", name: "Vocabulary", symbol: "Vocab", pastel: "pastel-amber", questionsCount: "লেসন ভিত্তিক", topic: "Unit 1, Unit 2... Lesson Units" }
       ],
       c_unit: [
         { id: "accounting", name: "হিসাববিজ্ঞান", symbol: "ACC", pastel: "pastel-blue", questionsCount: "১,৪৫০+ প্রশ্ন", topic: "আর্থিক বিবরণী" },
@@ -146,6 +147,177 @@ const TARGET_CONFIGS = {
     }
   }
 };
+
+// ==============================================================================
+// VOCABULARY CONTENT MODEL (ADMISSION -> UNIT "KHA" -> VOCABULARY)
+// ==============================================================================
+let VOCAB_ITEMS = [
+  {
+    id: "kha_eng_u1_001",
+    subject: "English Language",
+    section: "vocabulary",
+    admission_unit: "kha",
+    lesson_unit: "Unit 1",
+    sort_order: 1,
+    word: "Amicable",
+    part_of_speech: "adjective",
+    meaning_bn: "সৌহার্দ্যপূর্ণ, বন্ধুত্বপূর্ণ ও শান্তিপূর্ণ",
+    meaning_en: "Characterized by friendliness and goodwill without disagreement",
+    synonyms: ["Friendly", "Cordial", "Harmonious", "Amiable"],
+    antonyms: ["Hostile", "Antagonistic", "Belligerent", "Unfriendly"],
+    example: "Despite their differences, the committee members reached an amicable agreement.",
+    source: "Dhaka University 'Kha' Unit Question Bank (2022-23)",
+    tags: ["high-frequency", "du-kha", "adjective", "unit-1"],
+    created_at: "2026-11-25T00:00:00Z",
+    updated_at: "2026-11-25T00:00:00Z",
+    content_version: 1
+  },
+  {
+    id: "kha_eng_u1_002",
+    subject: "English Language",
+    section: "vocabulary",
+    admission_unit: "kha",
+    lesson_unit: "Unit 1",
+    sort_order: 2,
+    word: "Pragmatic",
+    part_of_speech: "adjective",
+    meaning_bn: "বাস্তবধর্মী, বাস্তবসম্মত ও প্রায়োগিক",
+    meaning_en: "Dealing with things sensibly and realistically based on practical considerations",
+    synonyms: ["Practical", "Realistic", "Sensible", "Hard-headed"],
+    antonyms: ["Idealistic", "Impractical", "Theoretical", "Unrealistic"],
+    example: "A pragmatic approach is essential when solving socioeconomic challenges.",
+    source: "DU 'Kha' Unit & GST Cluster Entrance Exam",
+    tags: ["high-frequency", "du-kha", "adjective", "unit-1"],
+    created_at: "2026-11-25T00:00:00Z",
+    updated_at: "2026-11-25T00:00:00Z",
+    content_version: 1
+  },
+  {
+    id: "kha_eng_u1_003",
+    subject: "English Language",
+    section: "vocabulary",
+    admission_unit: "kha",
+    lesson_unit: "Unit 1",
+    sort_order: 3,
+    word: "Benevolent",
+    part_of_speech: "adjective",
+    meaning_bn: "হিতৈষী, পরোপকারী ও দয়ালু",
+    meaning_en: "Well-meaning, kindly, and serving a charitable rather than a profit-making purpose",
+    synonyms: ["Kind-hearted", "Altruistic", "Generous", "Magnanimous"],
+    antonyms: ["Malevolent", "Spiteful", "Selfish", "Cruel"],
+    example: "The university founder was recognized for his benevolent contributions to higher education.",
+    source: "Dhaka University 'Kha' Unit Question Bank (2021-22)",
+    tags: ["high-frequency", "du-kha", "adjective", "unit-1"],
+    created_at: "2026-11-25T00:00:00Z",
+    updated_at: "2026-11-25T00:00:00Z",
+    content_version: 1
+  },
+  {
+    id: "kha_eng_u2_001",
+    subject: "English Language",
+    section: "vocabulary",
+    admission_unit: "kha",
+    lesson_unit: "Unit 2",
+    sort_order: 1,
+    word: "Eloquent",
+    part_of_speech: "adjective",
+    meaning_bn: "বাগ্মী, প্রাঞ্জল ও সুবক্তা",
+    meaning_en: "Fluent or persuasive in speaking or writing",
+    synonyms: ["Articulate", "Fluent", "Persuasive", "Expressive"],
+    antonyms: ["Inarticulate", "Hesitant", "Tongue-tied"],
+    example: "Her eloquent speech inspired thousands of admission candidates.",
+    source: "DU 'Kha' Unit Admission Test",
+    tags: ["high-frequency", "du-kha", "adjective", "unit-2"],
+    created_at: "2026-11-25T00:00:00Z",
+    updated_at: "2026-11-25T00:00:00Z",
+    content_version: 1
+  },
+  {
+    id: "kha_eng_u2_002",
+    subject: "English Language",
+    section: "vocabulary",
+    admission_unit: "kha",
+    lesson_unit: "Unit 2",
+    sort_order: 2,
+    word: "Resilient",
+    part_of_speech: "adjective",
+    meaning_bn: "স্থিতিস্থাপক, কষ্টসহিষ্ণু ও দ্রুত ঘুরে দাঁড়াতে সক্ষম",
+    meaning_en: "Able to withstand or recover quickly from difficult conditions",
+    synonyms: ["Tough", "Tenacious", "Durable", "Adaptable"],
+    antonyms: ["Fragile", "Vulnerable", "Weak"],
+    example: "Admission fighters need to be resilient in the face of setbacks.",
+    source: "DU 'Kha' Unit & University Admission Bank",
+    tags: ["high-frequency", "du-kha", "adjective", "unit-2"],
+    created_at: "2026-11-25T00:00:00Z",
+    updated_at: "2026-11-25T00:00:00Z",
+    content_version: 1
+  },
+  {
+    id: "kha_eng_u3_001",
+    subject: "English Language",
+    section: "vocabulary",
+    admission_unit: "kha",
+    lesson_unit: "Unit 3",
+    sort_order: 1,
+    word: "Tenacious",
+    part_of_speech: "adjective",
+    meaning_bn: "নাছোড়বান্দা, দৃঢ়সংকল্প ও একনিষ্ঠ",
+    meaning_en: "Tending to keep a firm hold of something; clinging or adhering closely",
+    synonyms: ["Persistent", "Determined", "Persevering", "Stubborn"],
+    antonyms: ["Yielding", "Surrendering", "Weak"],
+    example: "His tenacious efforts earned him a top place in the merit list.",
+    source: "DU 'Kha' Unit Question Bank",
+    tags: ["high-frequency", "du-kha", "adjective", "unit-3"],
+    created_at: "2026-11-25T00:00:00Z",
+    updated_at: "2026-11-25T00:00:00Z",
+    content_version: 1
+  }
+];
+
+// Helper to extract lesson units ordered by sort_order and then lesson_unit
+function getVocabLessonUnits() {
+  const items = VOCAB_ITEMS.filter(item => 
+    (!item.admission_unit || item.admission_unit === "kha") &&
+    (!item.section || item.section === "vocabulary")
+  );
+
+  const groupMap = new Map();
+  items.forEach(item => {
+    const key = item.lesson_unit || "Unit 1";
+    if (!groupMap.has(key)) {
+      groupMap.set(key, {
+        lesson_unit: key,
+        sort_order: item.sort_order ?? 0,
+        words: []
+      });
+    }
+    const group = groupMap.get(key);
+    group.words.push(item);
+    if ((item.sort_order ?? 0) < group.sort_order) {
+      group.sort_order = item.sort_order ?? 0;
+    }
+  });
+
+  // Strict ordering by sort_order, then lesson_unit
+  const sorted = Array.from(groupMap.values()).sort((a, b) => {
+    if (a.sort_order !== b.sort_order) {
+      return a.sort_order - b.sort_order;
+    }
+    return a.lesson_unit.localeCompare(b.lesson_unit, undefined, { numeric: true });
+  });
+
+  // Sort words inside each unit by sort_order then word
+  sorted.forEach(u => {
+    u.words.sort((a, b) => {
+      if ((a.sort_order ?? 0) !== (b.sort_order ?? 0)) {
+        return (a.sort_order ?? 0) - (b.sort_order ?? 0);
+      }
+      return (a.word || "").localeCompare(b.word || "");
+    });
+  });
+
+  return sorted;
+}
 
 // ==============================================================================
 // SUBJECT, CHAPTER & CONCEPT HIERARCHY MAP
@@ -360,6 +532,24 @@ const SUBJECT_CHAPTERS_MAP = {
         ]
       }
     ]
+  },
+  vocabulary: {
+    name: "Vocabulary",
+    get chapters() {
+      return getVocabLessonUnits().map(lu => ({
+        id: lu.lesson_unit.toLowerCase().replace(/\s+/g, "_"),
+        title: `${lu.lesson_unit} (${lu.words.length} Words)`,
+        lesson_unit: lu.lesson_unit,
+        sort_order: lu.sort_order,
+        concepts: [
+          { id: "all", title: `${lu.lesson_unit} - সকল শব্দ (All Words)` },
+          ...lu.words.map(w => ({
+            id: w.id,
+            title: `${w.word} (${w.part_of_speech || 'word'}) - ${w.meaning_bn}`
+          }))
+        ]
+      }));
+    }
   }
 };
 
@@ -609,6 +799,64 @@ const ALL_SAMPLE_QUESTIONS = [
       correctIndex: 1, // নারী ও পুরুষের
       explanation: "২৮(২) অনুচ্ছেদে স্পষ্টভাবে নারী ও পুরুষের সমঅধিকারের কথা বলা হয়েছে।"
     }
+  },
+  {
+    id: "q_vocab_1",
+    subjectId: "vocabulary",
+    chapterId: "unit_1",
+    conceptId: "kha_eng_u1_001",
+    category: "Vocabulary (Unit 1 - Synonyms)",
+    question: "What is the most appropriate SYNONYM for the word 'Amicable'?",
+    options: ["Hostile and Aggressive", "Friendly and Cordial", "Arrogant and Proud", "Timid and Fearful"],
+    correctIndex: 1,
+    explanation: `
+      <strong>শব্দার্থ ও কনসেপ্ট:</strong><br>
+      • <strong>Amicable (adj):</strong> সৌহার্দ্যপূর্ণ, বন্ধুত্বপূর্ণ ও শান্তিপূর্ণ (characterized by friendliness).<br>
+      • <strong>Synonyms:</strong> Friendly, Cordial, Harmonious, Amiable.<br>
+      • <strong>Antonyms:</strong> Hostile, Antagonistic, Belligerent.
+    `,
+    twisted: {
+      question: "Which of the following is an ANTONYM of 'Amicable'?",
+      options: ["Cordial", "Harmonious", "Hostile", "Affable"],
+      correctIndex: 2,
+      explanation: "'Hostile' (শত্রুভাবাপন্ন) is the direct antonym of 'Amicable'."
+    }
+  },
+  {
+    id: "q_vocab_2",
+    subjectId: "vocabulary",
+    chapterId: "unit_1",
+    conceptId: "kha_eng_u1_002",
+    category: "Vocabulary (Unit 1 - Context & Meaning)",
+    question: "A person who approaches problems realistically and practically is called:",
+    options: ["Pragmatic", "Idealistic", "Dogmatic", "Skeptical"],
+    correctIndex: 0,
+    explanation: `
+      <strong>শব্দার্থ ও কনসেপ্ট:</strong><br>
+      • <strong>Pragmatic (adj):</strong> বাস্তবধর্মী বা বাস্তবসম্মত (dealing with things sensibly and realistically).<br>
+      • <strong>Example:</strong> 'A pragmatic solution to public transport challenges.'
+    `,
+    twisted: {
+      question: "What is the antonym of 'Pragmatic'?",
+      options: ["Practical", "Idealistic / Impractical", "Sensible", "Rational"],
+      correctIndex: 1,
+      explanation: "'Idealistic' or 'Impractical' is the antonym of 'Pragmatic'."
+    }
+  },
+  {
+    id: "q_vocab_3",
+    subjectId: "vocabulary",
+    chapterId: "unit_2",
+    conceptId: "kha_eng_u2_001",
+    category: "Vocabulary (Unit 2 - Eloquent)",
+    question: "Which word means 'fluent or persuasive in speaking or writing'?",
+    options: ["Hesitant", "Eloquent", "Taciturn", "Inarticulate"],
+    correctIndex: 1,
+    explanation: `
+      <strong>শব্দার্থ ও কনসেপ্ট:</strong><br>
+      • <strong>Eloquent (adj):</strong> বাগ্মী, প্রাঞ্জল ও সুবক্তা (fluent/expressive speaker).<br>
+      • <strong>Synonyms:</strong> Articulate, Fluent, Persuasive.
+    `
   }
 ];
 
@@ -742,6 +990,7 @@ function init() {
   renderTargetUI();
   setupEventListeners();
   renderTargetModal();
+  fetchVocabItemsFromSupabase();
   
   if (!localStorage.getItem("conceptmcq_visited")) {
     openTargetModal();
@@ -750,6 +999,28 @@ function init() {
 
   // Initial Math pass
   setTimeout(renderMath, 400);
+}
+
+async function fetchVocabItemsFromSupabase() {
+  if (typeof supabaseClient !== "undefined" && supabaseClient) {
+    try {
+      const { data, error } = await supabaseClient
+        .from('vocab_items')
+        .select('*')
+        .eq('admission_unit', 'kha')
+        .order('sort_order', { ascending: true })
+        .order('lesson_unit', { ascending: true });
+      if (!error && data && data.length > 0) {
+        VOCAB_ITEMS = data;
+        const container = document.getElementById("vocab-lesson-units-list");
+        if (container && !container.closest(".modal-backdrop.hidden")) {
+          renderVocabularyLessonUnits();
+        }
+      }
+    } catch (e) {
+      console.warn("Using offline VOCAB_ITEMS", e);
+    }
+  }
 }
 
 // Render Target Header, Streams, and Subject Cards
@@ -803,27 +1074,50 @@ function renderTargetUI() {
   }
 
   // Update folder tabs in Main Card
-  document.querySelectorAll(".folder-tab").forEach(tab => {
-    tab.classList.toggle("active", tab.dataset.stream === currentStreamId);
-  });
+  const streamFolderTabs = document.getElementById("stream-folder-tabs");
+  if (streamFolderTabs && target.streams && target.streams.length > 0) {
+    streamFolderTabs.innerHTML = target.streams.map(stream => `
+      <button class="folder-tab ${stream.id === currentStreamId ? 'active' : ''}" data-stream="${stream.id}">${stream.label}</button>
+    `).join("");
+    streamFolderTabs.querySelectorAll(".folder-tab").forEach(tab => {
+      tab.addEventListener("click", () => {
+        streamFolderTabs.querySelectorAll(".folder-tab").forEach(t => t.classList.remove("active"));
+        tab.classList.add("active");
+        const sId = tab.dataset.stream;
+        if (sId) {
+          currentStreamId = sId;
+          localStorage.setItem("conceptmcq_stream", currentStreamId);
+          renderTargetUI();
+        }
+      });
+    });
+  } else {
+    document.querySelectorAll(".folder-tab").forEach(tab => {
+      tab.classList.toggle("active", tab.dataset.stream === currentStreamId);
+    });
+  }
 
   // Subject Cards (10MS Pastel Circular Icons)
   const subjects = target.subjects[currentStreamId] || target.subjects[target.streams[0]?.id] || [];
   subjectsGridContainer.innerHTML = subjects.map(sub => `
-    <div class="subject-card" data-subject="${sub.id}" data-name="${sub.name}">
+    <div class="subject-card ${sub.id === 'vocabulary' ? 'vocab-subject-card' : ''}" data-subject="${sub.id}" data-name="${sub.name}">
       <div class="subject-icon-box ${sub.pastel}">
         <span>${sub.symbol}</span>
       </div>
       <h3 class="subject-name">${sub.name}</h3>
       <span class="subject-questions-meta">${sub.questionsCount}</span>
-      <span class="subject-action-badge">অনুশীলন করুন →</span>
+      <span class="subject-action-badge">${sub.id === 'vocabulary' ? 'লেসন দেখুন →' : 'অনুশীলন করুন →'}</span>
     </div>
   `).join("");
 
   subjectsGridContainer.querySelectorAll(".subject-card").forEach(card => {
     card.addEventListener("click", () => {
       const subId = card.dataset.subject;
-      openCustomQuizModal(subId);
+      if (subId === "vocabulary") {
+        openVocabularyModal();
+      } else {
+        openCustomQuizModal(subId);
+      }
     });
   });
 }
@@ -1497,6 +1791,138 @@ function handleRapidQuizTrigger() {
   openCustomQuizModal();
 }
 
+// ==============================================================================
+// VOCABULARY MODAL & LESSON UNITS RENDERER (ADMISSION -> UNIT KHA -> VOCABULARY)
+// ==============================================================================
+function openVocabularyModal() {
+  const modal = document.getElementById("vocab-modal-backdrop");
+  if (modal) {
+    renderVocabularyLessonUnits();
+    modal.classList.remove("hidden");
+  }
+}
+
+function closeVocabularyModalDialog() {
+  const modal = document.getElementById("vocab-modal-backdrop");
+  if (modal) {
+    modal.classList.add("hidden");
+  }
+}
+
+function renderVocabularyLessonUnits() {
+  const container = document.getElementById("vocab-lesson-units-list");
+  if (!container) return;
+
+  // Retrieve lesson units ordered strictly by sort_order and then lesson_unit
+  const lessonUnits = getVocabLessonUnits();
+
+  if (lessonUnits.length === 0) {
+    container.innerHTML = `
+      <div class="empty-state-card" style="padding: 24px; text-align: center; color: var(--text-muted);">
+        <p>বর্তমানে কোনো লেসন ইউনিট পাওয়া যায়নি।</p>
+      </div>
+    `;
+    return;
+  }
+
+  container.innerHTML = lessonUnits.map(unit => {
+    const unitId = unit.lesson_unit.toLowerCase().replace(/\s+/g, "_");
+    return `
+      <div class="vocab-unit-block" data-unit="${unit.lesson_unit}">
+        <div class="vocab-unit-header">
+          <div class="vocab-unit-info">
+            <span class="vocab-sort-badge">ক্রম #${unit.sort_order}</span>
+            <h4 class="vocab-unit-title">${unit.lesson_unit}</h4>
+          </div>
+          <span class="vocab-count-badge">${unit.words.length} Words</span>
+        </div>
+
+        <div class="vocab-words-grid">
+          ${unit.words.map(w => `
+            <div class="vocab-word-card" id="card-${w.id}">
+              <div class="vocab-card-top">
+                <div class="vocab-headword-wrap">
+                  <span class="vocab-headword">${w.word}</span>
+                  ${w.part_of_speech ? `<span class="vocab-pos">(${w.part_of_speech})</span>` : ''}
+                </div>
+                <span class="vocab-order-tag">#${w.sort_order}</span>
+              </div>
+
+              <div class="vocab-meaning-bn">${w.meaning_bn}</div>
+              ${w.meaning_en ? `<div class="vocab-meaning-en">${w.meaning_en}</div>` : ''}
+
+              ${(w.synonyms && w.synonyms.length) ? `
+                <div class="vocab-meta-row">
+                  <span class="vocab-meta-label">Synonyms:</span>
+                  <div class="vocab-chips-wrap">
+                    ${w.synonyms.map(s => `<span class="vocab-chip syn-chip">${s}</span>`).join("")}
+                  </div>
+                </div>
+              ` : ''}
+
+              ${(w.antonyms && w.antonyms.length) ? `
+                <div class="vocab-meta-row">
+                  <span class="vocab-meta-label">Antonyms:</span>
+                  <div class="vocab-chips-wrap">
+                    ${w.antonyms.map(a => `<span class="vocab-chip ant-chip">${a}</span>`).join("")}
+                  </div>
+                </div>
+              ` : ''}
+
+              ${w.example ? `
+                <div class="vocab-example-box">
+                  <strong>Example:</strong> "${w.example}"
+                </div>
+              ` : ''}
+
+              ${w.source ? `
+                <div class="vocab-source-meta">
+                  <span>📌 ${w.source}</span>
+                </div>
+              ` : ''}
+            </div>
+          `).join("")}
+        </div>
+
+        <div class="vocab-unit-action-bar">
+          <button class="vocab-quiz-btn" data-unit="${unit.lesson_unit}" data-unit-id="${unitId}">
+            ⚡ ${unit.lesson_unit} কুইজ অনুশীলন করুন
+          </button>
+        </div>
+      </div>
+    `;
+  }).join("");
+
+  // Attach Quiz Click Handlers for each lesson unit
+  container.querySelectorAll(".vocab-quiz-btn").forEach(btn => {
+    btn.addEventListener("click", () => {
+      const uName = btn.dataset.unit;
+      const uId = btn.dataset.unitId;
+      closeVocabularyModalDialog();
+      startVocabularyQuizForUnit(uName, uId);
+    });
+  });
+}
+
+function startVocabularyQuizForUnit(unitName, unitId) {
+  let unitQuestions = ALL_SAMPLE_QUESTIONS.filter(q => q.subjectId === "vocabulary" && (q.chapterId === unitId || q.category.includes(unitName)));
+  
+  if (unitQuestions.length === 0) {
+    unitQuestions = ALL_SAMPLE_QUESTIONS.filter(q => q.subjectId === "vocabulary");
+  }
+
+  if (unitQuestions.length === 0) {
+    showToast(`${unitName} এর জন্য প্র্যাকটিস কুইজ প্রস্তুত হচ্ছে...`, "info");
+    return;
+  }
+
+  currentQuestions = [...unitQuestions];
+  document.getElementById("exam-category-badge").textContent = `Vocabulary • ${unitName} (${unitQuestions.length}টি প্রশ্ন)`;
+  currentExamMode = "standard";
+  startExamSession(10 * 60);
+  showToast(`Vocabulary ${unitName} কুইজ শুরু হয়েছে!`, "success");
+}
+
 function setupEventListeners() {
   targetSwitcherBtn.addEventListener("click", openTargetModal);
   closeTargetModal.addEventListener("click", closeTargetModalDialog);
@@ -1657,6 +2083,35 @@ function setupEventListeners() {
   if (notifBtn) {
     notifBtn.addEventListener("click", () => {
       showToast("আপনার ৩-দিনের রিভিশন ব্যাংকে নতুন প্রশ্ন যোগ হয়েছে!", "info");
+    });
+  }
+
+  // Vocabulary Modal Events
+  const closeVocabModalBtn = document.getElementById("close-vocab-modal");
+  const vocabModalBackdrop = document.getElementById("vocab-modal-backdrop");
+  if (closeVocabModalBtn) {
+    closeVocabModalBtn.addEventListener("click", closeVocabularyModalDialog);
+  }
+  if (vocabModalBackdrop) {
+    vocabModalBackdrop.addEventListener("click", (e) => {
+      if (e.target === vocabModalBackdrop) closeVocabularyModalDialog();
+    });
+  }
+
+  // Feature item in All Features sheet
+  const fItemVocab = document.getElementById("f-item-vocab");
+  if (fItemVocab) {
+    fItemVocab.addEventListener("click", () => {
+      const allFeaturesModal = document.getElementById("all-features-modal-backdrop");
+      if (allFeaturesModal) allFeaturesModal.classList.add("hidden");
+      
+      // Navigate to Admission -> Unit "kha"
+      currentTargetId = "admission";
+      currentStreamId = "b_unit";
+      localStorage.setItem("conceptmcq_target", "admission");
+      localStorage.setItem("conceptmcq_stream", "b_unit");
+      renderTargetUI();
+      openVocabularyModal();
     });
   }
 }

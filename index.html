@@ -978,6 +978,14 @@
                 </div>
                 <span class="f-action">কুইজ দিন →</span>
               </div>
+              <div class="feature-row-item" id="f-item-vocab">
+                <div class="f-icon bg-amber-soft">🔤</div>
+                <div class="f-info">
+                  <strong>Admission খ-ইউনিট Vocabulary</strong>
+                  <span>লেসন ভিত্তিক শব্দভাণ্ডার, অর্থ, সিনোনিম ও কুইজ</span>
+                </div>
+                <span class="f-action">পড়ুন →</span>
+              </div>
               <div class="feature-row-item disabled-feature" title="শীঘ্রই আসছে">
                 <div class="f-icon bg-amber-soft">📐</div>
                 <div class="f-info">
@@ -1256,6 +1264,41 @@
             </button>
           </div>
         </form>
+      </div>
+    </div>
+
+    <!-- Vocabulary Lesson Units Modal (Admission -> Unit "Kha" -> Vocabulary) -->
+    <div class="modal-backdrop hidden" id="vocab-modal-backdrop">
+      <div class="modal-card vocab-modal-sheet">
+        <div class="all-features-header">
+          <button class="modal-close-btn sheet-back-btn" id="close-vocab-modal" title="বন্ধ করুন">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="18" y1="6" x2="6" y2="18"></line>
+              <line x1="6" y1="6" x2="18" y2="18"></line>
+            </svg>
+          </button>
+          <div>
+            <div class="vocab-breadcrumb">
+              <span class="crumb-target">বিশ্ববিদ্যালয় ভর্তি (UNI)</span>
+              <span class="crumb-sep">›</span>
+              <span class="crumb-unit">খ-ইউনিট (মানবিক)</span>
+              <span class="crumb-sep">›</span>
+              <span class="crumb-sub">Vocabulary</span>
+            </div>
+            <h3 class="all-features-title">Vocabulary লেসন ইউনিটসমূহ</h3>
+          </div>
+        </div>
+
+        <div class="vocab-modal-body">
+          <div class="vocab-intro-box">
+            <p>ঢাকা বিশ্ববিদ্যালয় ও গুচ্ছ (GST) <strong>খ-ইউনিটের</strong> জন্য <code>vocab_items</code> থেকে সাজানো লেসন ইউনিটসমূহ। ক্রম (sort_order) ও লেসন অনুযায়ী নিচে তালিকাভুক্ত করা হয়েছে:</p>
+          </div>
+
+          <!-- Lesson Units List (ordered by sort_order and then lesson_unit) -->
+          <div class="vocab-lesson-units-list" id="vocab-lesson-units-list">
+            <!-- Dynamically populated from vocab_items by JS -->
+          </div>
+        </div>
       </div>
     </div>
 
