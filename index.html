@@ -925,25 +925,33 @@
 
       <!-- VIEW 5: UNIT LIST PAGE (/vocabulary/units) -->
       <div id="vocab-units-view" class="hidden vocab-page-view">
-        <div class="vocab-page-header">
-          <button class="back-link-btn vocab-back-btn" id="vocab-units-back-btn" data-route="/vocabulary">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <div class="vocab-minimal-topbar">
+          <button class="vocab-circle-back-btn" id="vocab-units-back-btn" data-route="/vocabulary" aria-label="ফিরুন">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
               <line x1="19" y1="12" x2="5" y2="12"></line>
               <polyline points="12 19 5 12 12 5"></polyline>
             </svg>
-            Vocabulary হোমে ফিরুন
           </button>
-          <div class="vocab-breadcrumb">
-            <span class="crumb-target">Vocabulary</span>
-            <span class="crumb-sep">›</span>
-            <span class="crumb-sub">লেসন ইউনিট তালিকা</span>
+          <div class="vocab-minimal-title-wrap">
+            <h1 class="vocab-minimal-title">Vocabulary (খ-ইউনিট)</h1>
+            <span class="vocab-minimal-sub" id="vocab-units-summary-sub">ইংরেজি • ৩টি ইউনিট • ৬টি প্রশ্ন</span>
           </div>
-          <h1 class="vocab-page-title">সকল লেসন ইউনিট</h1>
-          <p class="vocab-page-subtitle">নিচের যেকোনো ইউনিটে ট্যাপ করে শব্দ দেখা, ফ্ল্যাশকার্ড ও কুইজ মোড নির্বাচন করুন:</p>
         </div>
 
-        <!-- Compact Unit Cards Container -->
-        <div class="vocab-compact-units-grid" id="vocab-compact-units-list">
+        <!-- Flashcard Quick Access Card right at the top (Minimal dashed style) -->
+        <div class="vocab-top-flashcard-banner" id="vocab-units-flashcard-btn">
+          <div class="vtf-left">
+            <div class="vtf-icon-box">🗂️</div>
+            <div class="vtf-text">
+              <strong>ফ্ল্যাশকার্ড প্র্যাকটিস</strong>
+              <span>সব ইউনিটের শব্দ একসাথে ফ্ল্যাশকার্ডে পড়ুন</span>
+            </div>
+          </div>
+          <span class="vtf-arrow">›</span>
+        </div>
+
+        <!-- Minimal Unit Cards Container -->
+        <div class="vocab-minimal-units-list" id="vocab-compact-units-list">
           <!-- Dynamically populated from vocab_items ordered by sort_order and lesson_unit -->
         </div>
       </div>
@@ -999,53 +1007,50 @@
 
       <!-- VIEW 7: UNIT PRACTICE PAGE (/vocabulary/units/:unitId/practice) -->
       <div id="vocab-practice-view" class="hidden vocab-page-view">
-        <div class="vocab-page-header vocab-practice-header">
-          <!-- Top bar with NO hide-answers icon button (Removed per requirement) -->
-          <div class="vocab-practice-top-bar">
-            <button class="back-link-btn vocab-back-btn" id="vocab-practice-back-btn">
-              <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+        <div class="vocab-practice-minimal-header">
+          <!-- Minimal Top Bar: Back arrow + Unit Title + Theme toggle -->
+          <div class="vocab-minimal-topbar">
+            <button class="vocab-circle-back-btn" id="vocab-practice-back-btn" aria-label="ফিরুন">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
                 <line x1="19" y1="12" x2="5" y2="12"></line>
                 <polyline points="12 19 5 12 12 5"></polyline>
               </svg>
-              ইউনিট পেজে ফিরুন
             </button>
-          </div>
-
-          <div class="vocab-breadcrumb">
-            <span class="crumb-target">Vocabulary</span>
-            <span class="crumb-sep">›</span>
-            <span class="crumb-unit">লেসন ইউনিট</span>
-            <span class="crumb-sep">›</span>
-            <span class="crumb-unit" id="vocab-practice-breadcrumb-unit">Unit 1</span>
-            <span class="crumb-sep">›</span>
-            <span class="crumb-sub">প্র্যাকটিস</span>
-          </div>
-
-          <div class="vocab-unit-title-row">
-            <h1 class="vocab-page-title" id="vocab-practice-header-title">Unit 1 প্র্যাকটিস</h1>
-            <span class="vocab-count-badge" id="vocab-practice-questions-count">৩টি প্রশ্ন</span>
-          </div>
-
-          <!-- Progress Bar (Untouched / Preserved) -->
-          <div class="vocab-practice-progress-box">
-            <div class="vpp-header">
-              <span class="vpp-label">অনুশীলন অগ্রগতি</span>
-              <span class="vpp-text" id="vocab-practice-progress-text">০/৩ সম্পন্ন (০%)</span>
-            </div>
-            <div class="vpp-track">
-              <div class="vpp-fill" id="vocab-practice-progress-fill" style="width: 0%;"></div>
+            <h1 class="vocab-minimal-title" id="vocab-practice-header-title">Unit 1</h1>
+            <div class="vocab-topbar-right-actions">
+              <span class="vocab-count-pill" id="vocab-practice-progress-text">০/৩</span>
             </div>
           </div>
 
-          <!-- Filter Row with Toggle Chip as the FIRST chip -->
-          <div class="vocab-filter-row" id="vocab-practice-filters">
-            <!-- 1. The Toggle Chip (Placed as the FIRST chip, styled same way as other filter chips) -->
+          <!-- Primary Minimal Action Pills Row (Screenshot style: Toggle, Filter, Mark All Read) -->
+          <div class="vocab-practice-pills-row">
+            <!-- 1. Toggle Answers Chip (First Chip) -->
             <button type="button" class="vocab-filter-chip vocab-toggle-answer-chip" id="vocab-toggle-answers-btn">
               <span class="toggle-indicator-dot" id="vocab-toggle-indicator-dot"></span>
               <span class="toggle-chip-label" id="vocab-toggle-answers-label">উত্তর অফ</span>
             </button>
 
-            <!-- 2. Untouched / preserved filter chips -->
+            <!-- 2. Filter Drawer Toggle -->
+            <button type="button" class="vocab-filter-chip" id="vocab-filter-expand-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <line x1="4" y1="6" x2="20" y2="6"></line>
+                <line x1="7" y1="12" x2="17" y2="12"></line>
+                <line x1="10" y1="18" x2="14" y2="18"></line>
+              </svg>
+              <span>ফিল্টার</span>
+            </button>
+
+            <!-- 3. Mark All Read -->
+            <button type="button" class="vocab-filter-chip" id="vocab-mark-all-read-btn">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                <polyline points="20 6 9 17 4 12"></polyline>
+              </svg>
+              <span>সব পড়া হয়েছে</span>
+            </button>
+          </div>
+
+          <!-- Expandable Sub-filter Chips Row -->
+          <div class="vocab-filter-row hidden" id="vocab-practice-filters">
             <button type="button" class="vocab-filter-chip active" data-filter="all">সব</button>
             <button type="button" class="vocab-filter-chip" data-filter="unread">পড়া হয়নি</button>
             <button type="button" class="vocab-filter-chip" data-filter="read">পড়া হয়েছে</button>
