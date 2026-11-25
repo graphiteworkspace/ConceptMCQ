@@ -1,10 +1,10 @@
 // ConceptMCQ Service Worker for Offline Assessment & App Caching
-const CACHE_NAME = 'conceptmcq-v1';
+const CACHE_NAME = 'conceptmcq-v2.5-hero';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './css/style.css',
-  './js/app.js',
+  './css/style.css?v=20261125_hero',
+  './js/app.js?v=20261125_hero',
   './js/config.js',
   './manifest.json',
   'https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css',
