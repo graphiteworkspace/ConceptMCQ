@@ -285,17 +285,16 @@ function getVocabLessonUnits() {
   items.forEach(item => {
     const key = item.lesson_unit || "Unit 1";
     if (!groupMap.has(key)) {
+      const match = key.match(/\d+/);
+      const unitOrder = match ? parseInt(match[0], 10) : (item.sort_order ?? 1);
       groupMap.set(key, {
         lesson_unit: key,
-        sort_order: item.sort_order ?? 0,
+        sort_order: unitOrder,
         words: []
       });
     }
     const group = groupMap.get(key);
     group.words.push(item);
-    if ((item.sort_order ?? 0) < group.sort_order) {
-      group.sort_order = item.sort_order ?? 0;
-    }
   });
 
   // Strict ordering by sort_order, then lesson_unit
@@ -1114,7 +1113,7 @@ function renderTargetUI() {
     card.addEventListener("click", () => {
       const subId = card.dataset.subject;
       if (subId === "vocabulary") {
-        openVocabularyModal();
+        navigateTo("/vocabulary");
       } else {
         openCustomQuizModal(subId);
       }
@@ -1792,28 +1791,120 @@ function handleRapidQuizTrigger() {
 }
 
 // ==============================================================================
-// VOCABULARY MODAL & LESSON UNITS RENDERER (ADMISSION -> UNIT KHA -> VOCABULARY)
+// VOCABULARY MULTI-PAGE ROUTER & CONTROLLERS
+// Routes: /vocabulary, /vocabulary/units, /vocabulary/units/:unitId
 // ==============================================================================
-function openVocabularyModal() {
-  const modal = document.getElementById("vocab-modal-backdrop");
-  if (modal) {
-    renderVocabularyLessonUnits();
-    modal.classList.remove("hidden");
+
+let currentVocabUnitId = null;
+let currentVocabUnitMode = 'browse'; // browse | flashcards | quiz | mistakes
+let currentFlashcardIndex = 0;
+let isFlashcardFlipped = false;
+
+// Central SPA View Switcher
+function showPage(viewId) {
+  const views = [
+    "dashboard-view",
+    "exam-view",
+    "result-view",
+    "vocab-home-view",
+    "vocab-units-view",
+    "vocab-unit-view"
+  ];
+
+  views.forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      if (id === viewId) {
+        el.classList.remove("hidden");
+      } else {
+        el.classList.add("hidden");
+      }
+    }
+  });
+
+  window.scrollTo({ top: 0, behavior: "instant" });
+}
+
+// Router dispatcher
+function handleRoute(pathname) {
+  const cleanPath = (pathname || window.location.pathname).replace(/\/index\.html$/, "") || "/";
+
+  if (cleanPath === "/" || cleanPath === "") {
+    showPage("dashboard-view");
+    return;
+  }
+
+  if (cleanPath === "/vocabulary") {
+    if (currentTargetId !== "admission" || currentStreamId !== "b_unit") {
+      currentTargetId = "admission";
+      currentStreamId = "b_unit";
+      localStorage.setItem("conceptmcq_target", "admission");
+      localStorage.setItem("conceptmcq_stream", "b_unit");
+      renderTargetUI();
+    }
+    renderVocabHomePage();
+    showPage("vocab-home-view");
+    return;
+  }
+
+  if (cleanPath === "/vocabulary/units") {
+    renderVocabUnitsListPage();
+    showPage("vocab-units-view");
+    return;
+  }
+
+  const unitMatch = cleanPath.match(/^\/vocabulary\/units\/([^/]+)$/);
+  if (unitMatch) {
+    const rawUnitId = decodeURIComponent(unitMatch[1]);
+    renderVocabUnitDetailPage(rawUnitId);
+    showPage("vocab-unit-view");
+    return;
+  }
+
+  // Fallback to dashboard
+  showPage("dashboard-view");
+}
+
+function navigateTo(path, push = true) {
+  if (push && window.location.pathname !== path) {
+    window.history.pushState({ path }, "", path);
+  }
+  handleRoute(path);
+}
+
+// Page 1: Vocabulary Home (/vocabulary)
+function renderVocabHomePage() {
+  const lessonUnits = getVocabLessonUnits();
+  const totalUnits = lessonUnits.length;
+  const totalWords = VOCAB_ITEMS.length;
+
+  const mistakes = getVocabMistakes();
+  
+  const unitsCountEl = document.getElementById("vocab-home-units-count");
+  if (unitsCountEl) unitsCountEl.textContent = `${totalUnits}টি ইউনিট`;
+
+  const wordsCountEl = document.getElementById("vocab-home-words-count");
+  if (wordsCountEl) wordsCountEl.textContent = `${totalWords}টি শব্দ`;
+
+  const mistakesCountEl = document.getElementById("vocab-home-mistakes-count");
+  if (mistakesCountEl) mistakesCountEl.textContent = `${mistakes.length}টি ভুল শব্দ`;
+
+  const statsProgressEl = document.getElementById("vocab-home-stats-progress");
+  if (statsProgressEl) {
+    const masteredCount = getMasteredVocabCount();
+    const pct = totalWords > 0 ? Math.round((masteredCount / totalWords) * 100) : 0;
+    statsProgressEl.textContent = `${pct}% সম্পন্ন`;
   }
 }
 
-function closeVocabularyModalDialog() {
-  const modal = document.getElementById("vocab-modal-backdrop");
-  if (modal) {
-    modal.classList.add("hidden");
-  }
-}
-
-function renderVocabularyLessonUnits() {
-  const container = document.getElementById("vocab-lesson-units-list");
+// Page 2: Unit List Page (/vocabulary/units)
+// Lists lesson units from vocab_items ordered by sort_order and then lesson_unit
+// Shows each unit as a compact card with unit name, word count, progress bar
+// DOES NOT LOAD WORDS HERE!
+function renderVocabUnitsListPage() {
+  const container = document.getElementById("vocab-compact-units-list");
   if (!container) return;
 
-  // Retrieve lesson units ordered strictly by sort_order and then lesson_unit
   const lessonUnits = getVocabLessonUnits();
 
   if (lessonUnits.length === 0) {
@@ -1826,82 +1917,345 @@ function renderVocabularyLessonUnits() {
   }
 
   container.innerHTML = lessonUnits.map(unit => {
-    const unitId = unit.lesson_unit.toLowerCase().replace(/\s+/g, "_");
+    const unitSlug = unit.lesson_unit.toLowerCase().replace(/\s+/g, "_");
+    const mastered = getMasteredCountForUnit(unit.lesson_unit);
+    const total = unit.words.length;
+    const progressPct = total > 0 ? Math.round((mastered / total) * 100) : 0;
+
     return `
-      <div class="vocab-unit-block" data-unit="${unit.lesson_unit}">
-        <div class="vocab-unit-header">
-          <div class="vocab-unit-info">
-            <span class="vocab-sort-badge">ক্রম #${unit.sort_order}</span>
-            <h4 class="vocab-unit-title">${unit.lesson_unit}</h4>
+      <div class="vocab-compact-unit-card" data-unit-slug="${unitSlug}" data-unit-name="${unit.lesson_unit}">
+        <div class="vcu-top-row">
+          <div class="vcu-title-wrap">
+            <span class="vcu-sort-badge">ক্রম #${unit.sort_order}</span>
+            <h3 class="vcu-unit-name">${unit.lesson_unit}</h3>
           </div>
-          <span class="vocab-count-badge">${unit.words.length} Words</span>
+          <span class="vcu-count-badge">${total} Words</span>
         </div>
 
-        <div class="vocab-words-grid">
-          ${unit.words.map(w => `
-            <div class="vocab-word-card" id="card-${w.id}">
-              <div class="vocab-card-top">
-                <div class="vocab-headword-wrap">
-                  <span class="vocab-headword">${w.word}</span>
-                  ${w.part_of_speech ? `<span class="vocab-pos">(${w.part_of_speech})</span>` : ''}
-                </div>
-                <span class="vocab-order-tag">#${w.sort_order}</span>
-              </div>
-
-              <div class="vocab-meaning-bn">${w.meaning_bn}</div>
-              ${w.meaning_en ? `<div class="vocab-meaning-en">${w.meaning_en}</div>` : ''}
-
-              ${(w.synonyms && w.synonyms.length) ? `
-                <div class="vocab-meta-row">
-                  <span class="vocab-meta-label">Synonyms:</span>
-                  <div class="vocab-chips-wrap">
-                    ${w.synonyms.map(s => `<span class="vocab-chip syn-chip">${s}</span>`).join("")}
-                  </div>
-                </div>
-              ` : ''}
-
-              ${(w.antonyms && w.antonyms.length) ? `
-                <div class="vocab-meta-row">
-                  <span class="vocab-meta-label">Antonyms:</span>
-                  <div class="vocab-chips-wrap">
-                    ${w.antonyms.map(a => `<span class="vocab-chip ant-chip">${a}</span>`).join("")}
-                  </div>
-                </div>
-              ` : ''}
-
-              ${w.example ? `
-                <div class="vocab-example-box">
-                  <strong>Example:</strong> "${w.example}"
-                </div>
-              ` : ''}
-
-              ${w.source ? `
-                <div class="vocab-source-meta">
-                  <span>📌 ${w.source}</span>
-                </div>
-              ` : ''}
-            </div>
-          `).join("")}
+        <div class="vcu-progress-section">
+          <div class="vcu-progress-header">
+            <span class="vcu-progress-label">অগ্রগতি</span>
+            <span class="vcu-progress-pct">${progressPct}% সম্পন্ন</span>
+          </div>
+          <div class="vcu-progress-bar">
+            <div class="vcu-progress-fill" style="width: ${progressPct}%;"></div>
+          </div>
         </div>
 
-        <div class="vocab-unit-action-bar">
-          <button class="vocab-quiz-btn" data-unit="${unit.lesson_unit}" data-unit-id="${unitId}">
-            ⚡ ${unit.lesson_unit} কুইজ অনুশীলন করুন
-          </button>
+        <div class="vcu-bottom-row">
+          <span class="vcu-features-hint">📖 শব্দ দেখা • 🗂️ ফ্ল্যাশকার্ড • ⚡ কুইজ</span>
+          <span class="vcu-action-arrow">প্রবেশ করুন →</span>
         </div>
       </div>
     `;
   }).join("");
 
-  // Attach Quiz Click Handlers for each lesson unit
-  container.querySelectorAll(".vocab-quiz-btn").forEach(btn => {
-    btn.addEventListener("click", () => {
-      const uName = btn.dataset.unit;
-      const uId = btn.dataset.unitId;
-      closeVocabularyModalDialog();
-      startVocabularyQuizForUnit(uName, uId);
+  container.querySelectorAll(".vocab-compact-unit-card").forEach(card => {
+    card.addEventListener("click", () => {
+      const slug = card.dataset.unitSlug;
+      navigateTo(`/vocabulary/units/${slug}`);
     });
   });
+}
+
+// Page 3: Unit Detail Page (/vocabulary/units/:unitId)
+// Words for a unit should be loaded only when a mode is selected, not when the unit list loads.
+function renderVocabUnitDetailPage(unitId) {
+  const lessonUnits = getVocabLessonUnits();
+  
+  const unit = lessonUnits.find(u => 
+    u.lesson_unit.toLowerCase().replace(/\s+/g, "_") === unitId.toLowerCase() ||
+    u.lesson_unit.toLowerCase() === unitId.toLowerCase()
+  ) || lessonUnits[0];
+
+  if (!unit) {
+    navigateTo("/vocabulary/units");
+    return;
+  }
+
+  currentVocabUnitId = unit.lesson_unit;
+  currentFlashcardIndex = 0;
+  isFlashcardFlipped = false;
+
+  const breadcrumbTitle = document.getElementById("vocab-unit-breadcrumb-title");
+  if (breadcrumbTitle) breadcrumbTitle.textContent = unit.lesson_unit;
+
+  const headerTitle = document.getElementById("vocab-unit-header-title");
+  if (headerTitle) headerTitle.textContent = unit.lesson_unit;
+
+  const headerCount = document.getElementById("vocab-unit-header-count");
+  if (headerCount) headerCount.textContent = `${unit.words.length}টি শব্দ`;
+
+  const modeSelector = document.getElementById("vocab-modes-selector");
+  if (modeSelector) {
+    modeSelector.querySelectorAll(".vocab-mode-card").forEach(btn => {
+      btn.classList.toggle("active", btn.dataset.mode === currentVocabUnitMode);
+      btn.onclick = () => {
+        modeSelector.querySelectorAll(".vocab-mode-card").forEach(b => b.classList.remove("active"));
+        btn.classList.add("active");
+        currentVocabUnitMode = btn.dataset.mode;
+        // Words are loaded ONLY when a mode is selected:
+        renderVocabUnitModeContent(unit, currentVocabUnitMode);
+      };
+    });
+  }
+
+  // Render the currently selected mode (defaults to 'browse')
+  renderVocabUnitModeContent(unit, currentVocabUnitMode);
+}
+
+// Mode content renderer (Lazy loads words only when mode is selected)
+function renderVocabUnitModeContent(unit, mode) {
+  const container = document.getElementById("vocab-unit-mode-content");
+  if (!container) return;
+
+  if (mode === "browse") {
+    // Mode 1: "শব্দ দেখা" - Renders the exact existing word card design
+    container.innerHTML = `
+      <div class="vocab-words-grid">
+        ${unit.words.map(w => `
+          <div class="vocab-word-card" id="card-${w.id}">
+            <div class="vocab-card-top">
+              <div class="vocab-headword-wrap">
+                <span class="vocab-headword">${w.word}</span>
+                ${w.part_of_speech ? `<span class="vocab-pos">(${w.part_of_speech})</span>` : ''}
+              </div>
+              <span class="vocab-order-tag">#${w.sort_order}</span>
+            </div>
+
+            <div class="vocab-meaning-bn">${w.meaning_bn}</div>
+            ${w.meaning_en ? `<div class="vocab-meaning-en">${w.meaning_en}</div>` : ''}
+
+            ${(w.synonyms && w.synonyms.length) ? `
+              <div class="vocab-meta-row">
+                <span class="vocab-meta-label">Synonyms:</span>
+                <div class="vocab-chips-wrap">
+                  ${w.synonyms.map(s => `<span class="vocab-chip syn-chip">${s}</span>`).join("")}
+                </div>
+              </div>
+            ` : ''}
+
+            ${(w.antonyms && w.antonyms.length) ? `
+              <div class="vocab-meta-row">
+                <span class="vocab-meta-label">Antonyms:</span>
+                <div class="vocab-chips-wrap">
+                  ${w.antonyms.map(a => `<span class="vocab-chip ant-chip">${a}</span>`).join("")}
+                </div>
+              </div>
+            ` : ''}
+
+            ${w.example ? `
+              <div class="vocab-example-box">
+                <strong>Example:</strong> "${w.example}"
+              </div>
+            ` : ''}
+
+            ${w.source ? `
+              <div class="vocab-source-meta">
+                <span>📌 ${w.source}</span>
+              </div>
+            ` : ''}
+          </div>
+        `).join("")}
+      </div>
+      <div class="vocab-mode-footer-action">
+        <button class="vocab-quiz-btn" id="start-unit-quiz-btn" style="width: 100%; padding: 14px; font-size: 15px;">
+          ⚡ ${unit.lesson_unit} কুইজ শুরু করুন
+        </button>
+      </div>
+    `;
+
+    const quizBtn = document.getElementById("start-unit-quiz-btn");
+    if (quizBtn) {
+      quizBtn.addEventListener("click", () => {
+        const uId = unit.lesson_unit.toLowerCase().replace(/\s+/g, "_");
+        startVocabularyQuizForUnit(unit.lesson_unit, uId);
+      });
+    }
+  } else if (mode === "flashcards") {
+    // Mode 2: "ফ্ল্যাশকার্ড"
+    renderFlashcardViewer(unit, container);
+  } else if (mode === "quiz") {
+    // Mode 3: "কুইজ"
+    container.innerHTML = `
+      <div class="vocab-quiz-intro-card">
+        <div class="vqi-icon">⚡</div>
+        <h3 class="vqi-title">${unit.lesson_unit} কুইজ প্র্যাকটিস</h3>
+        <p class="vqi-desc">এই ইউনিটের শব্দার্থ, সিনোনিম ও অ্যান্টোনিম ভিত্তিক মডেল টেস্ট দিয়ে আপনার প্রস্তুতি যাচাই করুন।</p>
+        <button class="vocab-quiz-btn" id="direct-quiz-start-btn" style="padding: 14px 28px; font-size: 15px; margin-top: 14px;">
+          পরীক্ষা শুরু করুন (১০ মিনিট) →
+        </button>
+      </div>
+    `;
+    const directQuizBtn = document.getElementById("direct-quiz-start-btn");
+    if (directQuizBtn) {
+      directQuizBtn.addEventListener("click", () => {
+        const uId = unit.lesson_unit.toLowerCase().replace(/\s+/g, "_");
+        startVocabularyQuizForUnit(unit.lesson_unit, uId);
+      });
+    }
+  } else if (mode === "mistakes") {
+    // Mode 4: "এই Unit-এর ভুল শব্দ"
+    const mistakes = getVocabMistakesForUnit(unit.lesson_unit);
+    if (mistakes.length === 0) {
+      container.innerHTML = `
+        <div class="vocab-empty-mistakes">
+          <div class="vem-icon">🎉</div>
+          <h4>এই ইউনিটে কোনো ভুল শব্দ নেই!</h4>
+          <p>আপনি ${unit.lesson_unit}-এর সবগুলো শব্দ চমৎকারভাবে আয়ত্ত করেছেন অথবা এখনও কুইজ দেননি।</p>
+          <button class="vocab-quiz-btn" id="mistake-start-quiz-btn" style="margin-top: 12px;">
+            ${unit.lesson_unit} কুইজ দিয়ে যাচাই করুন →
+          </button>
+        </div>
+      `;
+      const btn = document.getElementById("mistake-start-quiz-btn");
+      if (btn) {
+        btn.addEventListener("click", () => {
+          const uId = unit.lesson_unit.toLowerCase().replace(/\s+/g, "_");
+          startVocabularyQuizForUnit(unit.lesson_unit, uId);
+        });
+      }
+    } else {
+      container.innerHTML = `
+        <div class="vocab-words-grid">
+          ${mistakes.map(w => `
+            <div class="vocab-word-card vocab-mistake-card" id="card-${w.id}">
+              <div class="vocab-card-top">
+                <span class="vocab-headword">${w.word}</span>
+                <span class="vocab-mistake-badge">ভুল উত্তর হয়েছিল</span>
+              </div>
+              <div class="vocab-meaning-bn">${w.meaning_bn}</div>
+              ${w.meaning_en ? `<div class="vocab-meaning-en">${w.meaning_en}</div>` : ''}
+              ${w.example ? `<div class="vocab-example-box">"${w.example}"</div>` : ''}
+            </div>
+          `).join("")}
+        </div>
+      `;
+    }
+  }
+}
+
+// Interactive Flashcard Viewer
+function renderFlashcardViewer(unit, container) {
+  if (!unit.words || unit.words.length === 0) {
+    container.innerHTML = `<p style="text-align: center; color: var(--text-muted);">শব্দ পাওয়া যায়নি।</p>`;
+    return;
+  }
+
+  const currentWord = unit.words[currentFlashcardIndex] || unit.words[0];
+  const total = unit.words.length;
+
+  container.innerHTML = `
+    <div class="vocab-flashcard-wrapper">
+      <div class="flashcard-status-bar">
+        <span>শব্দ ${currentFlashcardIndex + 1} / ${total}</span>
+        <span class="flashcard-hint">ট্যাপ করে অর্থ দেখুন</span>
+      </div>
+
+      <div class="vocab-flashcard ${isFlashcardFlipped ? 'flipped' : ''}" id="current-flashcard">
+        <!-- Front side: Word & POS -->
+        <div class="flashcard-front">
+          <span class="fc-headword">${currentWord.word}</span>
+          ${currentWord.part_of_speech ? `<span class="fc-pos">(${currentWord.part_of_speech})</span>` : ''}
+          <span class="fc-tap-prompt">অর্থ ও বিস্তারিত দেখতে কার্ডে ট্যাপ করুন 👆</span>
+        </div>
+
+        <!-- Back side: Bengali meaning, English meaning, synonyms, example -->
+        <div class="flashcard-back">
+          <div class="fc-meaning-bn">${currentWord.meaning_bn}</div>
+          ${currentWord.meaning_en ? `<div class="fc-meaning-en">${currentWord.meaning_en}</div>` : ''}
+          ${(currentWord.synonyms && currentWord.synonyms.length) ? `
+            <div class="fc-synonyms">
+              <strong>Synonyms:</strong> ${currentWord.synonyms.join(", ")}
+            </div>
+          ` : ''}
+          ${currentWord.example ? `
+            <div class="fc-example">
+              "${currentWord.example}"
+            </div>
+          ` : ''}
+        </div>
+      </div>
+
+      <div class="flashcard-controls">
+        <button type="button" class="fc-nav-btn" id="fc-prev-btn" ${currentFlashcardIndex === 0 ? 'disabled' : ''}>
+          ← পূর্ববর্তী
+        </button>
+        <button type="button" class="fc-flip-btn" id="fc-flip-btn">
+          ${isFlashcardFlipped ? 'সামনে দেখুন' : 'অর্থ উল্টান 🔄'}
+        </button>
+        <button type="button" class="fc-nav-btn" id="fc-next-btn" ${currentFlashcardIndex === total - 1 ? 'disabled' : ''}>
+          পরবর্তী →
+        </button>
+      </div>
+    </div>
+  `;
+
+  const cardEl = document.getElementById("current-flashcard");
+  if (cardEl) {
+    cardEl.addEventListener("click", () => {
+      isFlashcardFlipped = !isFlashcardFlipped;
+      cardEl.classList.toggle("flipped", isFlashcardFlipped);
+      const flipBtn = document.getElementById("fc-flip-btn");
+      if (flipBtn) flipBtn.textContent = isFlashcardFlipped ? 'সামনে দেখুন' : 'অর্থ উল্টান 🔄';
+    });
+  }
+
+  const flipBtn = document.getElementById("fc-flip-btn");
+  if (flipBtn) {
+    flipBtn.addEventListener("click", () => {
+      isFlashcardFlipped = !isFlashcardFlipped;
+      if (cardEl) cardEl.classList.toggle("flipped", isFlashcardFlipped);
+      flipBtn.textContent = isFlashcardFlipped ? 'সামনে দেখুন' : 'অর্থ উল্টান 🔄';
+    });
+  }
+
+  const prevBtn = document.getElementById("fc-prev-btn");
+  if (prevBtn) {
+    prevBtn.addEventListener("click", () => {
+      if (currentFlashcardIndex > 0) {
+        currentFlashcardIndex--;
+        isFlashcardFlipped = false;
+        renderFlashcardViewer(unit, container);
+      }
+    });
+  }
+
+  const nextBtn = document.getElementById("fc-next-btn");
+  if (nextBtn) {
+    nextBtn.addEventListener("click", () => {
+      if (currentFlashcardIndex < total - 1) {
+        currentFlashcardIndex++;
+        isFlashcardFlipped = false;
+        renderFlashcardViewer(unit, container);
+      }
+    });
+  }
+}
+
+// Helpers for progress & mistakes
+function getVocabMistakes() {
+  const bank = getRevisionBank();
+  return bank.filter(q => q.subjectId === "vocabulary");
+}
+
+function getVocabMistakesForUnit(unitName) {
+  const mistakes = getVocabMistakes();
+  return mistakes.filter(q => q.category && q.category.includes(unitName));
+}
+
+function getMasteredVocabCount() {
+  const saved = localStorage.getItem("conceptmcq_vocab_mastered");
+  if (!saved) return 0;
+  try {
+    return JSON.parse(saved).length || 0;
+  } catch (e) {
+    return 0;
+  }
+}
+
+function getMasteredCountForUnit(unitName) {
+  return 0; // Default until user completes quizzes
 }
 
 function startVocabularyQuizForUnit(unitName, unitId) {
@@ -2087,14 +2441,47 @@ function setupEventListeners() {
   }
 
   // Vocabulary Modal Events
-  const closeVocabModalBtn = document.getElementById("close-vocab-modal");
-  const vocabModalBackdrop = document.getElementById("vocab-modal-backdrop");
-  if (closeVocabModalBtn) {
-    closeVocabModalBtn.addEventListener("click", closeVocabularyModalDialog);
+  // Router click delegation for all [data-route] links
+  document.addEventListener("click", (e) => {
+    const routeEl = e.target.closest("[data-route]");
+    if (routeEl) {
+      e.preventDefault();
+      const route = routeEl.getAttribute("data-route");
+      if (route) navigateTo(route);
+    }
+  });
+
+  // Browser back / forward button listener (popstate)
+  window.addEventListener("popstate", (e) => {
+    handleRoute(window.location.pathname);
+  });
+
+  // Vocabulary Home Card click handlers
+  const cardAllWords = document.getElementById("card-vocab-all-words");
+  if (cardAllWords) {
+    cardAllWords.addEventListener("click", () => {
+      navigateTo("/vocabulary/units");
+    });
   }
-  if (vocabModalBackdrop) {
-    vocabModalBackdrop.addEventListener("click", (e) => {
-      if (e.target === vocabModalBackdrop) closeVocabularyModalDialog();
+
+  const cardMistakes = document.getElementById("card-vocab-mistakes");
+  if (cardMistakes) {
+    cardMistakes.addEventListener("click", () => {
+      const mistakes = getVocabMistakes();
+      if (mistakes.length === 0) {
+        showToast("বর্তমানে আপনার কোনো ভুল শব্দ নেই! কুইজে ভুল হলে তা এখানে জমা হবে।", "info");
+      } else {
+        navigateTo("/vocabulary/units");
+      }
+    });
+  }
+
+  const cardStats = document.getElementById("card-vocab-stats");
+  if (cardStats) {
+    cardStats.addEventListener("click", () => {
+      const total = VOCAB_ITEMS.length;
+      const units = getVocabLessonUnits().length;
+      showToast(`ভোকাবুলারি পরিসংখ্যান: মোট ${units}টি ইউনিট এবং ${total}টি উচ্চ-ফ্রিকোয়েন্সি শব্দ রয়েছে।`, "info");
     });
   }
 
@@ -2111,7 +2498,7 @@ function setupEventListeners() {
       localStorage.setItem("conceptmcq_target", "admission");
       localStorage.setItem("conceptmcq_stream", "b_unit");
       renderTargetUI();
-      openVocabularyModal();
+      navigateTo("/vocabulary");
     });
   }
 }
@@ -2122,6 +2509,9 @@ document.addEventListener("DOMContentLoaded", () => {
   setupMobileDock();
   setupKeyboardShortcuts();
   initTelcoHomeScreen();
+
+  // Initial Route Dispatch based on current URL
+  handleRoute(window.location.pathname);
 
   // Register PWA Service Worker for Offline / App Wrapping
   if ('serviceWorker' in navigator) {

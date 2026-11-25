@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>ConceptMCQ - কনসেপ্ট ক্লিয়ার, পরীক্ষা জয়</title>
+  <base href="/">
   
   <!-- PWA & Mobile Web App Meta Tags -->
   <meta name="mobile-web-app-capable" content="yes">
@@ -846,6 +847,156 @@
         </div>
       </div>
 
+      <!-- VIEW 4: VOCABULARY HOME PAGE (/vocabulary) -->
+      <div id="vocab-home-view" class="hidden vocab-page-view">
+        <div class="vocab-page-header">
+          <button class="back-link-btn vocab-back-btn" id="vocab-home-back-btn" data-route="/">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            ড্যাশবোর্ডে ফিরুন
+          </button>
+          <div class="vocab-breadcrumb">
+            <span class="crumb-target">বিশ্ববিদ্যালয় ভর্তি (UNI)</span>
+            <span class="crumb-sep">›</span>
+            <span class="crumb-unit">খ-ইউনিট (মানবিক)</span>
+            <span class="crumb-sep">›</span>
+            <span class="crumb-sub">Vocabulary</span>
+          </div>
+          <h1 class="vocab-page-title">Vocabulary শব্দভাণ্ডার</h1>
+          <p class="vocab-page-subtitle">ঢাকা বিশ্ববিদ্যালয় ও গুচ্ছ (GST) খ-ইউনিট ভর্তি পরীক্ষার পূর্ণাঙ্গ প্রস্তুতি</p>
+        </div>
+
+        <div class="vocab-home-grid">
+          <!-- Card 1: Unit অনুযায়ী পড়া -->
+          <div class="vocab-home-card" id="card-vocab-units" data-route="/vocabulary/units">
+            <div class="vh-card-icon-wrap bg-blue-soft">📖</div>
+            <div class="vh-card-content">
+              <div class="vh-card-header-row">
+                <h3 class="vh-card-title">Unit অনুযায়ী পড়া</h3>
+                <span class="vh-card-badge" id="vocab-home-units-count">৩টি ইউনিট</span>
+              </div>
+              <p class="vh-card-desc">লেসন ও ইউনিটভিত্তিক ক্রমানুসারে ভোকাবুলারি আয়ত্ত করুন</p>
+            </div>
+            <span class="vh-card-arrow">→</span>
+          </div>
+
+          <!-- Card 2: সব শব্দ -->
+          <div class="vocab-home-card" id="card-vocab-all-words">
+            <div class="vh-card-icon-wrap bg-purple-soft">🔤</div>
+            <div class="vh-card-content">
+              <div class="vh-card-header-row">
+                <h3 class="vh-card-title">সব শব্দ</h3>
+                <span class="vh-card-badge" id="vocab-home-words-count">৬টি শব্দ</span>
+              </div>
+              <p class="vh-card-desc">সকল ইউনিটের গুরুত্বপূর্ণ শব্দভাণ্ডারের বর্ণানুক্রমিক তালিকা</p>
+            </div>
+            <span class="vh-card-arrow">→</span>
+          </div>
+
+          <!-- Card 3: ভুল শব্দ রিভিউ -->
+          <div class="vocab-home-card" id="card-vocab-mistakes">
+            <div class="vh-card-icon-wrap bg-rose-soft">🔄</div>
+            <div class="vh-card-content">
+              <div class="vh-card-header-row">
+                <h3 class="vh-card-title">ভুল শব্দ রিভিউ</h3>
+                <span class="vh-card-badge" id="vocab-home-mistakes-count">০টি ভুল শব্দ</span>
+              </div>
+              <p class="vh-card-desc">কুইজে পূর্বে ভুল করা শব্দের স্পেসড রিভিশন প্র্যাকটিস</p>
+            </div>
+            <span class="vh-card-arrow">→</span>
+          </div>
+
+          <!-- Card 4: পরিসংখ্যান -->
+          <div class="vocab-home-card" id="card-vocab-stats">
+            <div class="vh-card-icon-wrap bg-amber-soft">📊</div>
+            <div class="vh-card-content">
+              <div class="vh-card-header-row">
+                <h3 class="vh-card-title">পরিসংখ্যান</h3>
+                <span class="vh-card-badge" id="vocab-home-stats-progress">০% সম্পন্ন</span>
+              </div>
+              <p class="vh-card-desc">ভোকাবুলারি পারদর্শিতা, শেখা শব্দের হার ও স্কোর ট্র্যাকিং</p>
+            </div>
+            <span class="vh-card-arrow">→</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- VIEW 5: UNIT LIST PAGE (/vocabulary/units) -->
+      <div id="vocab-units-view" class="hidden vocab-page-view">
+        <div class="vocab-page-header">
+          <button class="back-link-btn vocab-back-btn" id="vocab-units-back-btn" data-route="/vocabulary">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            Vocabulary হোমে ফিরুন
+          </button>
+          <div class="vocab-breadcrumb">
+            <span class="crumb-target">Vocabulary</span>
+            <span class="crumb-sep">›</span>
+            <span class="crumb-sub">লেসন ইউনিট তালিকা</span>
+          </div>
+          <h1 class="vocab-page-title">সকল লেসন ইউনিট</h1>
+          <p class="vocab-page-subtitle">নিচের যেকোনো ইউনিটে ট্যাপ করে শব্দ দেখা, ফ্ল্যাশকার্ড ও কুইজ মোড নির্বাচন করুন:</p>
+        </div>
+
+        <!-- Compact Unit Cards Container -->
+        <div class="vocab-compact-units-grid" id="vocab-compact-units-list">
+          <!-- Dynamically populated from vocab_items ordered by sort_order and lesson_unit -->
+        </div>
+      </div>
+
+      <!-- VIEW 6: UNIT DETAIL PAGE (/vocabulary/units/:unitId) -->
+      <div id="vocab-unit-view" class="hidden vocab-page-view">
+        <div class="vocab-page-header">
+          <button class="back-link-btn vocab-back-btn" id="vocab-unit-back-btn" data-route="/vocabulary/units">
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+              <line x1="19" y1="12" x2="5" y2="12"></line>
+              <polyline points="12 19 5 12 12 5"></polyline>
+            </svg>
+            ইউনিট তালিকায় ফিরুন
+          </button>
+          <div class="vocab-breadcrumb">
+            <span class="crumb-target">Vocabulary</span>
+            <span class="crumb-sep">›</span>
+            <span class="crumb-unit">লেসন ইউনিট</span>
+            <span class="crumb-sep">›</span>
+            <span class="crumb-sub" id="vocab-unit-breadcrumb-title">Unit 1</span>
+          </div>
+          <div class="vocab-unit-title-row">
+            <h1 class="vocab-page-title" id="vocab-unit-header-title">Unit 1</h1>
+            <span class="vocab-count-badge" id="vocab-unit-header-count">৩টি শব্দ</span>
+          </div>
+        </div>
+
+        <!-- 4 Mode Selection Options with large tap targets -->
+        <div class="vocab-modes-grid" id="vocab-modes-selector">
+          <button type="button" class="vocab-mode-card active" data-mode="browse">
+            <span class="mode-icon">📖</span>
+            <span class="mode-label">শব্দ দেখা</span>
+          </button>
+          <button type="button" class="vocab-mode-card" data-mode="flashcards">
+            <span class="mode-icon">🗂️</span>
+            <span class="mode-label">ফ্ল্যাশকার্ড</span>
+          </button>
+          <button type="button" class="vocab-mode-card" data-mode="quiz">
+            <span class="mode-icon">⚡</span>
+            <span class="mode-label">কুইজ</span>
+          </button>
+          <button type="button" class="vocab-mode-card" data-mode="mistakes">
+            <span class="mode-icon">❌</span>
+            <span class="mode-label">এই Unit-এর ভুল শব্দ</span>
+          </button>
+        </div>
+
+        <!-- Dynamic Content loaded ONLY when a mode is selected -->
+        <div class="vocab-mode-content-area" id="vocab-unit-mode-content">
+          <!-- Populated by JS when mode is selected -->
+        </div>
+      </div>
+
     </main>
 
     <!-- Floating Study Buddy Mascot Helper (Positioned above dock) -->
@@ -1264,41 +1415,6 @@
             </button>
           </div>
         </form>
-      </div>
-    </div>
-
-    <!-- Vocabulary Lesson Units Modal (Admission -> Unit "Kha" -> Vocabulary) -->
-    <div class="modal-backdrop hidden" id="vocab-modal-backdrop">
-      <div class="modal-card vocab-modal-sheet">
-        <div class="all-features-header">
-          <button class="modal-close-btn sheet-back-btn" id="close-vocab-modal" title="বন্ধ করুন">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="18" y1="6" x2="6" y2="18"></line>
-              <line x1="6" y1="6" x2="18" y2="18"></line>
-            </svg>
-          </button>
-          <div>
-            <div class="vocab-breadcrumb">
-              <span class="crumb-target">বিশ্ববিদ্যালয় ভর্তি (UNI)</span>
-              <span class="crumb-sep">›</span>
-              <span class="crumb-unit">খ-ইউনিট (মানবিক)</span>
-              <span class="crumb-sep">›</span>
-              <span class="crumb-sub">Vocabulary</span>
-            </div>
-            <h3 class="all-features-title">Vocabulary লেসন ইউনিটসমূহ</h3>
-          </div>
-        </div>
-
-        <div class="vocab-modal-body">
-          <div class="vocab-intro-box">
-            <p>ঢাকা বিশ্ববিদ্যালয় ও গুচ্ছ (GST) <strong>খ-ইউনিটের</strong> জন্য <code>vocab_items</code> থেকে সাজানো লেসন ইউনিটসমূহ। ক্রম (sort_order) ও লেসন অনুযায়ী নিচে তালিকাভুক্ত করা হয়েছে:</p>
-          </div>
-
-          <!-- Lesson Units List (ordered by sort_order and then lesson_unit) -->
-          <div class="vocab-lesson-units-list" id="vocab-lesson-units-list">
-            <!-- Dynamically populated from vocab_items by JS -->
-          </div>
-        </div>
       </div>
     </div>
 
