@@ -5482,3 +5482,405 @@ body.dark-mode .vpq-option.wrong-option {
 
 
 
+
+/* ==============================================================================
+ * VOCABULARY COMPACT & RESPONSIVE UNIT DETAIL SCREEN (unit-compact.html + Desktop)
+ * Mobile (<768px): Compact single-col, tight padding, fits 2-3 per screen
+ * Desktop (>=768px): Centered 900px, 2-col question grid, 2-col options inside
+ * ============================================================================== */
+:root {
+  --vuc-bg: #f3f6fb;
+  --vuc-card: #ffffff;
+  --vuc-text: #1d2433;
+  --vuc-muted: #6b7385;
+  --vuc-line: #e2e7f0;
+  --vuc-accent: #ff5a3c;
+  --vuc-ok: #16a34a;
+  --vuc-ok-bg: #e7f8ee;
+  --vuc-bad: #dc2626;
+  --vuc-bad-bg: #fdeaea;
+}
+
+.vocab-unit-compact-screen {
+  background: var(--vuc-bg) !important;
+  color: var(--vuc-text) !important;
+  font-family: "Noto Sans Bengali", "Hind Siliguri", system-ui, sans-serif !important;
+  font-size: 15px;
+  line-height: 1.45;
+  min-height: 100vh;
+  padding: 10px 10px 40px !important;
+  box-sizing: border-box;
+}
+
+.vuc-container {
+  width: 100%;
+  margin: 0 auto;
+}
+
+.vuc-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: var(--vuc-card);
+  border: 1px solid var(--vuc-line);
+  border-radius: 8px;
+  padding: 6px 12px;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--vuc-text);
+  cursor: pointer;
+  font-family: inherit;
+  transition: all 0.2s ease;
+  user-select: none;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.02);
+}
+.vuc-back:hover {
+  background: #f8fafc;
+  border-color: #cbd5e1;
+}
+
+.vuc-crumb {
+  margin: 10px 2px 6px;
+  font-size: 13px;
+  color: var(--vuc-muted);
+}
+.vuc-crumb .red {
+  color: var(--vuc-accent);
+  font-weight: 600;
+}
+
+.vuc-title-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+.vuc-title-row h1 {
+  font-size: 19px;
+  font-weight: 700;
+  color: var(--vuc-text);
+  margin: 0;
+}
+.vuc-badge {
+  background: #fff3d6;
+  color: #a86b00;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 3px 10px;
+  border-radius: 999px;
+  display: inline-block;
+}
+
+.vuc-modes {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 8px;
+}
+.vuc-mode {
+  flex: 1;
+  background: var(--vuc-card);
+  border: 1px solid var(--vuc-line);
+  border-radius: 10px;
+  padding: 6px 2px;
+  font-size: 12px;
+  text-align: center;
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  white-space: nowrap;
+  color: var(--vuc-text);
+  font-family: inherit;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  user-select: none;
+}
+.vuc-mode .ic {
+  font-size: 16px;
+  line-height: 1;
+}
+.vuc-mode.active {
+  background: linear-gradient(90deg, #ff7a2f, #ff4d6d);
+  color: #ffffff;
+  border-color: transparent;
+  font-weight: 600;
+  box-shadow: 0 2px 8px rgba(255, 77, 109, 0.25);
+}
+
+.vuc-toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid var(--vuc-line);
+  background: var(--vuc-card);
+  border-radius: 999px;
+  padding: 5px 12px;
+  font-size: 14px;
+  color: var(--vuc-muted);
+  margin: 4px 0 10px;
+  cursor: pointer;
+  font-family: inherit;
+  user-select: none;
+  transition: all 0.2s ease;
+}
+.vuc-toggle .dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  background: #9aa3b5;
+  transition: background 0.2s ease;
+}
+.vuc-toggle.on {
+  color: var(--vuc-ok);
+  border-color: rgba(22, 163, 74, 0.3);
+  background: var(--vuc-ok-bg);
+}
+.vuc-toggle.on .dot {
+  background: var(--vuc-ok);
+}
+
+.vuc-list {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.vuc-q {
+  background: var(--vuc-card);
+  border: 1px solid var(--vuc-line);
+  border-radius: 10px;
+  padding: 10px 10px 8px;
+  margin-bottom: 0;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.02);
+  transition: box-shadow 0.2s ease;
+}
+.vuc-q-num {
+  font-size: 13px;
+  color: var(--vuc-muted);
+  margin-bottom: 2px;
+  font-weight: 500;
+}
+.vuc-q-text {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--vuc-text);
+  margin-bottom: 8px;
+  line-height: 1.45;
+}
+
+.vuc-opts {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.vuc-opt {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  border: 1px solid var(--vuc-line);
+  border-radius: 8px;
+  padding: 7px 9px;
+  font-size: 14.5px;
+  background: #fafbfd;
+  cursor: pointer;
+  text-align: left;
+  color: var(--vuc-text);
+  font-family: inherit;
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+  user-select: none;
+  box-sizing: border-box;
+}
+.vuc-opt:not(:disabled):active {
+  transform: scale(0.98);
+}
+.vuc-opt:disabled {
+  cursor: default;
+}
+.vuc-opt .k {
+  flex: 0 0 auto;
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  background: #e8ecf3;
+  font-size: 12px;
+  font-weight: 600;
+  display: grid;
+  place-items: center;
+  color: var(--vuc-muted);
+  transition: all 0.2s ease;
+}
+.vuc-opt .opt-text {
+  flex: 1;
+  text-align: left;
+}
+.vuc-opt .mark {
+  margin-left: auto;
+  font-weight: 700;
+  font-size: 15px;
+  min-width: 16px;
+  text-align: right;
+}
+
+.vuc-opt.right {
+  border-color: var(--vuc-ok) !important;
+  background: var(--vuc-ok-bg) !important;
+  color: #0f6b34 !important;
+  font-weight: 600 !important;
+}
+.vuc-opt.right .k {
+  background: var(--vuc-ok) !important;
+  color: #ffffff !important;
+}
+.vuc-opt.right .mark {
+  color: var(--vuc-ok) !important;
+}
+
+.vuc-opt.wrong {
+  border-color: var(--vuc-bad) !important;
+  background: var(--vuc-bad-bg) !important;
+  color: #9b1c1c !important;
+  font-weight: 600 !important;
+  animation: vucShake 0.35s ease;
+}
+.vuc-opt.wrong .k {
+  background: var(--vuc-bad) !important;
+  color: #ffffff !important;
+}
+.vuc-opt.wrong .mark {
+  color: var(--vuc-bad) !important;
+}
+
+.vuc-opt.right.pop {
+  animation: vucPop 0.35s ease;
+}
+
+@keyframes vucShake {
+  0%, 100% { transform: translateX(0); }
+  25% { transform: translateX(-4px); }
+  75% { transform: translateX(4px); }
+}
+
+@keyframes vucPop {
+  0% { transform: scale(0.97); }
+  60% { transform: scale(1.02); }
+  100% { transform: scale(1); }
+}
+
+.vuc-ans-note {
+  font-size: 13px;
+  color: var(--vuc-muted);
+  margin-top: 6px;
+  min-height: 18px;
+  font-weight: 500;
+}
+.vuc-ans-note.ok {
+  color: var(--vuc-ok);
+  font-weight: 600;
+}
+.vuc-ans-note.bad {
+  color: var(--vuc-bad);
+  font-weight: 600;
+}
+
+/* ==============================================================================
+ * DESKTOP RESPONSIVE LAYOUT (Widescreens >= 768px)
+ * Centered 900px area, 2-col question grid, 2-col options grid
+ * ============================================================================== */
+@media (min-width: 768px) {
+  .vocab-unit-compact-screen {
+    padding: 24px 20px 60px !important;
+  }
+  .vuc-container {
+    max-width: 900px;
+    margin: 0 auto;
+  }
+  .vuc-header-area {
+    margin-bottom: 16px;
+  }
+  .vuc-back {
+    padding: 8px 14px;
+    font-size: 14px;
+    border-radius: 10px;
+  }
+  .vuc-crumb {
+    font-size: 14px;
+    margin: 12px 2px 8px;
+  }
+  .vuc-title-row {
+    margin-bottom: 14px;
+  }
+  .vuc-title-row h1 {
+    font-size: 24px;
+    font-weight: 700;
+  }
+  .vuc-badge {
+    font-size: 14px;
+    padding: 4px 14px;
+  }
+  .vuc-modes {
+    gap: 12px;
+    margin-bottom: 14px;
+  }
+  .vuc-mode {
+    flex-direction: row;
+    justify-content: center;
+    gap: 8px;
+    padding: 10px 16px;
+    font-size: 14px;
+    border-radius: 12px;
+  }
+  .vuc-mode .ic {
+    font-size: 18px;
+  }
+  .vuc-toggle {
+    padding: 7px 16px;
+    font-size: 14.5px;
+    margin-bottom: 16px;
+  }
+  .vuc-list {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 16px;
+  }
+  .vuc-q {
+    padding: 16px;
+    border-radius: 12px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  .vuc-q:hover {
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.04);
+  }
+  .vuc-q-num {
+    font-size: 13.5px;
+    margin-bottom: 4px;
+  }
+  .vuc-q-text {
+    font-size: 16px;
+    line-height: 1.5;
+    margin-bottom: 12px;
+  }
+  .vuc-opts {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+  }
+  .vuc-opt {
+    font-size: 15.5px;
+    padding: 9px 12px;
+    border-radius: 9px;
+  }
+  .vuc-opt .k {
+    width: 24px;
+    height: 24px;
+    font-size: 13px;
+  }
+  .vuc-ans-note {
+    font-size: 13.5px;
+    margin-top: 8px;
+  }
+}

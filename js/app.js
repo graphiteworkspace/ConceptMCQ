@@ -1991,6 +1991,13 @@ function renderVocabUnitsListPage() {
   });
 }
 
+// In-Memory state for Vocabulary Unit Detail Screen (No localStorage used per requirement)
+const vocabUnitMemory = {
+  unitId: null,
+  showAnswers: false,
+  answers: new Map(), // qId -> { selectedIndex, isCorrect }
+};
+
 // Page 3: Unit Detail Page (/vocabulary/units/:unitId)
 // Words for a unit should be loaded only when a mode is selected, not when the unit list loads.
 function renderVocabUnitDetailPage(unitId) {
@@ -2010,6 +2017,18 @@ function renderVocabUnitDetailPage(unitId) {
   currentFlashcardIndex = 0;
   isFlashcardFlipped = false;
 
+  // Reset or initialize in-memory state when switching units
+  if (vocabUnitMemory.unitId !== unit.lesson_unit) {
+    vocabUnitMemory.unitId = unit.lesson_unit;
+    vocabUnitMemory.showAnswers = false;
+    vocabUnitMemory.answers.clear();
+  }
+
+  const backBtn = document.getElementById("vocab-unit-back-btn");
+  if (backBtn) {
+    backBtn.onclick = () => navigateTo("/vocabulary/units");
+  }
+
   const breadcrumbTitle = document.getElementById("vocab-unit-breadcrumb-title");
   if (breadcrumbTitle) breadcrumbTitle.textContent = unit.lesson_unit;
 
@@ -2021,10 +2040,10 @@ function renderVocabUnitDetailPage(unitId) {
 
   const modeSelector = document.getElementById("vocab-modes-selector");
   if (modeSelector) {
-    modeSelector.querySelectorAll(".vocab-mode-card").forEach(btn => {
+    modeSelector.querySelectorAll(".vuc-mode, .vocab-mode-card").forEach(btn => {
       btn.classList.toggle("active", btn.dataset.mode === currentVocabUnitMode);
       btn.onclick = () => {
-        modeSelector.querySelectorAll(".vocab-mode-card").forEach(b => b.classList.remove("active"));
+        modeSelector.querySelectorAll(".vuc-mode, .vocab-mode-card").forEach(b => b.classList.remove("active"));
         btn.classList.add("active");
         currentVocabUnitMode = btn.dataset.mode;
         // Words are loaded ONLY when a mode is selected:
@@ -2043,101 +2062,124 @@ function renderVocabUnitModeContent(unit, mode) {
   if (!container) return;
 
   if (mode === "browse") {
-    // Mode 1: "শব্দ দেখা" - Bland options vertically, tapping an option reveals answer & full detailed explanation
+    // Mode 1: "শব্দ দেখা" - Compact & Responsive Question Cards with In-Memory State
     const questions = getUnitPracticeQuestions(unit);
-    const bnOptionLetters = ['ক', 'খ', 'গ', 'ঘ'];
-    const isAnswersHidden = getVocabAnswersHiddenState();
+    const labels = ['ক', 'খ', 'গ', 'ঘ'];
 
     container.innerHTML = `
-      <div class="vocab-practice-pills-row" style="margin-bottom: 14px;">
-        <button type="button" class="vocab-filter-chip vocab-toggle-answer-chip ${isAnswersHidden ? 'answers-off' : 'answers-on'}" id="browse-toggle-answers-btn">
-          <span class="toggle-indicator-dot ${isAnswersHidden ? 'off' : 'on'}"></span>
-          <span>${isAnswersHidden ? 'উত্তর অফ' : 'উত্তর অন'}</span>
-        </button>
+      <div class="vuc-toggle ${vocabUnitMemory.showAnswers ? 'on' : ''}" id="vuc-toggle">
+        <span class="dot"></span>
+        <span id="vuc-toggle-label">${vocabUnitMemory.showAnswers ? 'উত্তর অন' : 'উত্তর অফ'}</span>
       </div>
-      <div class="vocab-practice-questions-list" id="browse-questions-stream">
-        ${questions.map((q, idx) => {
-          const selectedIdx = vocabPracticeSelectedOptions.has(q.id) ? vocabPracticeSelectedOptions.get(q.id) : null;
-          const hasAnswered = selectedIdx !== null;
-          const showResult = !isAnswersHidden || hasAnswered;
-          const isWrong = hasAnswered && selectedIdx !== q.correctIndex;
-
-          return `
-            <div class="vocab-practice-q-card" data-qid="${q.id}">
-              <div class="vpq-top-row">
-                <div class="vpq-meta-left">
-                  <span class="vpq-q-title">Question ${toBnNum(idx + 1)}</span>
-                  ${isWrong ? '<span class="vpq-wrong-pill">ভুল</span>' : ''}
-                </div>
-              </div>
-              <div class="vpq-question-text">${q.question}</div>
-              <div class="vpq-options-grid">
-                ${q.options.map((opt, oIdx) => {
-                  let optStateClass = "";
-                  let statusSymbol = "";
-                  if (showResult) {
-                    if (oIdx === q.correctIndex) {
-                      optStateClass = "correct-option";
-                      statusSymbol = '<span class="vpq-opt-status correct">✓</span>';
-                    } else if (hasAnswered && oIdx === selectedIdx && oIdx !== q.correctIndex) {
-                      optStateClass = "wrong-option";
-                      statusSymbol = '<span class="vpq-opt-status wrong">✕</span>';
-                    }
-                  }
-                  return `
-                    <button type="button" class="vpq-option ${optStateClass}" data-qid="${q.id}" data-oidx="${oIdx}">
-                      <span class="vpq-opt-letter">${bnOptionLetters[oIdx] || String.fromCharCode(65 + oIdx)}</span>
-                      <span class="vpq-opt-text">${opt}</span>
-                      ${statusSymbol}
-                    </button>
-                  `;
-                }).join("")}
-              </div>
-              <div class="vpq-explanation-card ${showResult ? '' : 'hidden'}">
-                <div class="vpq-exp-header">
-                  <span class="vpq-exp-info-badge">i</span>
-                  <strong>ব্যাখ্যা</strong>
-                </div>
-                <div class="vpq-exp-body">${q.explanation}</div>
-              </div>
-            </div>
-          `;
-        }).join("")}
-      </div>
-      <div class="vocab-mode-footer-action">
-        <button class="vocab-quiz-btn" id="start-unit-quiz-btn" style="width: 100%; padding: 14px; font-size: 15px;">
-          ⚡ ${unit.lesson_unit} কুইজ শুরু করুন
-        </button>
-      </div>
+      <div class="vuc-list" id="vuc-list"></div>
     `;
 
-    const browseToggleBtn = document.getElementById("browse-toggle-answers-btn");
-    if (browseToggleBtn) {
-      browseToggleBtn.addEventListener("click", () => {
-        const nextHidden = !getVocabAnswersHiddenState();
-        setVocabAnswersHiddenState(nextHidden);
-        if (nextHidden) vocabPracticeSelectedOptions.clear();
-        renderVocabUnitModeContent(unit, "browse");
+    const toggle = container.querySelector("#vuc-toggle");
+    const list = container.querySelector("#vuc-list");
+
+    function renderQuestions() {
+      list.innerHTML = "";
+      questions.forEach((q, qi) => {
+        const card = document.createElement("div");
+        card.className = "vuc-q";
+        card.dataset.qid = q.id;
+
+        card.innerHTML = `
+          <div class="vuc-q-num">Question ${toBnNum(qi + 1)}</div>
+          <div class="vuc-q-text">${q.question || q.text}</div>
+          <div class="vuc-opts"></div>
+          <div class="vuc-ans-note"></div>
+        `;
+
+        const opts = card.querySelector(".vuc-opts");
+        const note = card.querySelector(".vuc-ans-note");
+
+        const existingAnswer = vocabUnitMemory.answers.get(q.id);
+        const hasAnswered = existingAnswer !== undefined;
+        const correctIndex = (q.correctIndex !== undefined) ? q.correctIndex : q.answer;
+
+        q.options.forEach((optText, oi) => {
+          const btn = document.createElement("button");
+          btn.type = "button";
+          btn.className = "vuc-opt";
+          btn.innerHTML = `
+            <span class="k">${labels[oi] || String.fromCharCode(65 + oi)}</span>
+            <span class="opt-text">${optText}</span>
+            <span class="mark"></span>
+          `;
+
+          // If already answered or showAnswers is on
+          if (hasAnswered) {
+            btn.disabled = true;
+            if (oi === correctIndex) {
+              btn.classList.add("right");
+              btn.querySelector(".mark").textContent = "✓";
+            } else if (oi === existingAnswer.selectedIndex && !existingAnswer.isCorrect) {
+              btn.classList.add("wrong");
+              btn.querySelector(".mark").textContent = "✗";
+            }
+          } else if (vocabUnitMemory.showAnswers) {
+            if (oi === correctIndex) {
+              btn.classList.add("right");
+              btn.querySelector(".mark").textContent = "✓";
+            }
+          }
+
+          btn.addEventListener("click", () => {
+            if (vocabUnitMemory.answers.has(q.id)) return;
+            const isCorrect = (oi === correctIndex);
+            vocabUnitMemory.answers.set(q.id, { selectedIndex: oi, isCorrect });
+
+            // Disable all options in this card
+            opts.querySelectorAll(".vuc-opt").forEach(b => b.disabled = true);
+
+            if (isCorrect) {
+              btn.classList.add("right", "pop");
+              btn.querySelector(".mark").textContent = "✓";
+              note.textContent = "সঠিক উত্তর!";
+              note.className = "vuc-ans-note ok";
+            } else {
+              btn.classList.add("wrong");
+              btn.querySelector(".mark").textContent = "✗";
+              const correctBtn = opts.children[correctIndex];
+              if (correctBtn) {
+                correctBtn.classList.add("right");
+                correctBtn.querySelector(".mark").textContent = "✓";
+              }
+              note.textContent = "ভুল — সঠিক উত্তর সবুজ দেখানো হয়েছে";
+              note.className = "vuc-ans-note bad";
+            }
+          });
+
+          opts.appendChild(btn);
+        });
+
+        // Show note if previously answered
+        if (hasAnswered) {
+          if (existingAnswer.isCorrect) {
+            note.textContent = "সঠিক উত্তর!";
+            note.className = "vuc-ans-note ok";
+          } else {
+            note.textContent = "ভুল — সঠিক উত্তর সবুজ দেখানো হয়েছে";
+            note.className = "vuc-ans-note bad";
+          }
+        }
+
+        list.appendChild(card);
       });
     }
 
-    container.querySelectorAll(".vpq-option").forEach(optBtn => {
-      optBtn.addEventListener("click", () => {
-        const qId = optBtn.dataset.qid;
-        const oIdx = parseInt(optBtn.dataset.oidx, 10);
-        vocabPracticeSelectedOptions.set(qId, oIdx);
-        markVocabQuestionRead(qId);
-        renderVocabUnitModeContent(unit, "browse");
-      });
-    });
-
-    const quizBtn = document.getElementById("start-unit-quiz-btn");
-    if (quizBtn) {
-      quizBtn.addEventListener("click", () => {
-        const uId = unit.lesson_unit.toLowerCase().replace(/\s+/g, "_");
-        startVocabularyQuizForUnit(unit.lesson_unit, uId);
+    if (toggle) {
+      toggle.addEventListener("click", () => {
+        vocabUnitMemory.showAnswers = !vocabUnitMemory.showAnswers;
+        toggle.classList.toggle("on", vocabUnitMemory.showAnswers);
+        const label = toggle.querySelector("#vuc-toggle-label");
+        if (label) label.textContent = vocabUnitMemory.showAnswers ? "উত্তর অন" : "উত্তর অফ";
+        renderQuestions();
       });
     }
+
+    renderQuestions();
   } else if (mode === "flashcards") {
     // Mode 2: "ফ্ল্যাশকার্ড"
     renderFlashcardViewer(unit, container);

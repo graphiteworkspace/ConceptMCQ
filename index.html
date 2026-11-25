@@ -957,51 +957,31 @@
       </div>
 
       <!-- VIEW 6: UNIT DETAIL PAGE (/vocabulary/units/:unitId) -->
-      <div id="vocab-unit-view" class="hidden vocab-page-view">
-        <div class="vocab-page-header">
-          <button class="back-link-btn vocab-back-btn" id="vocab-unit-back-btn" data-route="/vocabulary/units">
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
-              <line x1="19" y1="12" x2="5" y2="12"></line>
-              <polyline points="12 19 5 12 12 5"></polyline>
-            </svg>
-            ইউনিট তালিকায় ফিরুন
-          </button>
-          <div class="vocab-breadcrumb">
-            <span class="crumb-target">Vocabulary</span>
-            <span class="crumb-sep">›</span>
-            <span class="crumb-unit">লেসন ইউনিট</span>
-            <span class="crumb-sep">›</span>
-            <span class="crumb-sub" id="vocab-unit-breadcrumb-title">Unit 1</span>
+      <div id="vocab-unit-view" class="hidden vocab-page-view vocab-unit-compact-screen">
+        <div class="vuc-container">
+          <div class="vuc-header-area">
+            <button class="vuc-back" id="vocab-unit-back-btn" data-route="/vocabulary/units">← ইউনিট তালিকায় ফিরুন</button>
+            <div class="vuc-crumb">
+              <span class="red">Vocabulary</span> › <span class="red">লেসন ইউনিট</span> › <span id="vocab-unit-breadcrumb-title">Unit 1</span>
+            </div>
+            <div class="vuc-title-row">
+              <h1 id="vocab-unit-header-title">Unit 1</h1>
+              <span class="vuc-badge" id="vocab-unit-header-count">৩টি শব্দ</span>
+            </div>
           </div>
-          <div class="vocab-unit-title-row">
-            <h1 class="vocab-page-title" id="vocab-unit-header-title">Unit 1</h1>
-            <span class="vocab-count-badge" id="vocab-unit-header-count">৩টি শব্দ</span>
+
+          <!-- 4 Mode Selection Options with single-row segmented design -->
+          <div class="vuc-modes" id="vocab-modes-selector">
+            <div class="vuc-mode active" data-mode="browse"><span class="ic">📖</span><span>শব্দ দেখা</span></div>
+            <div class="vuc-mode" data-mode="flashcards"><span class="ic">📁</span><span>ফ্ল্যাশকার্ড</span></div>
+            <div class="vuc-mode" data-mode="quiz"><span class="ic">⚡</span><span>কুইজ</span></div>
+            <div class="vuc-mode" data-mode="mistakes"><span class="ic">✖</span><span>ভুল শব্দ</span></div>
           </div>
-        </div>
 
-        <!-- 4 Mode Selection Options with large tap targets -->
-        <div class="vocab-modes-grid" id="vocab-modes-selector">
-          <button type="button" class="vocab-mode-card active" data-mode="browse">
-            <span class="mode-icon">📖</span>
-            <span class="mode-label">শব্দ দেখা</span>
-          </button>
-          <button type="button" class="vocab-mode-card" data-mode="flashcards">
-            <span class="mode-icon">🗂️</span>
-            <span class="mode-label">ফ্ল্যাশকার্ড</span>
-          </button>
-          <button type="button" class="vocab-mode-card" data-mode="quiz">
-            <span class="mode-icon">⚡</span>
-            <span class="mode-label">কুইজ</span>
-          </button>
-          <button type="button" class="vocab-mode-card" data-mode="mistakes">
-            <span class="mode-icon">❌</span>
-            <span class="mode-label">এই Unit-এর ভুল শব্দ</span>
-          </button>
-        </div>
-
-        <!-- Dynamic Content loaded ONLY when a mode is selected -->
-        <div class="vocab-mode-content-area" id="vocab-unit-mode-content">
-          <!-- Populated by JS when mode is selected -->
+          <!-- Dynamic Content loaded for mode -->
+          <div class="vuc-mode-content-area" id="vocab-unit-mode-content">
+            <!-- Mode 1 (browse): Toggle + Question Cards Grid -->
+          </div>
         </div>
       </div>
 
