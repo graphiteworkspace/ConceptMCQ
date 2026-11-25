@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="css/style.css?v=20261125_hero">
+  <link rel="stylesheet" href="css/style.css?v=20261125_rounded_v3">
   
   <!-- Critical Hero Slider Overlay Styles (Zero-Cache Guarantee) -->
   <style>
@@ -34,20 +34,74 @@
       left: 0 !important;
       right: 0 !important;
       width: 100% !important;
+      height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
       z-index: 60 !important;
-      padding: max(12px, env(safe-area-inset-top)) 0 8px 0 !important;
+      padding: max(22px, env(safe-area-inset-top, 22px)) 0 10px 0 !important;
       pointer-events: none;
     }
+    .telco-header .header-container {
+      height: auto !important;
+      min-height: auto !important;
+      max-height: none !important;
+      overflow: visible !important;
+      padding: 0 12px !important;
+      display: flex !important;
+      align-items: center !important;
+      justify-content: space-between !important;
+    }
     .top-action-bar {
+      display: flex !important;
+      align-items: center !important;
+      gap: 8px !important;
+      width: 100% !important;
+      overflow: visible !important;
       pointer-events: auto;
     }
     .top-bar-block {
       pointer-events: auto;
-      background: rgba(255, 255, 255, 0.95) !important;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14), 0 1px 3px rgba(0, 0, 0, 0.08) !important;
-      border: 1px solid rgba(255, 255, 255, 0.8) !important;
+      height: 48px !important;
+      background: rgba(255, 255, 255, 0.96) !important;
+      border-radius: 18px !important;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+      border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
+      box-sizing: border-box !important;
+      display: flex !important;
+      align-items: center !important;
+    }
+    .avatar-block {
+      width: 48px !important;
+      height: 48px !important;
+      border-radius: 18px !important;
+      justify-content: center !important;
+      flex-shrink: 0 !important;
+    }
+    .avatar-student-circle {
+      width: 34px !important;
+      height: 34px !important;
+      border-radius: 50% !important;
+    }
+    .search-block {
+      height: 48px !important;
+      border-radius: 18px !important;
+      padding: 0 14px !important;
+    }
+    .icon-block.notif-btn {
+      width: 48px !important;
+      height: 48px !important;
+      border-radius: 18px !important;
+      justify-content: center !important;
+      flex-shrink: 0 !important;
+      overflow: visible !important;
+    }
+    .icon-block.target-switcher-btn {
+      height: 48px !important;
+      border-radius: 18px !important;
+      padding: 0 10px !important;
+      flex-shrink: 0 !important;
     }
     .mobile-hero-slider-section {
       display: block !important;
@@ -61,7 +115,7 @@
         margin-left: calc(-50vw + 50%) !important;
         margin-right: calc(-50vw + 50%) !important;
         height: 42vh !important;
-        min-height: 310px !important;
+        min-height: 320px !important;
         margin-top: 0 !important;
       }
     }

@@ -2140,11 +2140,11 @@ kbd {
   }
 
   /* Compact 10MS Mobile App Header (56px) */
-  .header {
+  .header:not(.telco-header) {
     height: 56px !important;
   }
 
-  .header-container {
+  .header:not(.telco-header) .header-container {
     height: 56px !important;
     gap: 8px !important;
   }
@@ -2563,13 +2563,13 @@ kbd {
 
 
   /* 10MS Clean Single-Row Mobile Header (Zero Overflow / Zero Floating) */
-  .header {
+  .header:not(.telco-header) {
     height: 56px !important;
     overflow: hidden !important;
     background: #FFFFFF !important;
   }
 
-  .header-container {
+  .header:not(.telco-header) .header-container {
     height: 56px !important;
     display: flex !important;
     flex-wrap: nowrap !important;
@@ -2840,29 +2840,33 @@ body.clean-ui .main-content {
 /* 1. Header with Transparent Background Floating Over Hero Slider */
 .header.telco-header {
   background: transparent !important;
-  border-top: none !important;
-  border-bottom: none !important;
+  border: none !important;
   position: absolute !important;
   top: 0 !important;
   left: 0 !important;
   right: 0 !important;
   width: 100% !important;
+  height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
   z-index: 60 !important;
   box-shadow: none !important;
-  padding: max(12px, env(safe-area-inset-top)) 0 8px 0 !important;
+  padding: max(22px, env(safe-area-inset-top, 22px)) 0 10px 0 !important;
   pointer-events: none;
 }
 
 .telco-header .header-container {
-  height: auto;
-  min-height: 48px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  position: relative;
-  z-index: 2;
-  gap: 8px;
-  padding: 0 14px;
+  height: auto !important;
+  min-height: auto !important;
+  max-height: none !important;
+  overflow: visible !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
+  position: relative !important;
+  z-index: 2 !important;
+  gap: 8px !important;
+  padding: 0 12px !important;
 }
 
 /* Desktop Logo & Stats floating pill match */
@@ -2905,48 +2909,52 @@ body.clean-ui .main-content {
 }
 
 .top-bar-block {
-  height: 46px;
-  background: rgba(255, 255, 255, 0.95) !important;
-  border-radius: 14px !important;
-  display: flex;
-  align-items: center;
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.14), 0 1px 3px rgba(0, 0, 0, 0.08) !important;
-  border: 1px solid rgba(255, 255, 255, 0.8) !important;
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
-  transition: all 0.2s ease;
-  pointer-events: auto;
+  height: 48px !important;
+  background: rgba(255, 255, 255, 0.96) !important;
+  border-radius: 18px !important;
+  display: flex !important;
+  align-items: center !important;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12), 0 1px 3px rgba(0, 0, 0, 0.06) !important;
+  border: 1.5px solid rgba(255, 255, 255, 0.95) !important;
+  backdrop-filter: blur(12px) !important;
+  -webkit-backdrop-filter: blur(12px) !important;
+  transition: all 0.2s ease !important;
+  pointer-events: auto !important;
+  box-sizing: border-box !important;
 }
 
 /* Block 1: Profile Avatar */
 .avatar-block {
-  width: 46px;
-  height: 46px;
-  flex-shrink: 0;
-  justify-content: center;
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 18px !important;
+  flex-shrink: 0 !important;
+  justify-content: center !important;
   cursor: pointer;
 }
 
 .avatar-student-circle {
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  background: #FF5A00;
-  color: #FFFFFF;
-  font-weight: 700;
-  font-size: 15px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  width: 34px !important;
+  height: 34px !important;
+  border-radius: 50% !important;
+  background: #FF5A00 !important;
+  color: #FFFFFF !important;
+  font-weight: 700 !important;
+  font-size: 15px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 /* Block 2: Search Bar */
 .search-block {
-  flex: 1;
-  padding: 0 14px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  flex: 1 !important;
+  height: 48px !important;
+  border-radius: 18px !important;
+  padding: 0 14px !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: space-between !important;
   cursor: text;
 }
 
@@ -2972,13 +2980,15 @@ body.clean-ui .main-content {
 
 /* Block 3: Notification Bell with Badge */
 .icon-block.notif-btn {
-  width: 46px;
-  height: 46px;
-  flex-shrink: 0;
-  justify-content: center;
+  width: 48px !important;
+  height: 48px !important;
+  border-radius: 18px !important;
+  flex-shrink: 0 !important;
+  justify-content: center !important;
   cursor: pointer;
   position: relative;
-  padding: 0;
+  padding: 0 !important;
+  overflow: visible !important;
 }
 
 .notif-icon-rel {
@@ -3008,10 +3018,11 @@ body.clean-ui .main-content {
 
 /* Block 4: Target Switcher / Grid Menu */
 .icon-block.target-switcher-btn {
-  height: 46px;
-  flex-shrink: 0;
-  padding: 0 10px;
-  gap: 6px;
+  height: 48px !important;
+  border-radius: 18px !important;
+  flex-shrink: 0 !important;
+  padding: 0 10px !important;
+  gap: 6px !important;
   cursor: pointer;
 }
 

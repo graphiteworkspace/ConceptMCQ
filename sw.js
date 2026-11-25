@@ -1,9 +1,9 @@
 // ConceptMCQ Service Worker for Offline Assessment & App Caching
-const CACHE_NAME = 'conceptmcq-v2.5-hero';
+const CACHE_NAME = 'conceptmcq-v2.6-rounded';
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './css/style.css?v=20261125_hero',
+  './css/style.css?v=20261125_rounded_v3',
   './js/app.js?v=20261125_hero',
   './js/config.js',
   './manifest.json',
